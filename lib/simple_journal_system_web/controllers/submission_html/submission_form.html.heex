@@ -1,0 +1,10 @@
+<.form :let={f} for={@changeset} action={@action}>
+  <.input field={f[:title]} type="text" label="Title" />
+  <.input field={f[:abstract]} type="textarea" label="Abstract" />
+  <.input field={f[:status]} type="number" label="Status" />
+  <.input field={f[:journal_id]} type="number" label="Journal" />
+  <footer>
+    <.button variant="primary">Save Submission</.button>
+    <.button :if={@return_to} href={@return_to}>Cancel</.button>
+  </footer>
+</.form>
