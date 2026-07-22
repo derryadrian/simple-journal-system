@@ -1,0 +1,28 @@
+<Layouts.app flash={@flash}>
+  <.header>
+    Listing Submissions
+    <:actions>
+      <.button href={~p"/submissions/new"}>
+        <.icon name="hero-plus" /> New Submission
+      </.button>
+    </:actions>
+  </.header>
+
+  <.table id="submissions" rows={@submissions} row_click={&JS.navigate(~p"/submissions/#{&1}")}>
+    <:col :let={submission} label="Title">{submission.title}</:col>
+    <:col :let={submission} label="Abstract">{submission.abstract}</:col>
+    <:col :let={submission} label="Status">{submission.status}</:col>
+    <:col :let={submission} label="Journal">{submission.journal_id}</:col>
+    <:action :let={submission}>
+      <div class="sr-only">
+        <.link navigate={~p"/submissions/#{submission}"}>Show</.link>
+      </div>
+      <.link navigate={~p"/submissions/#{submission}/edit"}>Edit</.link>
+    </:action>
+    <:action :let={submission}>
+      <.link href={~p"/submissions/#{submission}"} method="delete" data-confirm="Are you sure?">
+        Delete
+      </.link>
+    </:action>
+  </.table>
+</Layouts.app>
