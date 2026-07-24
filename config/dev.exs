@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :simple_journal_system, SimpleJournalSystem.Repo,
   username: "postgres",
-  password: "081109",
+  password: System.get_env("DB_PASSWORD"),
   hostname: "localhost",
   database: "ojs_db_pg",
   stacktrace: true,
