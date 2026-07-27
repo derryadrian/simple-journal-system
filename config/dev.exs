@@ -1,3 +1,4 @@
+HEAD
 import Config
 
 # Configure your database
