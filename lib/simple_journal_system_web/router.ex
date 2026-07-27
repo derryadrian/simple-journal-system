@@ -21,6 +21,7 @@ defmodule SimpleJournalSystemWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    resources "/submissions", SubmissionController
   end
 
   # Other scopes may use custom stacks.
