@@ -1,9 +1,11 @@
 <div class="min-h-screen bg-white flex flex-col justify-between">
   <div>
     <!-- Header Biru OJS -->
-    <header class="bg-[#1b4e82] text-white px-8 py-6 shadow-inner">
+    <header class="bg-[#1b4e82] text-white px-8 py-6 shadow-md">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <h1 class="text-3xl font-bold tracking-wide"><%= assigns[:journal_name] || "OJS" %></h1>
+        <h1 class="text-3xl font-bold tracking-wide">
+          <a href={~p"/journals/#{@journal_name}/current"} class="hover:underline">OJS</a>
+        </h1>
         <div class="text-sm space-x-4">
           <a href="#" class="hover:underline">Daftar</a>
           <a href="#" class="hover:underline">Login</a>
@@ -11,24 +13,41 @@
       </div>
 
       <!-- Navigasi Menu -->
-      <nav class="max-w-7xl mx-auto mt-6 flex space-x-8 text-sm font-medium border-b border-blue-900/40 pb-3">
-  <a href={"/journals/#{@journal_name}/current"} class="text-blue-200 hover:text-white">Terkini</a>
-  <a href={"/journals/#{@journal_name}/archive"} class="text-blue-200 hover:text-white">Arsip</a>
-  <a href="#" class="text-blue-200 hover:text-white">Tentang Kami</a>
-</nav>
-    </header>
+      <nav class="max-w-7xl mx-auto mt-6 flex items-center space-x-6 text-white text-sm font-medium">
+        <a href={~p"/journals/#{@journal_name}/current"} class="hover:underline">Terkini</a>
+        <a href={~p"/journals/#{@journal_name}/archive"} class="hover:underline">Arsip</a>
+        
+        <!-- Dropdown Menu Tentang Kami -->
+        <div class="relative group">
+          <button type="button" class="hover:text-gray-200 font-medium inline-flex items-center focus:outline-none py-2">
+            <span>Tentang Kami</span>
+            <svg class="w-4 h-4 ml-1 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </button>
+          
+          <div class="absolute left-0 top-full w-56 bg-white border border-gray-200 rounded-md shadow-lg hidden group-hover:block z-50">
+            <div class="py-1 text-sm text-gray-700">
+              <a href={~p"/journals/#{@journal_name}/about"} class="block px-4 py-2 hover:bg-gray-100">Tentang Jurnal Ini</a>
+              <a href={~p"/journals/#{@journal_name}/about/submissions"} class="block px-4 py-2 hover:bg-gray-100">Penyerahan Naskah</a>
+              <a href={~p"/journals/#{@journal_name}/about/editorialTeam"} class="block px-4 py-2 hover:bg-gray-100">Masthead Editorial</a>
+              <a href={~p"/journals/#{@journal_name}/about/privacy"} class="block px-4 py-2 hover:bg-gray-100">Pernyataan Privasi</a>
+              <a href={~p"/journals/#{@journal_name}/about/contact" |> String.replace("+", "")} class="block px-4 py-2 hover:bg-gray-100">Kontak</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      </header>
 
-    <!-- Tempat Konten Utama (current / archive) Masuk -->
+    <!-- Tempat Konten Utama -->
     <main class="max-w-7xl mx-auto px-8 py-6">
       <%= @inner_content %>
     </main>
   </div>
 
   <!-- Footer OJS -->
-  <footer class="bg-[#e8e8e8] py-6 px-8 text-right text-gray-600 text-xs border-t">
+  <footer class="bg-[#e8e8e8] py-6 px-8 text-right text-gray-600 border-t">
     <div class="max-w-7xl mx-auto flex flex-col items-end">
       <p class="font-semibold text-gray-700">Platform & workflow by</p>
-      <span class="font-serif italic text-xl tracking-tighter text-black font-bold">OJS / PKP</span>
+      <span class="font-serif italic text-xl tracking-tight text-gray-900">OJS / PKP</span>
     </div>
   </footer>
 </div>

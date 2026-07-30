@@ -29,4 +29,32 @@ defmodule SimpleJournalSystemWeb.JournalController do
     |> put_layout(html: {SimpleJournalSystemWeb.Layouts, :journal})
     |> render(:about)
   end
+
+  def submissions(conn, %{"slug" => slug}) do
+    conn
+    |> assign(:journal_name, slug)
+    |> put_layout(html: {SimpleJournalSystemWeb.Layouts, :journal})
+    |> render(:submissions)
+  end
+
+  def editorial_team(conn, %{"slug" => slug}) do
+    conn
+    |> assign(:journal_name, slug)
+    |> put_layout(html: {SimpleJournalSystemWeb.Layouts, :journal})
+    |> render(:editorial_team)
+  end
+
+  def privacy(conn, %{"slug" => slug}) do
+    conn
+    |> assign(:journal_name, slug)
+    |> put_layout(html: {SimpleJournalSystemWeb.Layouts, :journal})
+    |> render(:privacy)
+  end
+
+  def contact(conn, %{"slug" => slug}) do
+  conn
+  |> assign(:journal_name, slug)
+  |> put_layout(html: {SimpleJournalSystemWeb.Layouts, :journal})
+  |> render(:contact)
+end
 end

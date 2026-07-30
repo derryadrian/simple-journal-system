@@ -17,20 +17,28 @@ defmodule SimpleJournalSystemWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", SimpleJournalSystemWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
-    resources "/submissions", SubmissionController
-  end
-
-  # Route untuk Jurnal (OJS Style)
+  # Halaman Utama & Fitur Umum
   scope "/", SimpleJournalSystemWeb do
     pipe_through :browser
 
     get "/", JournalController, :index
-    get "/journals/:slug/current", JournalController, :current
-    get "/journals/:slug/archive", JournalController, :archive
+    get "/journals", JournalController, :index
+    resources "/submissions", SubmissionController
+  end
+
+  # Rute untuk Jurnal dengan Slug (OJS Style)
+  scope "/journals/:slug", SimpleJournalSystemWeb do
+    pipe_through :browser
+
+    get "/current", JournalController, :current
+    get "/archive", JournalController, :archive
+    
+    # Rute menu Tentang Kami & Sub-halamannya
+    get "/about", JournalController, :about
+    get "/about/submissions", JournalController, :submissions
+    get "/about/editorialTeam", JournalController, :editorial_team
+    get "/about/privacy", JournalController, :privacy
+    get "/about/contact", JournalController, :contact
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
@@ -46,7 +54,6 @@ defmodule SimpleJournalSystemWeb.Router do
   end
 
   ## Authentication routes
-
   scope "/", SimpleJournalSystemWeb do
     pipe_through [:browser, :require_authenticated_user]
 
@@ -58,14 +65,4 @@ defmodule SimpleJournalSystemWeb.Router do
 
     post "/users/update-password", UserSessionController, :update_password
   end
-
- scope "/", SimpleJournalSystemWeb do
-  pipe_through :browser
-
-  get "/", JournalController, :index
-  get "/journals/:slug/current", JournalController, :current
-  get "/journals/:slug/archive", JournalController, :archive
-
-  resources "/submissions", SubmissionController
-end
 end
