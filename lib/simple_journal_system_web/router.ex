@@ -24,18 +24,17 @@ defmodule SimpleJournalSystemWeb.Router do
     resources "/submissions", SubmissionController
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", SimpleJournalSystemWeb do
-  #   pipe_through :api
-  # end
+  # Route untuk Jurnal (OJS Style)
+  scope "/", SimpleJournalSystemWeb do
+    pipe_through :browser
+
+    get "/", JournalController, :index
+    get "/journals/:slug/current", JournalController, :current
+    get "/journals/:slug/archive", JournalController, :archive
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:simple_journal_system, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
@@ -60,17 +59,13 @@ defmodule SimpleJournalSystemWeb.Router do
     post "/users/update-password", UserSessionController, :update_password
   end
 
-  scope "/", SimpleJournalSystemWeb do
-    pipe_through [:browser]
+ scope "/", SimpleJournalSystemWeb do
+  pipe_through :browser
 
-    live_session :current_user,
-      on_mount: [{SimpleJournalSystemWeb.UserAuth, :mount_current_scope}] do
-      live "/users/register", UserLive.Registration, :new
-      live "/users/log-in", UserLive.Login, :new
-      live "/users/log-in/:token", UserLive.Confirmation, :new
-    end
+  get "/", JournalController, :index
+  get "/journals/:slug/current", JournalController, :current
+  get "/journals/:slug/archive", JournalController, :archive
 
-    post "/users/log-in", UserSessionController, :create
-    delete "/users/log-out", UserSessionController, :delete
-  end
+  resources "/submissions", SubmissionController
+end
 end
