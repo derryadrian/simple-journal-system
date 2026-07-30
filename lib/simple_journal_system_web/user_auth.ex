@@ -288,4 +288,33 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   end
 
   defp maybe_store_return_to(conn), do: conn
+
+  def require_role(conn, role_id) do
+    case conn.assigns[:current_scope] do
+      %{user: user} ->
+        user =
+          SimpleJournalSystem.Repo.preload(
+            user,
+            user_user_groups: :user_group
+          )
+
+      if SimpleJournalSystem.Authorization.has_role?(user, role_id) do
+        conn
+      else
+        conn
+        |> put_flash(:error, "You are not authorized to access this page.")
+        |> redirect(to: ~p"/")
+        |> halt()
+      end
+
+    _ ->
+      conn
+      |> redirect(to: ~p"/users/log-in")
+      |> halt()
+    end
+  end
+
+  def require_admin(conn, _opts) do
+    require_role(conn, 1)
+  end
 end

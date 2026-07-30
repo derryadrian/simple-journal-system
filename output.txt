@@ -1,0 +1,1954 @@
+[1;31m----------
+
+NOTICE:
+
+You have tried to upgrade to asdf 0.16.0 or newer. Versions 0.16.0 is a
+complete rewrite of asdf in Go. This text is being printed by the older
+Bash implementation. If you are seeing this you have not migrated to
+asdf 0.16.0. Please follow the instructions on the upgrade guide to
+migrate to the new version.
+
+Aside from this notice, this older Bash implementation works as it did
+in asdf version 0.15.0 and older.
+
+Migration guide: https://asdf-vm.com/guide/upgrading-to-v0-16
+asdf website: https://asdf-vm.com
+Source code: https://github.com/asdf-vm/asdf
+[0m
+
+[1;31m----------
+
+NOTICE:
+
+You have tried to upgrade to asdf 0.16.0 or newer. Versions 0.16.0 is a
+complete rewrite of asdf in Go. This text is being printed by the older
+Bash implementation. If you are seeing this you have not migrated to
+asdf 0.16.0. Please follow the instructions on the upgrade guide to
+migrate to the new version.
+
+Aside from this notice, this older Bash implementation works as it did
+in asdf version 0.15.0 and older.
+
+Migration guide: https://asdf-vm.com/guide/upgrading-to-v0-16
+asdf website: https://asdf-vm.com
+Source code: https://github.com/asdf-vm/asdf
+[0m
+
+     warning: SimpleJournalSystem.Accounts.deliver_login_instructions/2 is undefined or private
+     │
+ 116 │       Accounts.deliver_login_instructions(
+     │                ~
+     │
+     └─ lib/simple_journal_system_web/live/user_live/login.ex:116:16: SimpleJournalSystemWeb.UserLive.Login.handle_event/3
+
+    warning: SimpleJournalSystem.Accounts.change_user_email/3 is undefined or private. Did you mean:
+
+          * change_user_email/2
+
+    │
+ 88 │     email_changeset = Accounts.change_user_email(user, %{}, validate_unique: false)
+    │                                ~
+    │
+    └─ lib/simple_journal_system_web/live/user_live/settings.ex:88:32: SimpleJournalSystemWeb.UserLive.Settings.mount/3
+
+     warning: SimpleJournalSystem.Accounts.change_user_email/3 is undefined or private. Did you mean:
+
+           * change_user_email/2
+
+     │
+ 107 │       |> Accounts.change_user_email(user_params, validate_unique: false)
+     │                   ~
+     │
+     └─ lib/simple_journal_system_web/live/user_live/settings.ex:107:19: SimpleJournalSystemWeb.UserLive.Settings.handle_event/3
+
+    warning: SimpleJournalSystem.Accounts.change_user_password/3 is undefined or private. Did you mean:
+
+          * change_user_email/2
+          * change_user_registration/2
+          * update_user_password/3
+
+    │
+ 89 │     password_changeset = Accounts.change_user_password(user, %{}, hash_password: false)
+    │                                   ~
+    │
+    └─ lib/simple_journal_system_web/live/user_live/settings.ex:89:35: SimpleJournalSystemWeb.UserLive.Settings.mount/3
+
+     warning: SimpleJournalSystem.Accounts.change_user_password/3 is undefined or private. Did you mean:
+
+           * change_user_email/2
+           * change_user_registration/2
+           * update_user_password/3
+
+     │
+ 140 │       |> Accounts.change_user_password(user_params, hash_password: false)
+     │                   ~
+     │
+     └─ lib/simple_journal_system_web/live/user_live/settings.ex:140:19: SimpleJournalSystemWeb.UserLive.Settings.handle_event/3
+
+     warning: SimpleJournalSystem.Accounts.sudo_mode?/1 is undefined or private
+     │
+ 117 │     true = Accounts.sudo_mode?(user)
+     │                     ~
+     │
+     └─ lib/simple_journal_system_web/live/user_live/settings.ex:117:21: SimpleJournalSystemWeb.UserLive.Settings.handle_event/3
+
+     warning: SimpleJournalSystem.Accounts.sudo_mode?/1 is undefined or private
+     │
+ 150 │     true = Accounts.sudo_mode?(user)
+     │                     ~
+     │
+     └─ lib/simple_journal_system_web/live/user_live/settings.ex:150:21: SimpleJournalSystemWeb.UserLive.Settings.handle_event/3
+
+     warning: SimpleJournalSystem.Accounts.deliver_user_update_email_instructions/3 is undefined or private. Did you mean:
+
+           * deliver_user_update_email_instructions/2
+
+     │
+ 121 │         Accounts.deliver_user_update_email_instructions(
+     │                  ~
+     │
+     └─ lib/simple_journal_system_web/live/user_live/settings.ex:121:18: SimpleJournalSystemWeb.UserLive.Settings.handle_event/3
+
+     warning: SimpleJournalSystem.Accounts.change_user_password/2 is undefined or private. Did you mean:
+
+           * change_user_email/2
+           * change_user_registration/2
+           * update_user_password/3
+
+     │
+ 152 │     case Accounts.change_user_password(user, user_params) do
+     │                   ~
+     │
+     └─ lib/simple_journal_system_web/live/user_live/settings.ex:152:19: SimpleJournalSystemWeb.UserLive.Settings.handle_event/3
+
+    warning: SimpleJournalSystem.Accounts.login_user_by_magic_link/1 is undefined or private
+    │
+ 17 │     case Accounts.login_user_by_magic_link(token) do
+    │                   ~
+    │
+    └─ lib/simple_journal_system_web/controllers/user_session_controller.ex:17:19: SimpleJournalSystemWeb.UserSessionController.create/3
+
+    warning: SimpleJournalSystem.Accounts.sudo_mode?/1 is undefined or private
+    │
+ 51 │     true = Accounts.sudo_mode?(user)
+    │                     ~
+    │
+    └─ lib/simple_journal_system_web/controllers/user_session_controller.ex:51:21: SimpleJournalSystemWeb.UserSessionController.update_password/2
+
+    warning: SimpleJournalSystem.Accounts.update_user_password/2 is undefined or private. Did you mean:
+
+          * update_user_password/3
+
+    │
+ 52 │     {:ok, {_user, expired_tokens}} = Accounts.update_user_password(user, user_params)
+    │                                               ~
+    │
+    └─ lib/simple_journal_system_web/controllers/user_session_controller.ex:52:47: SimpleJournalSystemWeb.UserSessionController.update_password/2
+
+    warning: SimpleJournalSystem.Accounts.get_user_by_magic_link_token/1 is undefined or private. Did you mean:
+
+          * get_user_by_email/1
+          * get_user_by_session_token/1
+
+    │
+ 77 │     if user = Accounts.get_user_by_magic_link_token(token) do
+    │                        ~
+    │
+    └─ lib/simple_journal_system_web/live/user_live/confirmation.ex:77:24: SimpleJournalSystemWeb.UserLive.Confirmation.mount/3
+
+    warning: SimpleJournalSystem.Accounts.User.email_changeset/2 is undefined or private
+    │
+ 79 │     User.email_changeset(user, attrs)
+    │          ~
+    │
+    └─ lib/simple_journal_system/accounts.ex:79:10: SimpleJournalSystem.Accounts.change_user_email/2
+
+    warning: SimpleJournalSystem.Accounts.User.email_changeset/2 is undefined or private
+    │
+ 84 │     |> User.email_changeset(attrs)
+    │             ~
+    │
+    └─ lib/simple_journal_system/accounts.ex:84:13: SimpleJournalSystem.Accounts.apply_user_email/3
+
+     warning: SimpleJournalSystem.Accounts.User.email_changeset/2 is undefined or private
+     │
+ 140 │          {:ok, %{}} <- User.email_changeset(user, %{email: token_context(token)}) |> User.validate_current_password(password) |> Repo.update() do
+     │                             ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:140:29: SimpleJournalSystem.Accounts.update_user_email/2
+
+    warning: SimpleJournalSystem.Accounts.User.validate_current_password/2 is undefined or private
+    │
+ 85 │     |> User.validate_current_password(password)
+    │             ~
+    │
+    └─ lib/simple_journal_system/accounts.ex:85:13: SimpleJournalSystem.Accounts.apply_user_email/3
+
+    warning: SimpleJournalSystem.Accounts.User.validate_current_password/2 is undefined or private
+    │
+ 92 │     |> User.validate_current_password(password)
+    │             ~
+    │
+    └─ lib/simple_journal_system/accounts.ex:92:13: SimpleJournalSystem.Accounts.update_user_password/3
+
+     warning: SimpleJournalSystem.Accounts.User.validate_current_password/2 is undefined or private
+     │
+ 140 │          {:ok, %{}} <- User.email_changeset(user, %{email: token_context(token)}) |> User.validate_current_password(password) |> Repo.update() do
+     │                                                                                           ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:140:91: SimpleJournalSystem.Accounts.update_user_email/2
+
+    warning: SimpleJournalSystem.Accounts.User.password_changeset/2 is undefined or private
+    │
+ 91 │     |> User.password_changeset(attrs)
+    │             ~
+    │
+    └─ lib/simple_journal_system/accounts.ex:91:13: SimpleJournalSystem.Accounts.update_user_password/3
+
+     warning: SimpleJournalSystem.Accounts.User.password_changeset/2 is undefined or private
+     │
+ 123 │          {:ok, %{}} <- User.password_changeset(user, attrs) |> Repo.update() do
+     │                             ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:123:29: SimpleJournalSystem.Accounts.reset_user_password/2
+
+     warning: SimpleJournalSystem.Emails.deliver_confirmation_instructions/2 is undefined (module SimpleJournalSystem.Emails is not available or is yet to be defined)
+     │
+ 100 │     SimpleJournalSystem.Emails.deliver_confirmation_instructions(user, encoded_token)
+     │                                ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:100:32: SimpleJournalSystem.Accounts.deliver_user_confirmation_instructions/1
+
+     warning: SimpleJournalSystem.Accounts.UserToken.verify_email_token_query/2 is undefined or private. Did you mean:
+
+           * verify_change_email_token_query/2
+           * verify_magic_link_token_query/1
+           * verify_session_token_query/1
+
+     │
+ 104 │     with {:ok, query} <- UserToken.verify_email_token_query(token, "confirm"),
+     │                                    ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:104:36: SimpleJournalSystem.Accounts.confirm_user/1
+
+     warning: SimpleJournalSystem.Accounts.UserToken.verify_email_token_query/2 is undefined or private. Did you mean:
+
+           * verify_change_email_token_query/2
+           * verify_magic_link_token_query/1
+           * verify_session_token_query/1
+
+     │
+ 121 │     with {:ok, query} <- UserToken.verify_email_token_query(token, "reset_password"),
+     │                                    ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:121:36: SimpleJournalSystem.Accounts.reset_user_password/2
+
+     warning: SimpleJournalSystem.Accounts.UserToken.verify_email_token_query/2 is undefined or private. Did you mean:
+
+           * verify_change_email_token_query/2
+           * verify_magic_link_token_query/1
+           * verify_session_token_query/1
+
+     │
+ 138 │     with {:ok, query} <- UserToken.verify_email_token_query(token, "change"),
+     │                                    ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:138:36: SimpleJournalSystem.Accounts.update_user_email/2
+
+     warning: SimpleJournalSystem.Accounts.User.confirm_changeset/1 is undefined or private
+     │
+ 106 │          {:ok, %{}} <- User.confirm_changeset(user) |> Repo.update() do
+     │                             ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:106:29: SimpleJournalSystem.Accounts.confirm_user/1
+
+     warning: SimpleJournalSystem.Emails.deliver_reset_password_instructions/2 is undefined (module SimpleJournalSystem.Emails is not available or is yet to be defined)
+     │
+ 117 │     SimpleJournalSystem.Emails.deliver_reset_password_instructions(user, encoded_token)
+     │                                ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:117:32: SimpleJournalSystem.Accounts.deliver_user_reset_password_instructions/1
+
+     warning: SimpleJournalSystem.Emails.deliver_update_email_instructions/3 is undefined (module SimpleJournalSystem.Emails is not available or is yet to be defined)
+     │
+ 134 │     SimpleJournalSystem.Emails.deliver_update_email_instructions(user, email, encoded_token)
+     │                                ~
+     │
+     └─ lib/simple_journal_system/accounts.ex:134:32: SimpleJournalSystem.Accounts.deliver_user_update_email_instructions/2
+
+[error] `inotify-tools` is needed to run `file_system` for your system, check https://github.com/rvoicilas/inotify-tools/wiki for more information about how to install it. If it's already installed but not be found, appoint executable file with `config.exs` or `FILESYSTEM_FSINOTIFY_EXECUTABLE_FILE` env.
+[warning] Not able to start file_system worker, reason: {:error, :fs_inotify_bootstrap_error}
+[warning] Could not start Phoenix live-reload because we cannot listen to the file system.
+You don't need to worry! This is an optional feature used during development to
+refresh your browser when you save files and it does not affect production.
+
+[error] :gen_statem #PID<0.329.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 4,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_4"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.331.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 6,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_6"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.326.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 1,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_1"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.335.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 10,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_10"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.332.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 7,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_7"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.327.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 2,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_2"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.330.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 5,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_5"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.328.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 3,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_3"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.334.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 9,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_9"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.333.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 8,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_8"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.348.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 9,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_9"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.349.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 8,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_8"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.350.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 2,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_2"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[info] Running SimpleJournalSystemWeb.Endpoint with Bandit 1.12.0 at 127.0.0.1:4000 (http)
+[info] Access SimpleJournalSystemWeb.Endpoint at http://localhost:4000
+[error] :gen_statem #PID<0.693.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 5,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_5"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.689.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 1,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_1"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.692.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 4,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_4"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.694.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 6,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_6"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.695.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 7,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_7"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.690.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 2,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_2"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.696.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 8,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_8"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.691.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 3,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_3"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.697.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 9,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_9"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.699.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 5,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_5"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.698.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 10,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_10"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.700.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 1,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_1"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.701.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 4,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_4"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.706.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 2,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_2"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.707.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 3,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_3"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.709.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 5,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_5"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.714.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 10,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_10"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.705.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 1,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_1"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.708.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 4,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_4"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.712.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 8,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_8"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.715.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 2,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_2"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.711.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 7,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_7"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.710.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 6,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_6"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.713.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 9,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_9"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.716.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 3,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_3"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.717.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 5,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_5"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.726.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 6,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_6"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.723.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 3,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_3"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.725.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 5,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_5"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.724.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 4,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_4"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.722.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 2,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_2"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.721.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 1,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_1"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.727.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 7,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_7"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.729.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 9,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_9"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.728.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 8,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_8"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.731.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 6,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_6"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.730.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 10,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_10"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.732.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 3,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_3"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[error] :gen_statem #PID<0.733.0> terminating
+** (KeyError) key :password not found in: [
+  parameters: [],
+  pool_index: 5,
+  types: Postgrex.DefaultTypes,
+  port: 5432,
+  label: SimpleJournalSystem.Repo,
+  pool: DBConnection.ConnectionPool,
+  repo: SimpleJournalSystem.Repo,
+  telemetry_prefix: [:simple_journal_system, :repo],
+  otp_app: :simple_journal_system,
+  timeout: 15000,
+  username: "postgres",
+  hostname: "localhost",
+  database: "ojs_db_pg",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
+]
+    (elixir 1.17.3) lib/keyword.ex:602: Keyword.fetch!/2
+    (postgrex 0.22.3) lib/postgrex/scram.ex:24: Postgrex.SCRAM.client_final/2
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:937: Postgrex.Protocol.auth_cont/4
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:774: Postgrex.Protocol.handshake/3
+    (postgrex 0.22.3) lib/postgrex/protocol.ex:231: Postgrex.Protocol.connect_endpoints/6
+    (db_connection 2.10.2) lib/db_connection/connection.ex:81: DBConnection.Connection.handle_event/4
+    (stdlib 6.0) gen_statem.erl:3115: :gen_statem.loop_state_callback/11
+    (stdlib 6.0) proc_lib.erl:329: :proc_lib.init_p_do_apply/3
+Process Label: "db_conn_5"
+Queue: [internal: {:connect, :init}]
+Postponed: []
+State: Postgrex.Protocol
+Callback mode: &DBConnection.Connection.handle_event/4, state_enter: false
+[notice] Application simple_journal_system exited: shutdown
+
+BREAK: (a)bort (A)bort with dump (c)ontinue (p)roc info (i)nfo
+       (l)oaded (v)ersion (k)ill (D)b-tables (d)istribution

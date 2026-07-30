@@ -9,6 +9,11 @@ defmodule SimpleJournalSystem.Accounts.User do
     field :username, :string
     field :hashed_password, :string, source: :password
     field :email, :string
+
+    has_many :user_user_groups,
+      SimpleJournalSystem.Accounts.UserUserGroup,
+      foreign_key: :user_id
+
     field :url, :string
     field :phone, :string
     field :mailing_address, :string

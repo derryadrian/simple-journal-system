@@ -1,12 +1,25 @@
 defmodule SimpleJournalSystem.Accounts do
   import Ecto.Query
+
   alias SimpleJournalSystem.Repo
   alias SimpleJournalSystem.Accounts.User
   alias SimpleJournalSystem.Accounts.UserToken
+  alias SimpleJournalSystem.Accounts.UserGroup
+  alias SimpleJournalSystem.Accounts.UserUserGroup
 
   ## Database getters
 
   # Diubah: mendukung login dengan email ATAU username
+  def list_user_groups(user) do
+    UserUserGroup
+    |> where(user_id: ^user.user_id)
+    |> join(:inner, [uug], ug in UserGroup,
+      on: uug.user_group_id == ug.user_group_id
+    )
+    |> select([_uug, ug], ug)
+    |> Repo.all()
+  end
+
   def get_user_by_email(email) do
     get_user_by_email_or_username(email)
   end
