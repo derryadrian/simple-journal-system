@@ -4,78 +4,103 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="mx-auto max-w-sm space-y-4">
+    <div class="min-h-screen bg-white flex flex-col justify-between font-sans text-gray-800">
 
-        <div class="text-center">
-          <.header>
-            <p>Log in</p>
+      <!-- Header / Navbar OJS -->
+      <.ojs_header current_scope={@current_scope} />
 
-            <:subtitle>
-              <%= if @current_scope do %>
-                You need to reauthenticate to perform sensitive actions on your account.
-              <% else %>
-                Don't have an account?
-                <.link
-                  navigate={~p"/users/register"}
-                  class="font-semibold text-brand hover:underline"
-                  phx-no-format
-                >
-                  Sign up
-                </.link>
-                for an account now.
-              <% end %>
-            </:subtitle>
-          </.header>
+      <!-- Main Content Area -->
+      <main class="flex-grow max-w-5xl w-full mx-auto px-6 py-8">
+        <div class="bg-white border-x border-gray-200 min-h-[600px] p-8">
+
+          <!-- Breadcrumb Navigation -->
+          <nav class="text-sm text-gray-600 mb-6 flex items-center space-x-2">
+            <.link href={~p"/"} class="text-[#1b629b] hover:underline font-medium">Home</.link>
+            <span class="text-gray-400">/</span>
+            <span class="text-gray-500">Login</span>
+          </nav>
+
+          <!-- Title & Subtitle -->
+          <h1 class="text-3xl font-bold text-gray-900 mb-4">Login</h1>
+          <p class="text-sm text-gray-700 mb-6">
+            Required fields are marked with an asterisk: <span class="text-red-600 font-bold">*</span>
+          </p>
+
+          <!-- Login Form -->
+          <.form
+            :let={f}
+            for={@form}
+            id="login_form"
+            action={~p"/users/log-in"}
+            method="post"
+            phx-trigger-action={@trigger_submit}
+            phx-submit="submit_password"
+            class="max-w-md space-y-5"
+          >
+
+            <!-- Username or Email Input -->
+            <div>
+              <label for="user_email" class="block text-sm font-medium text-gray-800 mb-1">
+                Username or Email <span class="text-red-600">*</span>
+              </label>
+              <.input
+                field={f[:email]}
+                type="email"
+                autocomplete="username"
+                required
+                class="w-full px-3 py-1.5 border border-gray-400 rounded-sm text-sm focus:outline-none focus:border-[#1b629b] bg-white text-gray-900"
+              />
+            </div>
+
+            <!-- Password Input -->
+            <div>
+              <label for="user_password" class="block text-sm font-medium text-gray-800 mb-1">
+                Password <span class="text-red-600">*</span>
+              </label>
+              <.input
+                field={f[:password]}
+                type="password"
+                autocomplete="current-password"
+                required
+                class="w-full px-3 py-1.5 border border-gray-400 rounded-sm text-sm focus:outline-none focus:border-[#1b629b] bg-white text-gray-900"
+              />
+            </div>
+
+            <!-- Keep me logged in Checkbox -->
+            <div class="flex items-center space-x-2 pt-1">
+              <.input field={f[:remember_me]} type="checkbox" class="h-4 w-4 rounded border-gray-300 text-[#1b629b] focus:ring-0" />
+              <label for="user_remember_me" class="text-sm text-gray-800 select-none">
+                Keep me logged in
+              </label>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-4 pt-4">
+              <.link href={~p"/users/register"} class="text-sm text-[#1b629b] hover:underline">
+                Register
+              </.link>
+              <button
+                type="submit"
+                class="px-5 py-1.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] text-gray-900 font-semibold text-sm rounded border border-gray-400 shadow-sm transition-colors"
+              >
+                Login
+              </button>
+            </div>
+
+          </.form>
+
         </div>
+      </main>
 
+      <!-- Footer Section -->
+      <.ojs_footer />
 
-        <.form
-          :let={f}
-          for={@form}
-          id="login_form_password"
-          action={~p"/users/log-in"}
-          phx-submit="submit_password"
-          phx-trigger-action={@trigger_submit}
-        >
-
-          <.input
-            readonly={!!@current_scope}
-            field={f[:email]}
-            type="email"
-            label="Email"
-            autocomplete="username"
-            spellcheck="false"
-            required
-            phx-mounted={JS.focus()}
-          />
-
-
-          <.input
-            field={f[:password]}
-            type="password"
-            label="Password"
-            autocomplete="current-password"
-            spellcheck="false"
-            required
-          />
-
-
-          <.button class="btn btn-primary w-full">
-            Log in
-          </.button>
-
-        </.form>
-
-      </div>
-    </Layouts.app>
+    </div>
     """
   end
 
-
   @impl true
   def mount(_params, _session, socket) do
-
     email =
       Phoenix.Flash.get(socket.assigns.flash, :email) ||
         get_in(
@@ -87,7 +112,6 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
           ]
         )
 
-
     form =
       to_form(
         %{
@@ -95,7 +119,6 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
         },
         as: "user"
       )
-
 
     {:ok,
      assign(
@@ -105,11 +128,8 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
      )}
   end
 
-
-
   @impl true
   def handle_event("submit_password", _params, socket) do
-    {:noreply,
-     assign(socket, :trigger_submit, true)}
+    {:noreply, assign(socket, :trigger_submit, true)}
   end
 end
