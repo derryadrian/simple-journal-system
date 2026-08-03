@@ -6,6 +6,7 @@ defmodule SimpleJournalSystemWeb.UserAuth do
 
   alias SimpleJournalSystem.Accounts
   alias SimpleJournalSystem.Accounts.Scope
+  alias SimpleJournalSystem.Authorization
 
   # Make the remember me cookie valid for 14 days. This should match
   # the session validity setting in UserToken.
@@ -67,6 +68,17 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   def fetch_current_scope_for_user(conn, _opts) do
     with {token, conn} <- ensure_user_token(conn),
          {user, token_inserted_at} <- Accounts.get_user_by_session_token(token) do
+
+      # --- DEBUG GLOBAL SESSION PRELOAD ---
+      IO.puts("\n=== DEBUG GLOBAL SESSION PRELOAD ===")
+      IO.inspect(user.user_user_groups, label: "USER GROUPS")
+      IO.inspect(
+        Authorization.get_roles(user),
+        label: "ROLES"
+      )
+      IO.puts("====================================\n")
+      # ------------------------------------
+
       conn
       |> assign(:current_scope, Scope.for_user(user))
       |> maybe_reissue_user_session_token(user, token_inserted_at)
@@ -124,22 +136,6 @@ defmodule SimpleJournalSystemWeb.UserAuth do
     conn
   end
 
-  # This function renews the session ID and erases the whole
-  # session to avoid fixation attacks. If there is any data
-  # in the session you may want to preserve after log in/log out,
-  # you must explicitly fetch the session data before clearing
-  # and then immediately set it after clearing, for example:
-  #
-  #     defp renew_session(conn, _user) do
-  #       delete_csrf_token()
-  #       preferred_locale = get_session(conn, :preferred_locale)
-  #
-  #       conn
-  #       |> configure_session(renew: true)
-  #       |> clear_session()
-  #       |> put_session(:preferred_locale, preferred_locale)
-  #     end
-  #
   defp renew_session(conn, _user) do
     delete_csrf_token()
 
@@ -181,35 +177,6 @@ defmodule SimpleJournalSystemWeb.UserAuth do
 
   @doc """
   Handles mounting and authenticating the current_scope in LiveViews.
-
-  ## `on_mount` arguments
-
-    * `:mount_current_scope` - Assigns current_scope
-      to socket assigns based on user_token, or nil if
-      there's no user_token or no matching user.
-
-    * `:require_authenticated` - Authenticates the user from the session,
-      and assigns the current_scope to socket assigns based
-      on user_token.
-      Redirects to login page if there's no logged user.
-
-  ## Examples
-
-  Use the `on_mount` lifecycle macro in LiveViews to mount or authenticate
-  the `current_scope`:
-
-      defmodule SimpleJournalSystemWeb.PageLive do
-        use SimpleJournalSystemWeb, :live_view
-
-        on_mount {SimpleJournalSystemWeb.UserAuth, :mount_current_scope}
-        ...
-      end
-
-  Or use the `live_session` of your router to invoke the on_mount callback:
-
-      live_session :authenticated, on_mount: [{SimpleJournalSystemWeb.UserAuth, :require_authenticated}] do
-        live "/profile", ProfileLive, :index
-      end
   """
   def on_mount(:mount_current_scope, _params, session, socket) do
     {:cont, mount_current_scope(socket, session)}
@@ -233,8 +200,6 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   def on_mount(:require_sudo_mode, _params, session, socket) do
     socket = mount_current_scope(socket, session)
 
-    # Hapus panggilan sudo_mode? karena tidak ada
-    # Langsung izinkan akses atau redirect ke login
     if socket.assigns.current_scope && socket.assigns.current_scope.user do
       {:cont, socket}
     else
@@ -259,13 +224,8 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   end
 
   @doc "Returns the path to redirect to after log in."
-  def signed_in_path(conn) do
-    # PERUBAHAN: cek current_scope.user langsung, bukan menggunakan pattern matching
-    if conn.assigns[:current_scope] && conn.assigns.current_scope.user do
-      ~p"/"
-    else
-      ~p"/"
-    end
+  def signed_in_path(_conn) do
+    ~p"/"
   end
 
   @doc """
@@ -289,32 +249,50 @@ defmodule SimpleJournalSystemWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
+  @doc """
+  Core plug untuk memvalidasi apakah user memiliki role_id tertentu.
+  """
   def require_role(conn, role_id) do
     case conn.assigns[:current_scope] do
-      %{user: user} ->
-        user =
-          SimpleJournalSystem.Repo.preload(
-            user,
-            user_user_groups: :user_group
-          )
+      %{user: user} when not is_nil(user) ->
+        # --- DEBUG ROLE MANAGEMENT ---
+        IO.puts("\n=== DEBUG ROLE PROTECTION ===")
+        IO.inspect(user.user_user_groups, label: "USER GROUPS PRELOAD")
+        roles = Authorization.get_roles(user)
+        IO.inspect(roles, label: "ROLES DETECTED")
+        IO.puts("Target Role Required: #{role_id}")
+        IO.puts("=============================\n")
+        # -----------------------------
 
-      if SimpleJournalSystem.Authorization.has_role?(user, role_id) do
+        if Authorization.has_role?(user, role_id) do
+          conn
+        else
+          conn
+          |> put_flash(:error, "You are not authorized to access this page.")
+          |> redirect(to: ~p"/")
+          |> halt()
+        end
+
+      _ ->
         conn
-      else
-        conn
-        |> put_flash(:error, "You are not authorized to access this page.")
-        |> redirect(to: ~p"/")
+        |> redirect(to: ~p"/users/log-in")
         |> halt()
-      end
-
-    _ ->
-      conn
-      |> redirect(to: ~p"/users/log-in")
-      |> halt()
     end
   end
 
-  def require_admin(conn, _opts) do
-    require_role(conn, 1)
-  end
+  # --- HELPER PLUGS OJS (DELEGATED TO REQUIRE_ROLE/2) ---
+
+  def require_manager(conn, _opts),
+  do: require_role(conn, Authorization.role_manager())
+
+def require_admin(conn, _opts),
+  do: require_role(conn, Authorization.role_admin())
+
+def require_author(conn, _opts),
+  do: require_role(conn, Authorization.role_author())
+
+  def require_editor(conn, _opts), do: require_role(conn, 512)
+  def require_reviewer(conn, _opts), do: require_role(conn, 4096)
+  def require_assistant(conn, _opts), do: require_role(conn, 8192)
+  def require_reader(conn, _opts), do: require_role(conn, 65536)
 end

@@ -13,6 +13,16 @@ defmodule SimpleJournalSystemWeb.Router do
     plug :fetch_current_scope_for_user
   end
 
+  pipeline :admin do
+    plug :require_authenticated_user
+    plug :require_admin
+  end
+
+  pipeline :author do
+    plug :require_authenticated_user
+    plug :require_role, 256
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -24,6 +34,22 @@ defmodule SimpleJournalSystemWeb.Router do
     resources "/submissions", SubmissionController
   end
 
+  scope "/admin", SimpleJournalSystemWeb do
+    pipe_through [:browser, :admin]
+
+    get "/", PageController, :home
+  end
+
+  # Menggunakan live_session untuk rute LiveView Author agar aman di level WebSocket
+  scope "/author", SimpleJournalSystemWeb do
+    pipe_through [:browser, :author]
+
+    live_session :author_area,
+      on_mount: [{SimpleJournalSystemWeb.UserAuth, :require_authenticated}] do
+      live "/", AuthorLive, :index
+    end
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", SimpleJournalSystemWeb do
   #   pipe_through :api
@@ -31,11 +57,6 @@ defmodule SimpleJournalSystemWeb.Router do
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:simple_journal_system, :dev_routes) do
-    # If you want to use the LiveDashboard in production, you should put
-    # it behind authentication and allow only admins to access it.
-    # If your application does not have an admins-only section yet,
-    # you can use Plug.BasicAuth to set up some basic authentication
-    # as long as you are also using SSL (which you should anyway).
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do

@@ -41,14 +41,28 @@ defmodule SimpleJournalSystem.Accounts do
     end
   end
 
-  # Fungsi lain tetap seperti bawaan Phoenix (tidak diubah)
+  # PERBAIKAN: Pisahkan tuple sebelum melakukan preload
   def get_user_by_session_token(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
-    Repo.one(query)
+
+    case Repo.one(query) do
+      {user, inserted_at} ->
+        {
+          Repo.preload(user, user_user_groups: :user_group),
+          inserted_at
+        }
+
+      nil ->
+        nil
+    end
   end
 
-  def get_user_by_session_token(user_id) when is_integer(user_id) do
-    Repo.get(User, user_id)
+  def get_user_by_session_token(user_id)
+    when is_integer(user_id) do
+
+    User
+    |> Repo.get(user_id)
+    |> Repo.preload(user_user_groups: :user_group)
   end
 
   ## Session token management (tetap pakai UserToken jika ada)
