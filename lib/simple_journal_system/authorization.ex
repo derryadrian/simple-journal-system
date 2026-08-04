@@ -17,11 +17,20 @@ defmodule SimpleJournalSystem.Authorization do
 
   # ==========================================================
   # Role Getters
+  def role_manager, do: @manager
+  def role_admin, do: @site_admin
+  def role_author, do: @author
+  def role_editor, do: @editor
+  def role_reviewer, do: @reviewer
+  def role_assistant, do: @assistant
+  def role_reader, do: @reader
   # ==========================================================
 
   @doc """
   Mengambil seluruh role_id milik user.
   """
+  def get_roles(nil), do: []
+
   def get_roles(user) do
     user.user_user_groups
     |> Enum.map(& &1.user_group.role_id)

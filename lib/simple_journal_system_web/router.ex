@@ -20,7 +20,7 @@ defmodule SimpleJournalSystemWeb.Router do
 
   pipeline :author do
     plug :require_authenticated_user
-    plug :require_role, 256
+    plug :require_author
   end
 
   pipeline :api do
