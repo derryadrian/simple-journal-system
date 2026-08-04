@@ -23,6 +23,16 @@ defmodule SimpleJournalSystemWeb.Router do
     plug :require_author
   end
 
+  pipeline :editor do
+    plug :require_authenticated_user
+    plug :require_editor
+  end
+
+  pipeline :reviewer do
+    plug :require_authenticated_user
+    plug :require_reviewer
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
