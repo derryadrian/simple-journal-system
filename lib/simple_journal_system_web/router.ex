@@ -2,6 +2,7 @@ defmodule SimpleJournalSystemWeb.Router do
   use SimpleJournalSystemWeb, :router
 
   import SimpleJournalSystemWeb.UserAuth
+  import SimpleJournalSystemWeb.Authorize, only: [require_site_admin: 2]
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -15,6 +16,11 @@ defmodule SimpleJournalSystemWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  # Site admin only - used for the role management area.
+  pipeline :site_admin do
+    plug :require_site_admin
   end
 
   scope "/", SimpleJournalSystemWeb do
@@ -55,9 +61,20 @@ defmodule SimpleJournalSystemWeb.Router do
       on_mount: [{SimpleJournalSystemWeb.UserAuth, :require_authenticated}] do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+      live "/dashboard", DashboardLive, :index
     end
 
     post "/users/update-password", UserSessionController, :update_password
+  end
+
+  # Role-protected admin area. Only site admins may access it.
+  scope "/admin", SimpleJournalSystemWeb do
+    pipe_through [:browser, :require_authenticated_user, :site_admin]
+
+    live_session :site_admin,
+      on_mount: [{SimpleJournalSystemWeb.UserAuth, :require_authenticated}] do
+      live "/roles", RoleManagementLive, :index
+    end
   end
 
   scope "/", SimpleJournalSystemWeb do

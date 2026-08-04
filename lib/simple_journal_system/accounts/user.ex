@@ -24,7 +24,8 @@ defmodule SimpleJournalSystem.Accounts.User do
     field :confirmed_at, :naive_datetime, virtual: true
     field :inserted_at, :naive_datetime, virtual: true
     field :updated_at, :naive_datetime, virtual: true
-    field :authenticated_at, :naive_datetime, virtual: true  # BARU
+    # BARU
+    field :authenticated_at, :naive_datetime, virtual: true
 
     field :date_last_login, :naive_datetime
     field :must_change_password, :integer
@@ -38,17 +39,35 @@ defmodule SimpleJournalSystem.Accounts.User do
     # === Virtual fields untuk registration ===
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+
+    has_many :user_user_groups, SimpleJournalSystem.Roles.UserUserGroup,
+      foreign_key: :user_id,
+      references: :user_id
   end
 
   def changeset(user, attrs) do
     user
     |> cast(attrs, [
-      :username, :hashed_password, :email, :url, :phone,
-      :mailing_address, :billing_address, :country,
-      :locales, :gossip, :date_last_email,
-      :date_registered, :date_validated, :date_last_login,
-      :must_change_password, :auth_id, :auth_str,
-      :disabled, :disabled_reason, :inline_help,
+      :username,
+      :hashed_password,
+      :email,
+      :url,
+      :phone,
+      :mailing_address,
+      :billing_address,
+      :country,
+      :locales,
+      :gossip,
+      :date_last_email,
+      :date_registered,
+      :date_validated,
+      :date_last_login,
+      :must_change_password,
+      :auth_id,
+      :auth_str,
+      :disabled,
+      :disabled_reason,
+      :inline_help,
       :remember_token
     ])
     |> validate_required([:username, :email])
@@ -59,7 +78,9 @@ defmodule SimpleJournalSystem.Accounts.User do
     |> cast(attrs, [:username, :email, :password, :password_confirmation])
     |> validate_required([:username, :email, :password])
     |> validate_length(:username, min: 3, max: 100)
-    |> validate_format(:email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "format email tidak valid")
+    |> validate_format(:email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: "format email tidak valid"
+    )
     |> validate_confirmation(:password, message: "tidak sama dengan password")
     |> validate_length(:password, min: 6)
     |> put_password_hash()
@@ -67,9 +88,12 @@ defmodule SimpleJournalSystem.Accounts.User do
     |> put_default_values()
   end
 
-  defp put_password_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
+  defp put_password_hash(
+         %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
+       ) do
     change(changeset, hashed_password: Bcrypt.hash_pwd_salt(password))
   end
+
   defp put_password_hash(changeset), do: changeset
 
   defp put_user_id(changeset) do
@@ -77,6 +101,7 @@ defmodule SimpleJournalSystem.Accounts.User do
       true ->
         max_id = SimpleJournalSystem.Repo.aggregate(__MODULE__, :max, :user_id) || 0
         change(changeset, user_id: max_id + 1)
+
       false ->
         changeset
     end

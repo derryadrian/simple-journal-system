@@ -17,17 +17,37 @@ defmodule SimpleJournalSystem.Accounts.Scope do
   """
 
   alias SimpleJournalSystem.Accounts.User
+  alias SimpleJournalSystem.Roles
 
-  defstruct user: nil
+  defstruct user: nil, roles: []
 
   @doc """
   Creates a scope for the given user.
 
+  The user's assigned role keys are loaded from the OJS user_groups tables
+  and attached to the scope for authorization checks.
+
   Returns nil if no user is given.
   """
   def for_user(%User{} = user) do
-    %__MODULE__{user: user}
+    roles = Roles.get_user_role_atoms(user.user_id)
+    %__MODULE__{user: user, roles: roles}
   end
 
   def for_user(nil), do: nil
+
+  @doc "Returns true if the scope's user has the given role key."
+  def has_role?(%__MODULE__{roles: roles}, role_key), do: role_key in roles
+  def has_role?(_, _), do: false
+
+  @doc "Returns true if the scope's user has any of the given role keys."
+  def has_any_role?(%__MODULE__{roles: roles}, role_keys) when is_list(role_keys) do
+    Enum.any?(role_keys, &(&1 in roles))
+  end
+
+  def has_any_role?(_, _), do: false
+
+  @doc "Returns true if the scope has a user (is authenticated)."
+  def authenticated?(%__MODULE__{user: %User{}}), do: true
+  def authenticated?(_), do: false
 end
