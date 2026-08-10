@@ -46,7 +46,8 @@ defmodule SimpleJournalSystem.Accounts.UserToken do
     token = :crypto.strong_rand_bytes(@rand_size)
     dt = user.authenticated_at || DateTime.utc_now(:second)
     # PERUBAHAN: user.id -> user.user_id
-    {token, %UserToken{token: token, context: "session", user_id: user.user_id, authenticated_at: dt}}
+    {token,
+     %UserToken{token: token, context: "session", user_id: user.user_id, authenticated_at: dt}}
   end
 
   @doc """
@@ -137,7 +138,7 @@ defmodule SimpleJournalSystem.Accounts.UserToken do
   database and if it has not expired (after @change_email_validity_in_days).
   The context must always start with "change:".
   """
-    def verify_change_email_token_query(token, "change:" <> _ = context) do
+  def verify_change_email_token_query(token, "change:" <> _ = context) do
     case Base.url_decode64(token, padding: false) do
       {:ok, decoded_token} ->
         hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
@@ -156,5 +157,4 @@ defmodule SimpleJournalSystem.Accounts.UserToken do
   def by_token_and_context_query(token, context) do
     from t in __MODULE__, where: t.token == ^token and t.context == ^context
   end
-
 end

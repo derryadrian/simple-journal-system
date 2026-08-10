@@ -21,7 +21,6 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
       <nav class="flex items-center gap-6 text-sm font-medium">
         <%= if @current_scope do %>
           <span>{@current_scope.user.email}</span>
-
           <a href="/users/settings" class="hover:underline">
             Settings
           </a>
@@ -53,7 +52,9 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
       <div class="max-w-6xl mx-auto flex justify-end">
         <div class="text-right text-gray-800">
           <p class="text-xl font-serif italic">Platform &</p>
+
           <p class="text-xl font-serif italic">workflow by</p>
+
           <p class="text-2xl font-serif font-bold">OJS / PKP</p>
         </div>
       </div>

@@ -12,15 +12,18 @@ defmodule SimpleJournalSystem.Accounts do
   end
 
   defp get_user_by_email_or_username(login) do
-    query = from u in User,
-            where: u.email == ^login or u.username == ^login,
-            limit: 1
+    query =
+      from u in User,
+        where: u.email == ^login or u.username == ^login,
+        limit: 1
+
     Repo.one(query)
   end
 
   # Fungsi login utama – mengembalikan user atau nil (bukan tuple)
   def get_user_by_email_and_password(email, password) do
     user = get_user_by_email_or_username(email)
+
     if user && Bcrypt.verify_pass(password, user.hashed_password) do
       user
     else
@@ -124,7 +127,10 @@ defmodule SimpleJournalSystem.Accounts do
   def update_user_email(token, password) do
     with {:ok, query} <- UserToken.verify_email_token_query(token, "change"),
          %User{} = user <- Repo.one(query),
-         {:ok, %{}} <- User.email_changeset(user, %{email: token_context(token)}) |> User.validate_current_password(password) |> Repo.update() do
+         {:ok, %{}} <-
+           User.email_changeset(user, %{email: token_context(token)})
+           |> User.validate_current_password(password)
+           |> Repo.update() do
       {:ok, user}
     else
       _ -> :error

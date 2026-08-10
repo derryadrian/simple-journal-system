@@ -2,10 +2,13 @@ defmodule SimpleJournalSystemWeb.JournalController do
   use SimpleJournalSystemWeb, :controller
 
   def index(conn, _params) do
-    journals = [%{name: "bebas", slug: "bebas"}, %{name: "bebas2", slug: "bebas2"}]
-    
+    journals = [
+      %{name: "bebas", slug: "bebas"},
+      %{name: "bebas2", slug: "bebas2"}
+    ]
+
     conn
-    |> put_layout(html: {SimpleJournalSystemWeb.Layouts, :app})
+    |> put_layout(false)
     |> render(:index, journals: journals)
   end
 
@@ -52,9 +55,9 @@ defmodule SimpleJournalSystemWeb.JournalController do
   end
 
   def contact(conn, %{"slug" => slug}) do
-  conn
-  |> assign(:journal_name, slug)
-  |> put_layout(html: {SimpleJournalSystemWeb.Layouts, :journal})
-  |> render(:contact)
-end
+    conn
+    |> assign(:journal_name, slug)
+    |> put_layout(html: {SimpleJournalSystemWeb.Layouts, :journal})
+    |> render(:contact)
+  end
 end

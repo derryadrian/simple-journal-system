@@ -27,7 +27,9 @@ defmodule SimpleJournalSystemWeb.UserLive.LoginTest do
 
       assert html =~ "If your email is in our system"
 
-      assert SimpleJournalSystem.Repo.get_by!(SimpleJournalSystem.Accounts.UserToken, user_id: user.id).context ==
+      assert SimpleJournalSystem.Repo.get_by!(SimpleJournalSystem.Accounts.UserToken,
+               user_id: user.id
+             ).context ==
                "login"
     end
 

@@ -4,13 +4,23 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title default="SimpleJournalSystem" suffix=" · Phoenix Framework" phx-no-format>{assigns[:page_title]}</.live_title>
+
+    <.live_title
+      default="SimpleJournalSystem"
+      suffix=" · Open Journal Systems"
+      phx-no-format
+    >
+      {assigns[:page_title]}
+    </.live_title>
+
     <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
     </script>
+
     <script>
       (() => {
-        const systemTheme = () => matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        const systemTheme = () =>
+          matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
         const setTheme = (theme) => {
           if (theme === "system") {
@@ -23,23 +33,43 @@
             document.documentElement.setAttribute("data-theme-source", "user");
           }
         };
+
         if (!document.documentElement.hasAttribute("data-theme")) {
           setTheme(localStorage.getItem("phx:theme") || "system");
         }
-        window.addEventListener("storage", (e) => e.key === "phx:theme" && setTheme(e.newValue || "system"));
-        window.addEventListener("phx:set-theme", (e) => setTheme(e.target.dataset.phxTheme));
-
-        matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-          if (document.documentElement.getAttribute("data-theme-source") === "system") {
-            document.documentElement.setAttribute("data-theme", systemTheme());
-          }
-        });
       })();
     </script>
   </head>
-  <body>
-  
 
-  {@inner_content}
-</body>
+  <body class="bg-white text-gray-800">
+    <!-- OJS HEADER -->
+    <header class="bg-[#286b99] text-white px-8 py-3">
+      <!-- Daftar / Login -->
+      <div class="absolute top-3 right-8 text-sm flex gap-5">
+        <a href="/users/register" class="hover:underline">
+          Daftar
+        </a>
+
+        <a href="/users/log_in" class="hover:underline">
+          Login
+        </a>
+      </div>
+
+      <!-- OJS Logo -->
+      <div class="mt-2">
+        <div class="font-serif text-[76px] leading-none tracking-tight">
+          OJS
+        </div>
+
+        <div class="border-t border-white w-[120px] mt-1"></div>
+
+        <div class="text-[10px] tracking-wide mt-1">
+          OPEN JOURNAL SYSTEMS
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    {@inner_content}
+  </body>
 </html>

@@ -32,7 +32,7 @@ defmodule SimpleJournalSystemWeb.Router do
 
     get "/current", JournalController, :current
     get "/archive", JournalController, :archive
-    
+
     # Rute menu Tentang Kami & Sub-halamannya
     get "/about", JournalController, :about
     get "/about/submissions", JournalController, :submissions
