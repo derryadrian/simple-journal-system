@@ -22,6 +22,7 @@ defmodule SimpleJournalSystemWeb.Router do
 
     get "/", PageController, :home
     resources "/submissions", SubmissionController
+    resources "/issues", IssueController
   end
 
   # Other scopes may use custom stacks.

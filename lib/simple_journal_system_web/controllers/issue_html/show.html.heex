@@ -1,0 +1,62 @@
+<Layouts.app flash={@flash}>
+  <div class="max-w-4xl mx-auto py-8 px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-900">Issue Details</h1>
+      <div class="flex space-x-3">
+        <.link
+          href={~p"/issues/#{@issue}/edit"}
+          class="px-4 py-2 bg-[#1b629b] text-white rounded hover:bg-[#155080] text-sm font-medium"
+        >
+          Edit
+        </.link>
+        <.link
+          href={~p"/issues"}
+          class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 text-sm font-medium"
+        >
+          Back to Issues
+        </.link>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-300 rounded p-6">
+      <dl class="grid grid-cols-2 gap-4 text-sm">
+        <div>
+          <dt class="font-medium text-gray-700">ID</dt>
+          <dd class="text-gray-900"><%= @issue.issue_id %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Journal ID</dt>
+          <dd class="text-gray-900"><%= @issue.journal_id %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Volume</dt>
+          <dd class="text-gray-900"><%= @issue.volume %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Number</dt>
+          <dd class="text-gray-900"><%= @issue.number %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Year</dt>
+          <dd class="text-gray-900"><%= @issue.year %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Published</dt>
+          <dd class="text-gray-900"><%= @issue.published %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Access Status</dt>
+          <dd class="text-gray-900"><%= @issue.access_status %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Date Published</dt>
+          <dd class="text-gray-900"><%= @issue.date_published %></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-700">Open Access Date</dt>
+          <dd class="text-gray-900"><%= @issue.open_access_date %></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</Layouts.app>
