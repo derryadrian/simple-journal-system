@@ -45,8 +45,9 @@
     <div>
       <.input
         field={f[:published]}
-        type="number"
+        type="select"
         label="Published"
+        options={[{"Yes", 1}, {"No", 0}]}
         class="w-full px-3 py-1.5 border border-gray-400 rounded-sm text-sm focus:outline-none focus:border-[#1b629b] bg-white text-gray-900"
       />
     </div>
@@ -54,8 +55,9 @@
     <div>
       <.input
         field={f[:access_status]}
-        type="number"
+        type="select"
         label="Access Status"
+        options={[{"Yes", 1}, {"No", 0}]}
         class="w-full px-3 py-1.5 border border-gray-400 rounded-sm text-sm focus:outline-none focus:border-[#1b629b] bg-white text-gray-900"
       />
     </div>
@@ -63,8 +65,9 @@
     <div>
       <.input
         field={f[:show_volume]}
-        type="number"
+        type="select"
         label="Show Volume"
+        options={[{"Yes", 1}, {"No", 0}]}
         class="w-full px-3 py-1.5 border border-gray-400 rounded-sm text-sm focus:outline-none focus:border-[#1b629b] bg-white text-gray-900"
       />
     </div>
@@ -72,8 +75,9 @@
     <div>
       <.input
         field={f[:show_number]}
-        type="number"
+        type="select"
         label="Show Number"
+        options={[{"Yes", 1}, {"No", 0}]}
         class="w-full px-3 py-1.5 border border-gray-400 rounded-sm text-sm focus:outline-none focus:border-[#1b629b] bg-white text-gray-900"
       />
     </div>
@@ -81,8 +85,9 @@
     <div>
       <.input
         field={f[:show_year]}
-        type="number"
+        type="select"
         label="Show Year"
+        options={[{"Yes", 1}, {"No", 0}]}
         class="w-full px-3 py-1.5 border border-gray-400 rounded-sm text-sm focus:outline-none focus:border-[#1b629b] bg-white text-gray-900"
       />
     </div>
@@ -90,8 +95,9 @@
     <div>
       <.input
         field={f[:show_title]}
-        type="number"
+        type="select"
         label="Show Title"
+        options={[{"Yes", 1}, {"No", 0}]}
         class="w-full px-3 py-1.5 border border-gray-400 rounded-sm text-sm focus:outline-none focus:border-[#1b629b] bg-white text-gray-900"
       />
     </div>
