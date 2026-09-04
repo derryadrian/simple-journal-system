@@ -51,7 +51,15 @@ defmodule SimpleJournalSystem.Issues.Issue do
       :url_path,
       :doi_id
     ])
-    |> validate_required([:journal_id])
+    |> validate_required([
+      :journal_id,
+      :published,
+      :access_status,
+      :show_volume,
+      :show_number,
+      :show_year,
+      :show_title
+    ])
     |> validate_number(:journal_id, greater_than: 0)
   end
 
