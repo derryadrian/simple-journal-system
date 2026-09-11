@@ -1,0 +1,57 @@
+<Layouts.app flash={@flash}>
+  <div class="max-w-4xl mx-auto py-8 px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-900">Notes</h1>
+      <.link
+        href={~p"/notes/new"}
+        class="px-4 py-2 bg-[#1b629b] text-white rounded hover:bg-[#155080] text-sm font-medium"
+      >
+        New Note
+      </.link>
+    </div>
+
+    <div class="bg-white border border-gray-300 rounded overflow-hidden">
+      <table class="w-full text-sm text-left">
+        <thead class="bg-gray-100 text-gray-700">
+          <tr>
+            <th class="px-4 py-3 font-medium">ID</th>
+            <th class="px-4 py-3 font-medium">Assoc Type</th>
+            <th class="px-4 py-3 font-medium">Assoc ID</th>
+            <th class="px-4 py-3 font-medium">User ID</th>
+            <th class="px-4 py-3 font-medium">Title</th>
+            <th class="px-4 py-3 font-medium">Date Created</th>
+            <th class="px-4 py-3 font-medium">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for note <- @notes do %>
+            <tr class="border-t border-gray-200 hover:bg-gray-50">
+              <td class="px-4 py-3"><%= note.note_id %></td>
+              <td class="px-4 py-3"><%= note.assoc_type %></td>
+              <td class="px-4 py-3"><%= note.assoc_id %></td>
+              <td class="px-4 py-3"><%= note.user_id %></td>
+              <td class="px-4 py-3"><%= note.title %></td>
+              <td class="px-4 py-3"><%= note.date_created %></td>
+              <td class="px-4 py-3 flex space-x-3">
+                <.link href={~p"/notes/#{note}"} class="text-[#1b629b] hover:underline">
+                  Show
+                </.link>
+                <.link href={~p"/notes/#{note}/edit"} class="text-[#1b629b] hover:underline">
+                  Edit
+                </.link>
+                <.link
+                  href={~p"/notes/#{note}"}
+                  method="delete"
+                  data-confirm="Are you sure?"
+                  class="text-red-600 hover:underline"
+                >
+                  Delete
+                </.link>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</Layouts.app>
