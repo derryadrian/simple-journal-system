@@ -16,7 +16,12 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
         </.header>
       </div>
 
-      <.form for={@email_form} id="email_form" phx-submit="update_email" phx-change="validate_email">
+      <.form
+        for={@email_form}
+        id="email_form"
+        phx-submit="update_email"
+        phx-change="validate_email"
+      >
         <.input
           field={@email_form[:email]}
           type="email"
@@ -25,7 +30,9 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
           spellcheck="false"
           required
         />
-        <.button variant="primary" phx-disable-with="Changing...">Change Email</.button>
+        <.button variant="primary" phx-disable-with="Changing...">
+          Change Email
+        </.button>
       </.form>
 
       <div class="divider" />
@@ -46,6 +53,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
           spellcheck="false"
           value={@current_email}
         />
+
         <.input
           field={@password_form[:password]}
           type="password"
@@ -54,6 +62,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
           spellcheck="false"
           required
         />
+
         <.input
           field={@password_form[:password_confirmation]}
           type="password"
@@ -61,6 +70,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
           autocomplete="new-password"
           spellcheck="false"
         />
+
         <.button variant="primary" phx-disable-with="Saving...">
           Save Password
         </.button>
@@ -76,8 +86,12 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
         {:ok, _user} ->
           put_flash(socket, :info, "Email changed successfully.")
 
-        {:error, _} ->
-          put_flash(socket, :error, "Email change link is invalid or it has expired.")
+        :error ->
+          put_flash(
+            socket,
+            :error,
+            "Email change link is invalid or it has expired."
+          )
       end
 
     {:ok, push_navigate(socket, to: ~p"/users/settings")}
@@ -85,8 +99,20 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
 
   def mount(_params, _session, socket) do
     user = socket.assigns.current_scope.user
-    email_changeset = Accounts.change_user_email(user, %{}, validate_unique: false)
-    password_changeset = Accounts.change_user_password(user, %{}, hash_password: false)
+
+    email_changeset =
+      Accounts.change_user_email(
+        user,
+        %{},
+        validate_unique: false
+      )
+
+    password_changeset =
+      Accounts.change_user_password(
+        user,
+        %{},
+        hash_password: false
+      )
 
     socket =
       socket
@@ -104,7 +130,10 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
 
     email_form =
       socket.assigns.current_scope.user
-      |> Accounts.change_user_email(user_params, validate_unique: false)
+      |> Accounts.change_user_email(
+        user_params,
+        validate_unique: false
+      )
       |> Map.put(:action, :validate)
       |> to_form()
 
@@ -114,21 +143,29 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
   def handle_event("update_email", params, socket) do
     %{"user" => user_params} = params
     user = socket.assigns.current_scope.user
+
     true = Accounts.sudo_mode?(user)
 
     case Accounts.change_user_email(user, user_params) do
       %{valid?: true} = changeset ->
         Accounts.deliver_user_update_email_instructions(
           Ecto.Changeset.apply_action!(changeset, :insert),
-          user.email,
+          user_params["email"],
           &url(~p"/users/settings/confirm-email/#{&1}")
         )
 
-        info = "A link to confirm your email change has been sent to the new address."
+        info =
+          "A link to confirm your email change has been sent to the new address."
+
         {:noreply, socket |> put_flash(:info, info)}
 
       changeset ->
-        {:noreply, assign(socket, :email_form, to_form(changeset, action: :insert))}
+        {:noreply,
+         assign(
+           socket,
+           :email_form,
+           to_form(changeset, action: :insert)
+         )}
     end
   end
 
@@ -137,7 +174,10 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
 
     password_form =
       socket.assigns.current_scope.user
-      |> Accounts.change_user_password(user_params, hash_password: false)
+      |> Accounts.change_user_password(
+        user_params,
+        hash_password: false
+      )
       |> Map.put(:action, :validate)
       |> to_form()
 
@@ -147,14 +187,24 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
   def handle_event("update_password", params, socket) do
     %{"user" => user_params} = params
     user = socket.assigns.current_scope.user
+
     true = Accounts.sudo_mode?(user)
 
     case Accounts.change_user_password(user, user_params) do
       %{valid?: true} = changeset ->
-        {:noreply, assign(socket, trigger_submit: true, password_form: to_form(changeset))}
+        {:noreply,
+         assign(
+           socket,
+           trigger_submit: true,
+           password_form: to_form(changeset)
+         )}
 
       changeset ->
-        {:noreply, assign(socket, password_form: to_form(changeset, action: :insert))}
+        {:noreply,
+         assign(
+           socket,
+           password_form: to_form(changeset, action: :insert)
+         )}
     end
   end
 end

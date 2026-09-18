@@ -4,15 +4,17 @@ defmodule SimpleJournalSystem.Accounts.User do
 
   @primary_key {:user_id, :id, []}
   @derive {Phoenix.Param, key: :user_id}
+  @derive {Inspect, except: [:password, :password_confirmation]}
 
   schema "users" do
+
     field :username, :string
     field :hashed_password, :string, source: :password
     field :email, :string
 
     has_many :user_user_groups,
-      SimpleJournalSystem.Accounts.UserUserGroup,
-      foreign_key: :user_id
+             SimpleJournalSystem.Accounts.UserUserGroup,
+             foreign_key: :user_id
 
     field :url, :string
     field :phone, :string
@@ -29,7 +31,8 @@ defmodule SimpleJournalSystem.Accounts.User do
     field :confirmed_at, :naive_datetime, virtual: true
     field :inserted_at, :naive_datetime, virtual: true
     field :updated_at, :naive_datetime, virtual: true
-    field :authenticated_at, :naive_datetime, virtual: true  # BARU
+    # BARU
+    field :authenticated_at, :naive_datetime, virtual: true
 
     field :date_last_login, :naive_datetime
     field :must_change_password, :integer
@@ -48,12 +51,26 @@ defmodule SimpleJournalSystem.Accounts.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [
-      :username, :hashed_password, :email, :url, :phone,
-      :mailing_address, :billing_address, :country,
-      :locales, :gossip, :date_last_email,
-      :date_registered, :date_validated, :date_last_login,
-      :must_change_password, :auth_id, :auth_str,
-      :disabled, :disabled_reason, :inline_help,
+      :username,
+      :hashed_password,
+      :email,
+      :url,
+      :phone,
+      :mailing_address,
+      :billing_address,
+      :country,
+      :locales,
+      :gossip,
+      :date_last_email,
+      :date_registered,
+      :date_validated,
+      :date_last_login,
+      :must_change_password,
+      :auth_id,
+      :auth_str,
+      :disabled,
+      :disabled_reason,
+      :inline_help,
       :remember_token
     ])
     |> validate_required([:username, :email])
@@ -64,24 +81,101 @@ defmodule SimpleJournalSystem.Accounts.User do
     |> cast(attrs, [:username, :email, :password, :password_confirmation])
     |> validate_required([:username, :email, :password])
     |> validate_length(:username, min: 3, max: 100)
-    |> validate_format(:email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "format email tidak valid")
-    |> validate_confirmation(:password, message: "tidak sama dengan password")
+    |> validate_format(:email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: "must have the @ sign and no spaces"
+    )
+    |> validate_length(:email, max: 160)
+    |> validate_confirmation(:password, message: "does not match password")
     |> validate_length(:password, min: 6)
+    |> unsafe_validate_unique(:email, SimpleJournalSystem.Repo)
+    |> unsafe_validate_unique(:username, SimpleJournalSystem.Repo)
     |> put_password_hash()
     |> put_user_id()
     |> put_default_values()
   end
 
-  defp put_password_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset) do
+  defp put_password_hash(
+         %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
+       ) do
     change(changeset, hashed_password: Bcrypt.hash_pwd_salt(password))
   end
+
   defp put_password_hash(changeset), do: changeset
+
+  def email_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:email])
+    |> validate_format(:email, ~r/^[^\s@]+@[^\s@]+$/,
+      message: "must have the @ sign and no spaces"
+    )
+    |> validate_length(:email, max: 160)
+    |> validate_required([:email])
+    |> maybe_validate_unique_email(opts)
+  end
+
+  defp maybe_validate_unique_email(changeset, opts) do
+    if Keyword.get(opts, :validate_unique, true) do
+      changeset
+      |> unsafe_validate_unique(:email, SimpleJournalSystem.Repo)
+      |> unique_constraint(:email)
+    else
+      changeset
+    end
+  end
+
+  def password_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:password])
+    |> validate_confirmation(:password, message: "does not match password")
+    |> validate_length(:password, min: 12, max: 72)
+    |> validate_required([:password])
+    |> maybe_hash_password(opts)
+  end
+
+  defp maybe_hash_password(changeset, opts) do
+    if Keyword.get(opts, :hash_password, true) do
+      changeset
+      |> put_password_hash()
+    else
+      changeset
+    end
+  end
+
+  def confirm_changeset(user) do
+    change(user, confirmed_at: DateTime.utc_now(:second))
+  end
+
+  def validate_current_password(changeset, password) do
+    changeset
+    |> validate_confirmation(:password, message: "does not match password")
+    |> validate_length(:password, min: 12, max: 72)
+    |> validate_current_password_hashed(password)
+  end
+
+  defp validate_current_password_hashed(changeset, password) do
+    if is_nil(get_change(changeset, :hashed_password)) do
+      current_password = get_field(changeset, :hashed_password)
+
+      if is_nil(current_password) do
+        changeset
+      else
+        if Bcrypt.verify_pass(password, current_password) do
+          changeset
+        else
+          add_error(changeset, :hashed_password, "is not valid")
+        end
+      end
+    else
+      changeset
+    end
+  end
 
   defp put_user_id(changeset) do
     case changeset.valid? do
       true ->
         max_id = SimpleJournalSystem.Repo.aggregate(__MODULE__, :max, :user_id) || 0
         change(changeset, user_id: max_id + 1)
+
       false ->
         changeset
     end

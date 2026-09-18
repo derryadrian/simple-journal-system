@@ -1,3 +1,9 @@
+import Ecto.Query
+
+alias SimpleJournalSystem.Repo
+alias SimpleJournalSystem.Accounts.UserUserGroup
+alias SimpleJournalSystem.Accounts.UserGroup
+
 defmodule SimpleJournalSystem.Authorization do
   @moduledoc """
   Authorization helper berdasarkan struktur role OJS.
@@ -31,10 +37,15 @@ defmodule SimpleJournalSystem.Authorization do
   """
   def get_roles(nil), do: []
 
-  def get_roles(user) do
-    user.user_user_groups
-    |> Enum.map(& &1.user_group.role_id)
-    |> Enum.uniq()
+  def get_roles(%{user_id: user_id}) do
+    from(uug in UserUserGroup,
+      join: ug in UserGroup,
+      on: uug.user_group_id == ug.user_group_id,
+      where: uug.user_id == ^user_id,
+      select: ug.role_id,
+      distinct: true
+    )
+    |> Repo.all()
   end
 
   # ==========================================================
