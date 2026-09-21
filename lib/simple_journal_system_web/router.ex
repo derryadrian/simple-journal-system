@@ -33,7 +33,7 @@ defmodule SimpleJournalSystemWeb.Router do
     plug :require_reviewer
   end
 
-    pipeline :manager do
+  pipeline :manager do
     plug :require_authenticated_user
     plug :require_manager
   end

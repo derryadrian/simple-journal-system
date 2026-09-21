@@ -90,7 +90,11 @@ defmodule SimpleJournalSystem.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["compile", "tailwind simple_journal_system", "esbuild simple_journal_system"],
+      "assets.build": [
+        "compile",
+        "tailwind simple_journal_system",
+        "esbuild simple_journal_system"
+      ],
       "assets.deploy": [
         "tailwind simple_journal_system --minify",
         "esbuild simple_journal_system --minify",
