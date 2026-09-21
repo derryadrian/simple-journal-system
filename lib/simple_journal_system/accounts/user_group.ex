@@ -15,7 +15,7 @@ defmodule SimpleJournalSystem.Accounts.UserGroup do
     field :masthead, :integer
 
     has_many :user_user_groups,
-      SimpleJournalSystem.Accounts.UserUserGroup,
-      foreign_key: :user_group_id
+             SimpleJournalSystem.Accounts.UserUserGroup,
+             foreign_key: :user_group_id
   end
 end

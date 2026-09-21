@@ -9,13 +9,13 @@ defmodule SimpleJournalSystem.Accounts.UserUserGroup do
     field :masthead, :integer
 
     belongs_to :user,
-      SimpleJournalSystem.Accounts.User,
-      foreign_key: :user_id,
-      references: :user_id
+               SimpleJournalSystem.Accounts.User,
+               foreign_key: :user_id,
+               references: :user_id
 
     belongs_to :user_group,
-      SimpleJournalSystem.Accounts.UserGroup,
-      foreign_key: :user_group_id,
-      references: :user_group_id
+               SimpleJournalSystem.Accounts.UserGroup,
+               foreign_key: :user_group_id,
+               references: :user_group_id
   end
 end
