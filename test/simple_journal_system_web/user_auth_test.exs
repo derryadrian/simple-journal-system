@@ -91,7 +91,10 @@ defmodule SimpleJournalSystemWeb.UserAuthTest do
       conn =
         conn
         |> recycle()
-        |> Map.replace!(:secret_key_base, SimpleJournalSystemWeb.Endpoint.config(:secret_key_base))
+        |> Map.replace!(
+          :secret_key_base,
+          SimpleJournalSystemWeb.Endpoint.config(:secret_key_base)
+        )
         |> fetch_cookies()
         |> init_test_session(%{user_remember_me: true})
 
@@ -150,7 +153,7 @@ defmodule SimpleJournalSystemWeb.UserAuthTest do
       conn =
         conn |> put_session(:user_token, user_token) |> UserAuth.fetch_current_scope_for_user([])
 
-      assert conn.assigns.current_scope.user.id == user.id
+      assert conn.assigns.current_scope.user.user_id == user.user_id
       assert conn.assigns.current_scope.user.authenticated_at == user.authenticated_at
       assert get_session(conn, :user_token) == user_token
     end
@@ -167,7 +170,7 @@ defmodule SimpleJournalSystemWeb.UserAuthTest do
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> UserAuth.fetch_current_scope_for_user([])
 
-      assert conn.assigns.current_scope.user.id == user.id
+      assert conn.assigns.current_scope.user.user_id == user.user_id
       assert conn.assigns.current_scope.user.authenticated_at == user.authenticated_at
       assert get_session(conn, :user_token) == user_token
       assert get_session(conn, :user_remember_me)
@@ -200,7 +203,7 @@ defmodule SimpleJournalSystemWeb.UserAuthTest do
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> UserAuth.fetch_current_scope_for_user([])
 
-      assert conn.assigns.current_scope.user.id == user.id
+      assert conn.assigns.current_scope.user.user_id == user.user_id
       assert conn.assigns.current_scope.user.authenticated_at == user.authenticated_at
       assert new_token = get_session(conn, :user_token)
       assert new_token != token
@@ -222,7 +225,7 @@ defmodule SimpleJournalSystemWeb.UserAuthTest do
       {:cont, updated_socket} =
         UserAuth.on_mount(:mount_current_scope, %{}, session, %LiveView.Socket{})
 
-      assert updated_socket.assigns.current_scope.user.id == user.id
+      assert updated_socket.assigns.current_scope.user.user_id == user.user_id
     end
 
     test "assigns nil to current_scope assign if there isn't a valid user_token", %{conn: conn} do
@@ -253,7 +256,7 @@ defmodule SimpleJournalSystemWeb.UserAuthTest do
       {:cont, updated_socket} =
         UserAuth.on_mount(:require_authenticated, %{}, session, %LiveView.Socket{})
 
-      assert updated_socket.assigns.current_scope.user.id == user.id
+      assert updated_socket.assigns.current_scope.user.user_id == user.user_id
     end
 
     test "redirects to login page if there isn't a valid user_token", %{conn: conn} do

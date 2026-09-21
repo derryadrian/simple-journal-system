@@ -10,7 +10,7 @@ config :bcrypt_elixir, :log_rounds, 1
 # Run `mix help test` for more information.
 config :simple_journal_system, SimpleJournalSystem.Repo,
   username: "postgres",
-  password: "postgres",
+  password: System.get_env("DB_PASSWORD", "postgres"),
   hostname: "localhost",
   database: "simple_journal_system_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,

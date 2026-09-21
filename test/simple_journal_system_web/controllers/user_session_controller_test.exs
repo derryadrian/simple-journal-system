@@ -106,7 +106,7 @@ defmodule SimpleJournalSystemWeb.UserSessionControllerTest do
       assert redirected_to(conn) == ~p"/"
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "User confirmed successfully."
 
-      assert Accounts.get_user!(user.id).confirmed_at
+      assert Accounts.get_user!(user.user_id).confirmed_at
 
       # Now do a logged in request and assert on the menu
       conn = get(conn, ~p"/")
