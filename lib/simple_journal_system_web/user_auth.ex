@@ -285,14 +285,21 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   def require_manager(conn, _opts),
   do: require_role(conn, Authorization.role_manager())
 
-def require_admin(conn, _opts),
-  do: require_role(conn, Authorization.role_admin())
+  def require_admin(conn, _opts),
+    do: require_role(conn, Authorization.role_admin())
 
-def require_author(conn, _opts),
-  do: require_role(conn, Authorization.role_author())
+  def require_author(conn, _opts),
+    do: require_role(conn, Authorization.role_author())
 
-  def require_editor(conn, _opts), do: require_role(conn, 512)
-  def require_reviewer(conn, _opts), do: require_role(conn, 4096)
-  def require_assistant(conn, _opts), do: require_role(conn, 8192)
-  def require_reader(conn, _opts), do: require_role(conn, 65536)
+  def require_editor(conn, _opts),
+  do: require_role(conn, Authorization.role_editor())
+
+  def require_reviewer(conn, _opts),
+    do: require_role(conn, Authorization.role_reviewer())
+
+  def require_assistant(conn, _opts),
+    do: require_role(conn, Authorization.role_assistant())
+
+  def require_reader(conn, _opts),
+    do: require_role(conn, Authorization.role_reader())
 end

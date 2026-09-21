@@ -5,14 +5,12 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
   def render(assigns) do
     ~H"""
     <div class="min-h-screen bg-white flex flex-col justify-between font-sans text-gray-800">
-
       <!-- Header / Navbar OJS -->
       <.ojs_header current_scope={@current_scope} />
 
       <!-- Main Content Area -->
       <main class="flex-grow max-w-5xl w-full mx-auto px-6 py-8">
         <div class="bg-white border-x border-gray-200 min-h-[600px] p-8">
-
           <!-- Breadcrumb Navigation -->
           <nav class="text-sm text-gray-600 mb-6 flex items-center space-x-2">
             <.link href={~p"/"} class="text-[#1b629b] hover:underline font-medium">Home</.link>
@@ -37,7 +35,6 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
             phx-submit="submit_password"
             class="max-w-md space-y-5"
           >
-
             <!-- Username or Email Input -->
             <div>
               <label for="user_email" class="block text-sm font-medium text-gray-800 mb-1">
@@ -68,7 +65,11 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
 
             <!-- Keep me logged in Checkbox -->
             <div class="flex items-center space-x-2 pt-1">
-              <.input field={f[:remember_me]} type="checkbox" class="h-4 w-4 rounded border-gray-300 text-[#1b629b] focus:ring-0" />
+              <.input
+                field={f[:remember_me]}
+                type="checkbox"
+                class="h-4 w-4 rounded border-gray-300 text-[#1b629b] focus:ring-0"
+              />
               <label for="user_remember_me" class="text-sm text-gray-800 select-none">
                 Keep me logged in
               </label>
@@ -86,15 +87,12 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
                 Login
               </button>
             </div>
-
           </.form>
-
         </div>
       </main>
 
       <!-- Footer Section -->
       <.ojs_footer />
-
     </div>
     """
   end
