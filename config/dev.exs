@@ -5,7 +5,7 @@ config :simple_journal_system, SimpleJournalSystem.Repo,
   username: "postgres",
   password: System.get_env("DB_PASSWORD"),
   hostname: "localhost",
-  database: "ojs_db_pg",
+  database: "ojs_db_wsl",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
