@@ -66,38 +66,44 @@ defmodule SimpleJournalSystem.Accounts do
 
   def login_user_by_magic_link(token) do
     with {:ok, query} <- UserToken.verify_magic_link_token_query(token),
-         {user, user_token} <- Repo.one(query) do
+        {user, user_token} <- Repo.one(query) do
       user = Repo.preload(user, user_user_groups: :user_group)
 
-      if is_nil(user.confirmed_at) && not is_nil(user.hashed_password) do
-        raise "magic link log in is not allowed when a password is set"
-      end
+      cond do
+        # Case 1 — unconfirmed + password → raise
+        is_nil(user.confirmed_at) && not is_nil(user.hashed_password) ->
+          raise "magic link log in is not allowed when a password is set"
 
-      now = DateTime.utc_now(:second)
+        # Case 2 — unconfirmed + no password → confirm
+        is_nil(user.confirmed_at) ->
+          now = NaiveDateTime.utc_now(:second)
 
-      authenticated_user =
-        user
-        |> Ecto.Changeset.change(
-          confirmed_at: now,
-          authenticated_at: now
-        )
+          authenticated_user =
+            user
+            |> Ecto.Changeset.change(
+              confirmed_at: now,
+              authenticated_at: now
+            )
 
-      case Repo.update(authenticated_user) do
-        {:ok, user} ->
+          case Repo.update(authenticated_user) do
+            {:ok, user} ->
+              Repo.delete(user_token)
+              {:ok, {user, [user_token]}}
+
+            {:error, _changeset} ->
+              :error
+          end
+
+        # Case 3 — confirmed → return []
+        true ->
           Repo.delete(user_token)
-          {:ok, {user, [user_token]}}
-
-        {:error, _changeset} ->
-          :error
+          {:ok, {user, []}}
       end
     else
+      nil -> {:error, :not_found}
       _ -> :error
     end
   end
-
-  ## =========================
-  ## Session token
-  ## =========================
 
   def get_user_by_session_token(token) do
     case UserToken.verify_session_token_query(token) do

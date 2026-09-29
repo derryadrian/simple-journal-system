@@ -85,13 +85,23 @@ defmodule SimpleJournalSystem.AccountsTest do
       %{email: email} = user_fixture()
 
       {:error, changeset} =
-        Accounts.register_user(%{email: email})
+        Accounts.register_user(%{
+          username: unique_user_username(),
+          email: email,
+          password: valid_user_password(),
+          password_confirmation: valid_user_password()
+        })
 
       assert "has already been taken" in errors_on(changeset).email
 
       # Now try with the uppercased email too, to check that email case is ignored.
       {:error, changeset} =
-        Accounts.register_user(%{email: String.upcase(email)})
+        Accounts.register_user(%{
+          username: unique_user_username(),
+          email: String.upcase(email),
+          password: valid_user_password(),
+          password_confirmation: valid_user_password()
+        })
 
       assert "has already been taken" in errors_on(changeset).email
     end
@@ -157,11 +167,13 @@ defmodule SimpleJournalSystem.AccountsTest do
     end
 
     test "sends token through notification", %{user: user} do
+      email = "current@example.com"
+
       token =
         extract_user_token(fn url ->
           Accounts.deliver_user_update_email_instructions(
             user,
-            "current@example.com",
+            email,
             url
           )
         end)
@@ -169,14 +181,14 @@ defmodule SimpleJournalSystem.AccountsTest do
       {:ok, token} = Base.url_decode64(token, padding: false)
 
       assert user_token =
-               Repo.get_by(
-                 UserToken,
-                 token: :crypto.hash(:sha256, token)
-               )
+              Repo.get_by(
+                UserToken,
+                token: :crypto.hash(:sha256, token)
+              )
 
       assert user_token.user_id == user.user_id
-      assert user_token.sent_to == user.email
-      assert user_token.context == "change:current@example.com"
+      assert user_token.sent_to == email
+      assert user_token.context == "change:#{email}"
     end
   end
 
@@ -469,8 +481,11 @@ defmodule SimpleJournalSystem.AccountsTest do
       {encoded_token, _hashed_token} =
         generate_user_magic_link_token(user)
 
-      assert {:ok, {^user, []}} =
-               Accounts.login_user_by_magic_link(encoded_token)
+      assert {:ok, {returned_user, []}} =
+         Accounts.login_user_by_magic_link(encoded_token)
+
+      assert returned_user.user_id == user.user_id
+      assert returned_user.confirmed_at
 
       # one time use only
       assert {:error, :not_found} =

@@ -28,7 +28,7 @@ defmodule SimpleJournalSystem.Accounts.User do
     field :date_validated, :naive_datetime
 
     # === Virtual fields untuk kompatibilitas dengan phx.gen.auth ===
-    field :confirmed_at, :naive_datetime, virtual: true
+    field :confirmed_at, :naive_datetime, source: :date_validated
     field :inserted_at, :naive_datetime, virtual: true
     field :updated_at, :naive_datetime, virtual: true
     # BARU

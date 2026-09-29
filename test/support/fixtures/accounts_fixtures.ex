@@ -35,6 +35,11 @@ defmodule SimpleJournalSystem.AccountsFixtures do
   def user_fixture(attrs \\ %{}) do
     user = unconfirmed_user_fixture(attrs)
 
+    {:ok, user} =
+      user
+      |> Ecto.Changeset.change(confirmed_at: NaiveDateTime.utc_now(:second))
+      |> SimpleJournalSystem.Repo.update()
+
     user
   end
 
