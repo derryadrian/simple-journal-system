@@ -3,6 +3,13 @@ defmodule SimpleJournalSystem.Accounts do
   alias SimpleJournalSystem.Repo
   alias SimpleJournalSystem.Accounts.User
   alias SimpleJournalSystem.Accounts.UserToken
+  alias SimpleJournalSystem.Accounts.UserGroup
+  alias SimpleJournalSystem.Accounts.UserGroupSetting
+  alias SimpleJournalSystem.Accounts.UserGroupStage
+  alias SimpleJournalSystem.Accounts.UserUserGroup
+  alias SimpleJournalSystem.Accounts.Roles
+  alias SimpleJournalSystem.Accounts.Stages
+  alias SimpleJournalSystem.Journals.Journal
 
   ## Database getters
 
@@ -136,5 +143,119 @@ defmodule SimpleJournalSystem.Accounts do
     token
     |> String.split(":", parts: 2)
     |> List.last()
+  end
+
+  ## User Group CRUD (D)
+
+  @doc """
+  Lists all user groups for a journal.
+  """
+  def list_user_groups(journal_id) do
+    Repo.all(from ug in UserGroup, where: ug.context_id == ^journal_id, order_by: ug.role_id)
+  end
+
+  @doc """
+  Gets a single user group by ID.
+  """
+  def get_user_group!(id), do: Repo.get!(UserGroup, id)
+
+  @doc """
+  Creates a user group for a journal.
+  """
+  def create_user_group(attrs) do
+    %UserGroup{}
+    |> UserGroup.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a user group.
+  """
+  def update_user_group(%UserGroup{} = group, attrs) do
+    group
+    |> UserGroup.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a user group. Prevents deletion if users are assigned.
+  """
+  def delete_user_group(%UserGroup{} = group) do
+    count = Repo.one(from uug in UserUserGroup, where: uug.user_group_id == ^group.user_group_id, select: count(uug.id))
+    if count > 0 do
+      {:error, :has_assigned_users}
+    else
+      Repo.delete(group)
+    end
+  end
+
+  @doc """
+  Sets a user group as default for a journal.
+  """
+  def set_default_group(journal_id, user_group_id) do
+    Repo.transaction(fn ->
+      Repo.update_all(UserGroup, set: [is_default: 0], where: [context_id: journal_id])
+      Repo.update_all(UserGroup, set: [is_default: 1], where: [user_group_id: user_group_id])
+    end)
+  end
+
+  ## User Group Settings (D)
+
+  @doc """
+  Gets localized settings for a user group.
+  """
+  def get_user_group_settings(user_group_id, locale \\ "en") do
+    Repo.all(from ugs in UserGroupSetting,
+      where: ugs.user_group_id == ^user_group_id and ugs.locale == ^locale)
+  end
+
+  @doc """
+  Sets a localized setting for a user group.
+  """
+  def put_user_group_setting(user_group_id, setting_name, setting_value, locale \\ "en") do
+    Repo.transaction(fn ->
+      existing = Repo.one(from ugs in UserGroupSetting,
+        where: ugs.user_group_id == ^user_group_id and ugs.setting_name == ^setting_name and ugs.locale == ^locale)
+      if existing do
+        Repo.update(%UserGroupSetting{existing | setting_value: setting_value})
+      else
+        Repo.insert(%UserGroupSetting{user_group_id: user_group_id, setting_name: setting_name, setting_value: setting_value, locale: locale})
+      end
+    end)
+  end
+
+  ## Stage Assignment (F)
+
+  @doc """
+  Sets stages accessible by a user group in a journal.
+  """
+  def set_stages(user_group_id, journal_id, stage_ids) do
+    Repo.transaction(fn ->
+      Repo.delete_all(from ugs in UserGroupStage, where: ugs.user_group_id == ^user_group_id and ugs.context_id == ^journal_id)
+      Enum.each(stage_ids, fn stage_id ->
+        if Stages.valid?(stage_id) do
+          Repo.insert!(%UserGroupStage{user_group_id: user_group_id, context_id: journal_id, stage_id: stage_id})
+        end
+      end)
+    end)
+    {:ok, :stages_updated}
+  end
+
+  @doc """
+  Gets stages assigned to a user group.
+  """
+  def stages_for_group(user_group_id) do
+    Repo.all(from ugs in UserGroupStage,
+      where: ugs.user_group_id == ^user_group_id,
+      select: ugs.stage_id)
+  end
+
+  @doc """
+  Gets stages assigned to a user group for a specific journal.
+  """
+  def stages_for_group_in_journal(user_group_id, journal_id) do
+    Repo.all(from ugs in UserGroupStage,
+      where: ugs.user_group_id == ^user_group_id and ugs.context_id == ^journal_id,
+      select: ugs.stage_id)
   end
 end
