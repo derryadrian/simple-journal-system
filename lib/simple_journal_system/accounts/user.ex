@@ -52,6 +52,8 @@ defmodule SimpleJournalSystem.Accounts.User do
       :remember_token
     ])
     |> validate_required([:username, :email])
+    |> unique_constraint(:username, name: :users_username_key)
+    |> unique_constraint(:email, name: :users_email_key)
   end
 
   def registration_changeset(user, attrs) do
@@ -62,6 +64,8 @@ defmodule SimpleJournalSystem.Accounts.User do
     |> validate_format(:email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "format email tidak valid")
     |> validate_confirmation(:password, message: "tidak sama dengan password")
     |> validate_length(:password, min: 6)
+    |> unique_constraint(:username, name: :users_username_key)
+    |> unique_constraint(:email, name: :users_email_key)
     |> put_password_hash()
     |> put_user_id()
     |> put_default_values()

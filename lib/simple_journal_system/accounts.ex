@@ -258,4 +258,106 @@ defmodule SimpleJournalSystem.Accounts do
       where: ugs.user_group_id == ^user_group_id and ugs.context_id == ^journal_id,
       select: ugs.stage_id)
   end
+
+  ## User Settings EAV (C)
+
+  @doc """
+  Gets a user setting value.
+  """
+  def get_setting(user, key, locale \\ "en") do
+    Repo.one(from us in UserSetting,
+      where: us.user_id == ^user.user_id and us.setting_name == ^key and us.locale == ^locale,
+      select: us.setting_value)
+  end
+
+  @doc """
+  Gets a user setting value with fallback locale.
+  """
+  def get_setting(user, key, locale, fallback_locale) do
+    get_setting(user, key, locale) || get_setting(user, key, fallback_locale)
+  end
+
+  @doc """
+  Sets a user setting value (upsert).
+  """
+  def put_setting(user, key, value, locale \\ "en") do
+    Repo.transaction(fn ->
+      existing = Repo.one(from us in UserSetting,
+        where: us.user_id == ^user.user_id and us.setting_name == ^key and us.locale == ^locale)
+      if existing do
+        Repo.update(%{existing | setting_value: value})
+      else
+        Repo.insert(%{user_id: user.user_id, setting_name: key, setting_value: value, locale: locale})
+      end
+    end)
+  end
+
+  @doc """
+  Gets all settings for a user as a map.
+  """
+  def get_all_settings(user, locale \\ "en") do
+    Repo.all(from us in UserSetting,
+      where: us.user_id == ^user.user_id and us.locale == ^locale,
+      select: {us.setting_name, us.setting_value})
+    |> Enum.into(%{})
+  end
+
+  @doc """
+  Returns user profile map from settings.
+  """
+  def get_profile(user, locale \\ "en") do
+    settings = get_all_settings(user, locale)
+    %{
+      given_name: settings["givenName"] || settings["firstName"],
+      family_name: settings["familyName"] || settings["lastName"],
+      affiliation: settings["affiliation"],
+      orcid: settings["orcid"],
+      country: settings["country"] || user.country,
+      email: user.email,
+      username: user.username,
+      url: user.url,
+      phone: user.phone,
+      mailing_address: user.mailing_address,
+      billing_address: user.billing_address,
+      biography: settings["biography"],
+      locale: settings["locale"] || locale
+    }
+  end
+
+  @doc """
+  Updates user profile from attrs (uses put_setting for EAV fields).
+  """
+  def update_profile(user, attrs) do
+    eav_fields = ["givenName", "familyName", "affiliation", "orcid", "country", "biography", "locale"]
+
+    Repo.transaction(fn ->
+      Enum.each(eav_fields, fn field ->
+        if Map.has_key?(attrs, field) do
+          put_setting(user, field, attrs[field])
+        end
+      end)
+
+      # Update direct fields on users table
+      direct_fields = Map.take(attrs, ["email", "username", "url", "phone", "mailing_address", "billing_address"])
+      if direct_fields != %{} do
+        user
+        |> User.changeset(direct_fields)
+        |> Repo.update()
+      end
+    end)
+  end
+
+  @doc """
+  Suspends a user account (soft disable).
+  """
+  def suspend_user(user, reason) do
+    Repo.update(%User{user | disabled: 1, disabled_reason: reason})
+  end
+
+  @doc """
+  Activates a suspended user account.
+  """
+  def activate_user(user) do
+    Repo.update(%User{user | disabled: 0, disabled_reason: nil})
+  end
 end
