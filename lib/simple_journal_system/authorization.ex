@@ -1,30 +1,10 @@
 defmodule SimpleJournalSystem.Authorization do
   @moduledoc """
   Authorization helper berdasarkan struktur role OJS.
+  Uses role IDs from SimpleJournalSystem.Accounts.Roles.
   """
 
-  # ==========================================================
-  # OJS Role Constants
-  # ==========================================================
-
-  @manager 1
-  @site_admin 16
-  @author 256
-  @editor 512
-  @reviewer 4096
-  @assistant 8192
-  @reader 65536
-
-  # ==========================================================
-  # Role Getters
-  def role_manager, do: @manager
-  def role_admin, do: @site_admin
-  def role_author, do: @author
-  def role_editor, do: @editor
-  def role_reviewer, do: @reviewer
-  def role_assistant, do: @assistant
-  def role_reader, do: @reader
-  # ==========================================================
+  alias SimpleJournalSystem.Accounts.Roles
 
   @doc """
   Mengambil seluruh role_id milik user.
@@ -71,27 +51,33 @@ defmodule SimpleJournalSystem.Authorization do
   end
 
   # ==========================================================
-  # OJS Helper Functions
+  # OJS Helper Functions (delegated to Roles module)
   # ==========================================================
 
   def is_manager?(user),
-    do: has_role?(user, @manager)
+    do: has_role?(user, Roles.manager())
 
   def is_site_admin?(user),
-    do: has_role?(user, @site_admin)
+    do: has_role?(user, Roles.site_admin())
+
+  def is_journal_manager?(user),
+    do: has_role?(user, Roles.journal_manager())
 
   def is_author?(user),
-    do: has_role?(user, @author)
+    do: has_role?(user, Roles.author())
 
   def is_editor?(user),
-    do: has_role?(user, @editor)
+    do: has_role?(user, Roles.editor())
 
   def is_reviewer?(user),
-    do: has_role?(user, @reviewer)
+    do: has_role?(user, Roles.reviewer())
 
   def is_assistant?(user),
-    do: has_role?(user, @assistant)
+    do: has_role?(user, Roles.assistant())
 
   def is_reader?(user),
-    do: has_role?(user, @reader)
+    do: has_role?(user, Roles.reader())
+
+  def is_subscription_manager?(user),
+    do: has_role?(user, Roles.subscription_manager())
 end

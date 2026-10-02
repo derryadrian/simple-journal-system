@@ -280,19 +280,25 @@ defmodule SimpleJournalSystemWeb.UserAuth do
     end
   end
 
-  # --- HELPER PLUGS OJS (DELEGATED TO REQUIRE_ROLE/2) ---
+# --- HELPER PLUGS OJS (DELEGATED TO REQUIRE_ROLE/2) ---
+
+  alias SimpleJournalSystem.Accounts.Roles
 
   def require_manager(conn, _opts),
-  do: require_role(conn, Authorization.role_manager())
+  do: require_role(conn, Roles.manager())
 
 def require_admin(conn, _opts),
-  do: require_role(conn, Authorization.role_admin())
+  do: require_role(conn, Roles.site_admin())
+
+def require_journal_manager(conn, _opts),
+  do: require_role(conn, Roles.journal_manager())
 
 def require_author(conn, _opts),
-  do: require_role(conn, Authorization.role_author())
+  do: require_role(conn, Roles.author())
 
-  def require_editor(conn, _opts), do: require_role(conn, 512)
-  def require_reviewer(conn, _opts), do: require_role(conn, 4096)
-  def require_assistant(conn, _opts), do: require_role(conn, 8192)
-  def require_reader(conn, _opts), do: require_role(conn, 65536)
+def require_editor(conn, _opts), do: require_role(conn, Roles.editor())
+def require_reviewer(conn, _opts), do: require_role(conn, Roles.reviewer())
+def require_assistant(conn, _opts), do: require_role(conn, Roles.assistant())
+def require_reader(conn, _opts), do: require_role(conn, Roles.reader())
+def require_subscription_manager(conn, _opts), do: require_role(conn, Roles.subscription_manager())
 end
