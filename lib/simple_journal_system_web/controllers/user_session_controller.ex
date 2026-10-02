@@ -3,6 +3,7 @@ defmodule SimpleJournalSystemWeb.UserSessionController do
 
   alias SimpleJournalSystem.Accounts
   alias SimpleJournalSystemWeb.UserAuth
+  alias SimpleJournalSystemWeb.RateLimit
 
   def create(conn, %{"_action" => "confirmed"} = params) do
     create(conn, params, "User confirmed successfully.")
@@ -32,12 +33,17 @@ defmodule SimpleJournalSystemWeb.UserSessionController do
   # email + password login
   defp create(conn, %{"user" => user_params}, info) do
     %{"email" => email, "password" => password} = user_params
+    identifier = RateLimit.get_identifier_for_email(conn, email)
 
     if user = Accounts.get_user_by_email_and_password(email, password) do
+      RateLimit.reset_login_attempts(identifier)
+
       conn
       |> put_flash(:info, info)
       |> UserAuth.log_in_user(user, user_params)
     else
+      RateLimit.increment_login_attempt(identifier)
+
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
       conn
       |> put_flash(:error, "Invalid email or password")

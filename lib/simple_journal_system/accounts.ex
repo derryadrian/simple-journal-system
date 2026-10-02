@@ -25,13 +25,71 @@ defmodule SimpleJournalSystem.Accounts do
     Repo.one(query)
   end
 
-  # Fungsi login utama – mengembalikan user atau nil (bukan tuple)
+  # Fungsi login utama – mendukung Bcrypt DAN legacy SHA1 (OJS)
   def get_user_by_email_and_password(email, password) do
     user = get_user_by_email_or_username(email)
-    if user && Bcrypt.verify_pass(password, user.hashed_password) do
+    if user && verify_password(password, user.hashed_password) do
+      maybe_upgrade_hash(user, password)
       user
     else
       nil
+    end
+  end
+
+  @doc """
+  Verifies password against hash. Supports:
+  - Bcrypt (current)
+  - OJS SHA1 legacy: sha1$salt$hash or plain SHA1
+  """
+  defp verify_password(password, hashed) do
+    cond do
+      is_nil(hashed) or hashed == "" ->
+        false
+      String.starts_with?(hashed, "$2b$") or String.starts_with?(hashed, "$2a$") or String.starts_with?(hashed, "$2y$") ->
+        Bcrypt.verify_pass(password, hashed)
+      String.contains?(hashed, "$") ->
+        verify_sha1_legacy(password, hashed)
+      true ->
+        # Plain SHA1 (40 hex chars)
+        :crypto.hash(:sha, password) |> Base.encode16(case: :lower) == hashed
+    end
+  end
+
+  @doc """
+  Verifies OJS legacy SHA1 format: algorithm$salt$hash
+  Common formats:
+  - sha1$salt$hash
+  - sha256$salt$hash
+  - md5$salt$hash
+  """
+  defp verify_sha1_legacy(password, hashed) do
+    parts = String.split(hashed, "$", parts: 3)
+    case parts do
+      [algo, salt, hash] ->
+        computed =
+          case algo do
+            "sha1" -> :crypto.hash(:sha, salt <> password)
+            "sha256" -> :crypto.hash(:sha256, salt <> password)
+            "md5" -> :crypto.hash(:md5, salt <> password)
+            _ -> :crypto.hash(:sha, salt <> password)
+          end
+        Base.encode16(computed, case: :lower) == hash
+      _ ->
+        false
+    end
+  end
+
+  @doc """
+  Upgrades legacy hash to Bcrypt on successful login.
+  """
+  defp maybe_upgrade_hash(user, password) do
+    hashed = user.hashed_password
+    if hashed && !String.starts_with?(hashed, "$2b$") and !String.starts_with?(hashed, "$2a$") and !String.starts_with?(hashed, "$2y$") do
+      new_hash = Bcrypt.hash_pwd_salt(password)
+      Repo.update(%User{user | hashed_password: new_hash})
+      :ok
+    else
+      :ok
     end
   end
 

@@ -73,6 +73,7 @@ defmodule SimpleJournalSystem.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bcrypt_elixir, "~> 3.2"},
+      {:hammer, "~> 7.0"},
       {:bandit, "~> 1.5"}
     ]
   end

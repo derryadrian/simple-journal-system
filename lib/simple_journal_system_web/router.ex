@@ -13,6 +13,10 @@ defmodule SimpleJournalSystemWeb.Router do
     plug :fetch_current_scope_for_user
   end
 
+  pipeline :rate_limit_login do
+    plug SimpleJournalSystemWeb.Plugs.RateLimitLogin
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -70,7 +74,11 @@ defmodule SimpleJournalSystemWeb.Router do
       live "/users/log-in/:token", UserLive.Confirmation, :new
     end
 
-    post "/users/log-in", UserSessionController, :create
+    scope "/", SimpleJournalSystemWeb do
+      pipe_through [:rate_limit_login]
+      post "/users/log-in", UserSessionController, :create
+    end
+
     delete "/users/log-out", UserSessionController, :delete
   end
 end
