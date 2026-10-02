@@ -1,39 +1,11 @@
 <div class="min-h-screen bg-white flex flex-col justify-between font-sans text-gray-800">
   
   <!-- Header / Navbar Section -->
-  <header class="bg-[#1b629b] text-white px-8 py-6 flex justify-between items-center shadow-sm">
-    <!-- Logo Left -->
-    <div class="flex items-center space-x-2">
-      <a href="/" class="flex items-end space-x-1">
-        <span class="text-5xl font-serif tracking-wider leading-none font-bold">OJS</span>
-      </a>
-      <div class="border-t border-white/80 pt-0.5 text-[10px] uppercase tracking-widest leading-none font-sans font-light">
-        OPEN JOURNAL SYSTEMS
-      </div>
-    </div>
-
-    <!-- Auth Links Right (Disesuaikan dengan @current_scope) -->
-    <nav class="flex items-center space-x-6 text-sm font-medium">
-      <%= if assigns[:current_scope] && @current_scope do %>
-        <span class="text-xs text-blue-100 font-normal">
-          <%= @current_scope.user.email %>
-        </span>
-        <.link href={~p"/users/settings"} class="hover:underline">
-          Settings
-        </.link>
-        <.link href={~p"/users/log-out"} method="delete" class="hover:underline">
-          Log out
-        </.link>
-      <% else %>
-        <.link href={~p"/users/register"} class="hover:underline">
-          Register
-        </.link>
-        <.link href={~p"/users/log-in"} class="hover:underline">
-          Log in
-        </.link>
-      <% end %>
-    </nav>
-  </header>
+  <.ojs_header 
+    current_scope={@current_scope} 
+    current_journal={@current_journal}
+    user_journals={@user_journals}
+  />
 
   <!-- Main Content Area -->
   <main class="flex-grow max-w-5xl w-full mx-auto px-6 py-10">

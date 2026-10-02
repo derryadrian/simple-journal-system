@@ -2,6 +2,8 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
   use Phoenix.Component
 
   attr :current_scope, :any, default: nil
+  attr :current_journal, :any, default: nil
+  attr :user_journals, :list, default: []
 
   def ojs_header(assigns) do
     ~H"""
@@ -19,8 +21,58 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
       </div>
 
       <nav class="flex items-center gap-6 text-sm font-medium">
+        <!-- Journal Switcher (CSS-only dropdown with click-away hook) -->
+        <%= if @user_journals && length(@user_journals) > 0 do %>
+          <div class="relative" phx-hook="JournalDropdown" id="journal-dropdown">
+            <!-- Hidden checkbox for CSS-only toggle -->
+            <input 
+              type="checkbox" 
+              id="journal-dropdown-toggle" 
+              class="peer hidden" 
+              phx-hook="ToggleJournalDropdown"
+            />
+            
+            <label 
+              for="journal-dropdown-toggle"
+              class="flex items-center gap-2 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors cursor-pointer"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
+              </svg>
+              <span class="font-medium">
+                <%= @current_journal?.path || "Select Journal" %>
+              </span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </label>
+
+            <!-- Dropdown menu (CSS-only, shown when checkbox is checked) -->
+            <div class="peer-checked:block hidden absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50 animate-fade-in">
+              <div class="py-1">
+                <%= for journal <- @user_journals do %>
+                  <%= is_current = @current_journal && @current_journal.journal_id == journal.journal_id %>
+                  <a 
+                    href={"/journal/switch/" <> to_string(journal.journal_id)}
+                    class={"block px-4 py-2 text-sm hover:bg-gray-100 " <> if is_current, do: "bg-blue-50 text-blue-700 font-medium", else: ""}
+                  >
+                    <div class="flex items-center justify-between">
+                      <span><%= journal.path %></span>
+                      <%= if @current_journal && @current_journal.journal_id == journal.journal_id do %>
+                        <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                      <% end %>
+                    </div>
+                  </a>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
         <%= if @current_scope do %>
-          <span>{@current_scope.user.email}</span>
+          <span class="text-xs opacity-80">{@current_scope.user.email}</span>
 
           <a href="/users/settings" class="hover:underline">
             Settings
