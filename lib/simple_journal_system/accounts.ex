@@ -1,5 +1,6 @@
 defmodule SimpleJournalSystem.Accounts do
   import Ecto.Query
+
   alias SimpleJournalSystem.Repo
   alias SimpleJournalSystem.Accounts.User
   alias SimpleJournalSystem.Accounts.UserToken
@@ -96,11 +97,35 @@ defmodule SimpleJournalSystem.Accounts do
   # Fungsi lain tetap seperti bawaan Phoenix (tidak diubah)
   def get_user_by_session_token(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
-    Repo.one(query)
+
+    case Repo.one(query) do
+      {user, inserted_at} ->
+        {
+          Repo.preload(user, user_user_groups: :user_group),
+          inserted_at
+        }
+
+      nil ->
+        nil
+    end
   end
 
-  def get_user_by_session_token(user_id) when is_integer(user_id) do
-    Repo.get(User, user_id)
+  def get_user_by_session_token(user_id)
+      when is_integer(user_id) do
+
+    User
+    |> Repo.get(user_id)
+    |> Repo.preload(user_user_groups: :user_group)
+  end
+
+  def list_user_groups_for_user(user) do
+    UserUserGroup
+    |> where(user_id: ^user.user_id)
+    |> join(:inner, [uug], ug in UserGroup,
+      on: uug.user_group_id == ug.user_group_id
+    )
+    |> select([_uug, ug], ug)
+    |> Repo.all()
   end
 
   ## Session token management (tetap pakai UserToken jika ada)
