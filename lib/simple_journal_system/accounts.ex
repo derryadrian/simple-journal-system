@@ -418,4 +418,112 @@ defmodule SimpleJournalSystem.Accounts do
   def activate_user(user) do
     Repo.update(%User{user | disabled: 0, disabled_reason: nil})
   end
+
+  ## User Role Assignment (E)
+
+  @doc """
+  Enrolls a user into a user group (role).
+  """
+  def enroll_user(user_id, user_group_id) do
+    Repo.transaction(fn ->
+      _user = Repo.get!(User, user_id)
+      _group = Repo.get!(UserGroup, user_group_id)
+
+      # Check if already enrolled
+      existing = Repo.one(from uug in UserUserGroup,
+        where: uug.user_id == ^user_id and uug.user_group_id == ^user_group_id)
+      
+      if existing do
+        {:error, :already_enrolled}
+      else
+        Repo.insert!(%UserUserGroup{
+          user_id: user_id,
+          user_group_id: user_group_id,
+          date_start: NaiveDateTime.utc_now()
+        })
+        {:ok, :enrolled}
+      end
+    end)
+  end
+
+  @doc """
+  Unenrolls a user from a user group (role).
+  """
+  def unenroll_user(user_id, user_group_id) do
+    Repo.transaction(fn ->
+      deleted = Repo.delete_all(from uug in UserUserGroup,
+        where: uug.user_id == ^user_id and uug.user_group_id == ^user_group_id)
+      if deleted > 0 do
+        {:ok, :unenrolled}
+      else
+        {:error, :not_enrolled}
+      end
+    end)
+  end
+
+  @doc """
+  Lists all roles for a user across all journals.
+  Returns list of %{journal_id:, journal_path:, role_id:, role_name:, group_id:, is_default:}
+  """
+  def list_user_roles(user_id) do
+    Repo.all(
+      from uug in UserUserGroup,
+      join: ug in UserGroup,
+      on: uug.user_group_id == ug.user_group_id,
+      join: j in Journal,
+      on: ug.context_id == j.journal_id,
+      where: uug.user_id == ^user_id,
+      select: %{
+        journal_id: j.journal_id,
+        journal_path: j.path,
+        role_id: ug.role_id,
+        group_id: ug.user_group_id,
+        is_default: ug.is_default == 1,
+        date_start: uug.date_start,
+        date_end: uug.date_end
+      }
+    )
+    |> Enum.map(fn r ->
+      Map.put(r, :role_name, Roles.name(r.role_id))
+    end)
+  end
+
+  @doc """
+  Lists user roles for a specific journal.
+  """
+  def list_user_roles_in_journal(user_id, journal_id) do
+    Repo.all(
+      from uug in UserUserGroup,
+      join: ug in UserGroup,
+      on: uug.user_group_id == ug.user_group_id,
+      where: uug.user_id == ^user_id and ug.context_id == ^journal_id,
+      select: %{
+        role_id: ug.role_id,
+        group_id: ug.user_group_id,
+        is_default: ug.is_default == 1,
+        date_start: uug.date_start,
+        date_end: uug.date_end
+      }
+    )
+    |> Enum.map(fn r ->
+      Map.put(r, :role_name, Roles.name(r.role_id))
+    end)
+  end
+
+  @doc """
+  Bulk enrolls multiple users into a user group.
+  """
+  def bulk_enroll(user_ids, user_group_id) do
+    Repo.transaction(fn ->
+      _group = Repo.get!(UserGroup, user_group_id)
+      results = Enum.map(user_ids, fn user_id ->
+        case enroll_user(user_id, user_group_id) do
+          {:ok, _} -> {:ok, user_id}
+          {:error, :already_enrolled} -> {:skipped, user_id}
+          error -> error
+        end
+      end)
+      {:ok, results}
+    end)
+  end
 end
