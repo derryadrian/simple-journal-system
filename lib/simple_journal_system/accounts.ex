@@ -551,4 +551,149 @@ defmodule SimpleJournalSystem.Accounts do
       {:ok, results}
     end)
   end
+
+  ## Admin Users (I)
+
+  @doc """
+  Lists all users with search and filter.
+  """
+  def list_users(filters \\ %{}) do
+    query = User
+    |> where([u], not is_nil(u.user_id))
+    |> order_by([u], desc: u.date_registered)
+
+    query = if filters[:search] do
+      search = "%#{filters[:search]}%"
+      from u in query,
+        where: ilike(u.email, ^search) or ilike(u.username, ^search)
+    else
+      query
+    end
+
+    query = if filters[:role_id] do
+      from u in query,
+        join: uug in assoc(u, :user_user_groups),
+        join: ug in assoc(uug, :user_group),
+        where: ug.role_id == ^filters[:role_id]
+    else
+      query
+    end
+
+    query = if filters[:journal_id] do
+      from u in query,
+        join: uug in assoc(u, :user_user_groups),
+        join: ug in assoc(uug, :user_group),
+        where: ug.context_id == ^filters[:journal_id]
+    else
+      query
+    end
+
+    query = if filters[:disabled] != nil do
+      from u in query, where: u.disabled == ^filters[:disabled]
+    else
+      query
+    end
+
+    page = filters[:page] || 1
+    per_page = filters[:per_page] || 25
+
+    {results, total} = Repo.paginate(query, page: page, page_size: per_page)
+    
+    %{
+      users: results,
+      total: total,
+      page: page,
+      per_page: per_page,
+      total_pages: div(total + per_page - 1, per_page)
+    }
+  end
+
+  @doc """
+  Gets a user with all their roles across journals.
+  """
+  def get_user_with_roles(user_id) do
+    user = Repo.get!(User, user_id)
+    roles = list_user_roles(user_id)
+    journals = Journals.list_user_journals(user_id)
+    %{
+      user: user,
+      roles: roles,
+      journals: journals
+    }
+  end
+
+  @doc """
+  Updates user roles (enroll/unenroll).
+  """
+  def update_user_roles(user_id, role_changes) do
+    Repo.transaction(fn ->
+      current_roles = list_user_roles(user_id)
+      current_group_ids = Enum.map(current_roles, & &1.group_id)
+      
+      # Roles to add
+      to_add = role_changes[:add] || []
+      Enum.each(to_add, fn group_id ->
+        unless group_id in current_group_ids do
+          enroll_user(user_id, group_id)
+        end
+      end)
+
+      # Roles to remove
+      to_remove = role_changes[:remove] || []
+      Enum.each(to_remove, fn group_id ->
+        if group_id in current_group_ids do
+          unenroll_user(user_id, group_id)
+        end
+      end)
+
+      {:ok, list_user_roles(user_id)}
+    end)
+  end
+
+  @doc """
+  Approves a user account (enables it).
+  """
+  def approve_user(user_id) do
+    Repo.update(%User{user_id: user_id, disabled: 0, disabled_reason: nil})
+  end
+
+  @doc """
+  Rejects/disables a user account.
+  """
+  def reject_user(user_id, reason) do
+    Repo.update(%User{user_id: user_id, disabled: 1, disabled_reason: reason})
+  end
+
+  @doc """
+  Exports users to CSV format.
+  """
+  def export_users_csv(filters \\ %{}) do
+    {results, _total} = Repo.paginate(list_users(filters), page: 1, page_size: 10000)
+    
+    headers = ["User ID", "Username", "Email", "Disabled", "Disabled Reason", "Date Registered", "Roles", "Journals"]
+    
+    rows = Enum.map(results.users, fn user ->
+      roles = list_user_roles(user.user_id)
+      journals = Journals.list_user_journals(user.user_id)
+      role_str = Enum.map_join(roles, ", ", fn r -> "#{r.role_name} (#{r.journal_path})" end)
+      journal_str = Enum.map_join(journals, ", ", fn j -> j.path end)
+      
+      disabled_str = if user.disabled == 1, do: "Yes", else: "No"
+      
+      [
+        user.user_id,
+        user.username,
+        user.email,
+        disabled_str,
+        user.disabled_reason || "",
+        user.date_registered,
+        role_str,
+        journal_str
+      ]
+    end)
+    
+    [headers | rows]
+    |> Enum.map(&Enum.join(&1, ","))
+    |> Enum.join("\n")
+  end
 end

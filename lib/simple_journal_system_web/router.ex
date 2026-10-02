@@ -67,7 +67,12 @@ defmodule SimpleJournalSystemWeb.Router do
   scope "/admin", SimpleJournalSystemWeb do
     pipe_through [:browser, :admin]
 
-    get "/", PageController, :home
+    live_session :admin_users,
+      on_mount: [{SimpleJournalSystemWeb.UserAuth, :require_authenticated}] do
+      live "/users", AdminLive.UsersLive, :index
+    end
+
+    get "/users/export", AdminController, :export_users
   end
 
   # Menggunakan live_session untuk rute LiveView Author agar aman di level WebSocket
