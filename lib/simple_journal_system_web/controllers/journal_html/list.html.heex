@@ -1,0 +1,48 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div class="max-w-3xl mx-auto px-6 py-8">
+    <div class="bg-white border-x border-gray-200 p-8">
+      <nav class="text-sm text-gray-600 mb-6 flex items-center space-x-2">
+        <.link href={~p"/"} class="text-[#1b629b] hover:underline font-medium">Home</.link>
+        <span class="text-gray-400">/</span>
+        <span class="text-gray-500">Switch Journal</span>
+      </nav>
+
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Switch Journal</h1>
+      <p class="text-sm text-gray-700 mb-6">
+        Select the journal you want to work with.
+      </p>
+
+      <div class="space-y-4">
+        <ul class="divide-y divide-gray-200">
+          <%= for journal <- @journals do %>
+            <li class="py-4 flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <div class="flex-1">
+                  <h3 class="text-lg font-medium text-gray-900"><%= journal.path %></h3>
+                  <p class="text-sm text-gray-500">ID: <%= journal.journal_id %> • Locale: <%= journal.primary_locale %></p>
+                </div>
+                <%= if @current_journal && @current_journal.journal_id == journal.journal_id do %>
+                  <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Current</span>
+                <% else do %>
+                  <.link 
+                    href={~p"/journal/switch/#{journal.journal_id}"} 
+                    class="px-4 py-2 bg-[#1b629b] hover:bg-[#155282] text-white text-sm font-medium rounded border border-gray-400 shadow-sm transition-colors"
+                    method="get"
+                  >
+                    Switch
+                  </.link>
+                <% end %>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+
+      <%= if @journals == [] do %>
+        <div class="mt-6 text-center text-gray-500">
+          <p>You don't have access to any journals yet.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</Layouts.app>

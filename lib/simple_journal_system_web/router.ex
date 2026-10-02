@@ -11,6 +11,7 @@ defmodule SimpleJournalSystemWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_scope_for_user
+    plug SimpleJournalSystemWeb.Plugs.JournalResolver
   end
 
   pipeline :rate_limit_login do
@@ -126,5 +127,13 @@ defmodule SimpleJournalSystemWeb.Router do
     end
 
     delete "/users/log-out", UserSessionController, :delete
+  end
+
+  # Journal switching routes
+  scope "/", SimpleJournalSystemWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/journal/switch/:journal_id", JournalController, :switch
+    get "/journal/list", JournalController, :list
   end
 end
