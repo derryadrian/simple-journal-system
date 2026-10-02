@@ -34,12 +34,13 @@ defmodule SimpleJournalSystemWeb.AdminLive.UsersLive do
   @impl true
   def handle_event("toggle_user", %{"user_id" => user_id, "action" => action}, socket) do
     user_id = String.to_integer(user_id)
+    changed_by_id = socket.assigns.current_scope.user.user_id
     
     case action do
       "approve" ->
-        Accounts.approve_user(user_id)
+        Accounts.approve_user(user_id, changed_by_id)
       "reject" ->
-        Accounts.reject_user(user_id, "Rejected by admin")
+        Accounts.reject_user(user_id, "Rejected by admin", changed_by_id)
     end
     
     socket = apply_filters(socket, socket.assigns.filters)
@@ -50,6 +51,7 @@ defmodule SimpleJournalSystemWeb.AdminLive.UsersLive do
   def handle_event("save_roles", %{"user_id" => user_id, "role_ids" => role_ids}, socket) do
     user_id = String.to_integer(user_id)
     role_ids = Enum.map(role_ids, &String.to_integer/1)
+    changed_by_id = socket.assigns.current_scope.user.user_id
     
     # Get current roles
     current = Accounts.list_user_roles(user_id)
@@ -59,7 +61,7 @@ defmodule SimpleJournalSystemWeb.AdminLive.UsersLive do
     to_add = role_ids -- current_group_ids
     to_remove = current_group_ids -- role_ids
     
-    Accounts.update_user_roles(user_id, add: to_add, remove: to_remove)
+    Accounts.update_user_roles(user_id, add: to_add, remove: to_remove, changed_by_id: changed_by_id)
     
     socket = apply_filters(socket, socket.assigns.filters)
     {:noreply, put_flash(socket, :info, "Roles updated successfully")}

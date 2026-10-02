@@ -11,6 +11,8 @@ defmodule SimpleJournalSystem.Accounts do
   alias SimpleJournalSystem.Accounts.Roles
   alias SimpleJournalSystem.Accounts.Stages
   alias SimpleJournalSystem.Journals.Journal
+  alias SimpleJournalSystem.Audit
+  alias SimpleJournalSystem.Audit.RoleChangeLog
 
   ## Database getters
 
@@ -449,10 +451,10 @@ defmodule SimpleJournalSystem.Accounts do
   @doc """
   Enrolls a user into a user group (role).
   """
-  def enroll_user(user_id, user_group_id) do
+  def enroll_user(user_id, user_group_id, changed_by_id) do
     Repo.transaction(fn ->
       _user = Repo.get!(User, user_id)
-      _group = Repo.get!(UserGroup, user_group_id)
+      group = Repo.get!(UserGroup, user_group_id)
 
       # Check if already enrolled
       existing = Repo.one(from uug in UserUserGroup,
@@ -466,6 +468,8 @@ defmodule SimpleJournalSystem.Accounts do
           user_group_id: user_group_id,
           date_start: NaiveDateTime.utc_now()
         })
+        # Audit log
+        Audit.log_enroll(user_id, changed_by_id, user_group_id, group.context_id)
         {:ok, :enrolled}
       end
     end)
@@ -474,11 +478,14 @@ defmodule SimpleJournalSystem.Accounts do
   @doc """
   Unenrolls a user from a user group (role).
   """
-  def unenroll_user(user_id, user_group_id) do
+  def unenroll_user(user_id, user_group_id, changed_by_id) do
     Repo.transaction(fn ->
+      group = Repo.get!(UserGroup, user_group_id)
       deleted = Repo.delete_all(from uug in UserUserGroup,
         where: uug.user_id == ^user_id and uug.user_group_id == ^user_group_id)
       if deleted > 0 do
+        # Audit log
+        Audit.log_unenroll(user_id, changed_by_id, user_group_id, group.context_id)
         {:ok, :unenrolled}
       else
         {:error, :not_enrolled}
@@ -538,11 +545,11 @@ defmodule SimpleJournalSystem.Accounts do
   @doc """
   Bulk enrolls multiple users into a user group.
   """
-  def bulk_enroll(user_ids, user_group_id) do
+  def bulk_enroll(user_ids, user_group_id, changed_by_id) do
     Repo.transaction(fn ->
       _group = Repo.get!(UserGroup, user_group_id)
       results = Enum.map(user_ids, fn user_id ->
-        case enroll_user(user_id, user_group_id) do
+        case enroll_user(user_id, user_group_id, changed_by_id) do
           {:ok, _} -> {:ok, user_id}
           {:error, :already_enrolled} -> {:skipped, user_id}
           error -> error
@@ -625,7 +632,7 @@ defmodule SimpleJournalSystem.Accounts do
   @doc """
   Updates user roles (enroll/unenroll).
   """
-  def update_user_roles(user_id, role_changes) do
+  def update_user_roles(user_id, role_changes, changed_by_id) do
     Repo.transaction(fn ->
       current_roles = list_user_roles(user_id)
       current_group_ids = Enum.map(current_roles, & &1.group_id)
@@ -634,7 +641,7 @@ defmodule SimpleJournalSystem.Accounts do
       to_add = role_changes[:add] || []
       Enum.each(to_add, fn group_id ->
         unless group_id in current_group_ids do
-          enroll_user(user_id, group_id)
+          enroll_user(user_id, group_id, changed_by_id)
         end
       end)
 
@@ -642,7 +649,7 @@ defmodule SimpleJournalSystem.Accounts do
       to_remove = role_changes[:remove] || []
       Enum.each(to_remove, fn group_id ->
         if group_id in current_group_ids do
-          unenroll_user(user_id, group_id)
+          unenroll_user(user_id, group_id, changed_by_id)
         end
       end)
 
@@ -653,15 +660,21 @@ defmodule SimpleJournalSystem.Accounts do
   @doc """
   Approves a user account (enables it).
   """
-  def approve_user(user_id) do
-    Repo.update(%User{user_id: user_id, disabled: 0, disabled_reason: nil})
+  def approve_user(user_id, changed_by_id) do
+    Repo.transaction(fn ->
+      Repo.update(%User{user_id: user_id, disabled: 0, disabled_reason: nil})
+      Audit.log_approve(user_id, changed_by_id)
+    end)
   end
 
   @doc """
   Rejects/disables a user account.
   """
-  def reject_user(user_id, reason) do
-    Repo.update(%User{user_id: user_id, disabled: 1, disabled_reason: reason})
+  def reject_user(user_id, reason, changed_by_id) do
+    Repo.transaction(fn ->
+      Repo.update(%User{user_id: user_id, disabled: 1, disabled_reason: reason})
+      Audit.log_reject(user_id, changed_by_id, reason)
+    end)
   end
 
   @doc """
