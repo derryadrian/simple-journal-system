@@ -149,11 +149,11 @@ defmodule SimpleJournalSystemWeb.UserLive.Settings do
     user = socket.assigns.current_scope.user
     true = Accounts.sudo_mode?(user)
 
-    case Accounts.change_user_password(user, user_params) do
-      %{valid?: true} = changeset ->
-        {:noreply, assign(socket, trigger_submit: true, password_form: to_form(changeset))}
+    case Accounts.update_user_password(user, "current_password", user_params) do
+      {:ok, {_user, _expired_tokens}} ->
+        {:noreply, assign(socket, trigger_submit: true, password_form: to_form(Accounts.change_user_password(user, %{}, hash_password: false)))}
 
-      changeset ->
+      {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset, action: :insert))}
     end
   end

@@ -3,23 +3,9 @@ defmodule SimpleJournalSystemWeb.RateLimit do
   Rate limiting for login attempts using Hammer.
   """
 
-  @hammer_opts [
-    backend: {Hammer.Backend.ETS, []},
+  use Hammer,
+    backend: :ets,
     expiry_ms: 15 * 60 * 1000 # 15 minutes
-  ]
-
-  def child_spec(_opts) do
-    %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, []},
-      type: :worker,
-      restart: :permanent
-    }
-  end
-
-  def start_link(_opts) do
-    Hammer.start_link([name: __MODULE__] ++ @hammer_opts)
-  end
 
   @doc """
   Checks rate limit for login attempts.

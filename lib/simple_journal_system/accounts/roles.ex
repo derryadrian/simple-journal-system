@@ -9,6 +9,7 @@ defmodule SimpleJournalSystem.Accounts.Roles do
   @reviewer 4096
   @editor 4097
   @author 65536
+  @assistant 8192
   @reader 1048576
   @subscription_manager 2097152
 
@@ -62,6 +63,11 @@ defmodule SimpleJournalSystem.Accounts.Roles do
   Returns role ID for reader.
   """
   def reader, do: @reader
+
+  @doc """
+  Returns role ID for assistant.
+  """
+  def assistant, do: @assistant
 
   @doc """
   Returns role ID for subscription manager.

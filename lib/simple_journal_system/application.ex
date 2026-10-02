@@ -12,7 +12,7 @@ defmodule SimpleJournalSystem.Application do
       SimpleJournalSystem.Repo,
       {DNSCluster, query: Application.get_env(:simple_journal_system, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: SimpleJournalSystem.PubSub},
-      SimpleJournalSystemWeb.RateLimit,
+      # RateLimit is started automatically via `use Hammer`
       # Start a worker by calling: SimpleJournalSystem.Worker.start_link(arg)
       # {SimpleJournalSystem.Worker, arg},
       # Start to serve requests, typically the last entry
