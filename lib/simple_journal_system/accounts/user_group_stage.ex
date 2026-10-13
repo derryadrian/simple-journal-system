@@ -13,7 +13,6 @@ defmodule SimpleJournalSystem.Accounts.UserGroupStage do
       foreign_key: :user_group_id,
       references: :user_group_id
 
-    timestamps(type: :utc_datetime, updated_at: false)
   end
 
   def changeset(stage, attrs) do

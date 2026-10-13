@@ -19,7 +19,7 @@ defmodule SimpleJournalSystem.AccountsFixtures do
   Creates a user with Bcrypt password.
   """
   def user_fixture(attrs \\ %{}) do
-    attrs = Enum.merge(%{
+    attrs = Map.merge(%{
       username: "user#{System.unique_integer()}",
       email: unique_user_email(),
       password: valid_user_password(),

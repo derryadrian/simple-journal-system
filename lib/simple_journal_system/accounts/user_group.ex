@@ -25,7 +25,6 @@ defmodule SimpleJournalSystem.Accounts.UserGroup do
       foreign_key: :user_group_id,
       references: :user_group_id
 
-    timestamps(type: :utc_datetime, updated_at: false)
   end
 
   def changeset(group, attrs) do

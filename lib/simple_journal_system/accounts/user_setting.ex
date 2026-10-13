@@ -14,7 +14,6 @@ defmodule SimpleJournalSystem.Accounts.UserSetting do
       foreign_key: :user_id,
       references: :user_id
 
-    timestamps(type: :utc_datetime, updated_at: false)
   end
 
   def changeset(setting, attrs) do
