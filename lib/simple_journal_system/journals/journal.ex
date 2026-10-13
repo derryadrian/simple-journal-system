@@ -15,8 +15,6 @@ defmodule SimpleJournalSystem.Journals.Journal do
     has_many :user_groups, SimpleJournalSystem.Accounts.UserGroup,
       foreign_key: :context_id,
       references: :journal_id
-
-    timestamps(type: :utc_datetime, updated_at: false)
   end
 
   def changeset(journal, attrs) do

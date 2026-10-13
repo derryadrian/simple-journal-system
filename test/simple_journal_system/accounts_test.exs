@@ -2,396 +2,510 @@ defmodule SimpleJournalSystem.AccountsTest do
   use SimpleJournalSystem.DataCase
 
   alias SimpleJournalSystem.Accounts
+  alias SimpleJournalSystem.Accounts.User
+  alias SimpleJournalSystem.Accounts.UserGroup
+  alias SimpleJournalSystem.Accounts.UserUserGroup
+  alias SimpleJournalSystem.Accounts.Roles
+  alias SimpleJournalSystem.Journals.Journal
+  alias SimpleJournalSystem.Repo
 
   import SimpleJournalSystem.AccountsFixtures
-  alias SimpleJournalSystem.Accounts.{User, UserToken}
-
-  describe "get_user_by_email/1" do
-    test "does not return the user if the email does not exist" do
-      refute Accounts.get_user_by_email("unknown@example.com")
-    end
-
-    test "returns the user if the email exists" do
-      %{id: id} = user = user_fixture()
-      assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
-    end
-  end
 
   describe "get_user_by_email_and_password/2" do
-    test "does not return the user if the email does not exist" do
-      refute Accounts.get_user_by_email_and_password("unknown@example.com", "hello world!")
+    @tag :auth
+    test "returns user with valid Bcrypt password", %{user: user} do
+      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.email, "password123")
     end
 
-    test "does not return the user if the password is not valid" do
-      user = user_fixture() |> set_password()
-      refute Accounts.get_user_by_email_and_password(user.email, "invalid")
+    @tag :auth
+    test "returns nil with invalid password", %{user: user} do
+      refute Accounts.get_user_by_email_and_password(user.email, "wrongpassword")
     end
 
-    test "returns the user if the email and password are valid" do
-      %{id: id} = user = user_fixture() |> set_password()
+    @tag :auth
+    test "returns nil for non-existent email", %{user: user} do
+      refute Accounts.get_user_by_email_and_password("nonexistent@example.com", "password123")
+    end
 
-      assert %User{id: ^id} =
-               Accounts.get_user_by_email_and_password(user.email, valid_user_password())
+    @tag :auth
+    test "works with username instead of email", %{user: user} do
+      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.username, "password123")
     end
   end
 
-  describe "get_user!/1" do
-    test "raises if id is invalid" do
-      assert_raise Ecto.NoResultsError, fn ->
-        Accounts.get_user!(-1)
-      end
+  describe "SHA1 legacy password fallback" do
+    @tag :auth
+    test "logs in user with SHA1 legacy password", %{user: user} do
+      # Create user with legacy SHA1 password
+      {:ok, user} = Accounts.register_user(%{
+        username: "legacy#{System.unique_integer()}",
+        email: "legacy#{System.unique_integer()}@example.com",
+        password: "legacy123",
+        password_confirmation: "legacy123"
+      })
+
+      # Override with SHA1 hash
+      salt = "testsalt123"
+      sha1_hash = :crypto.hash(:sha, salt <> "legacy123") |> Base.encode16(case: :lower)
+      legacy_hash = "sha1$testsalt123$#{sha1_hash}"
+      Repo.update!(%User{user | hashed_password: legacy_hash})
+
+      # Should login with legacy password
+      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.email, "legacy123")
+      
+      # Password should be upgraded to Bcrypt
+      updated_user = Repo.get!(User, user.user_id)
+      assert String.starts_with?(updated_user.hashed_password, "$2b$")
     end
 
-    test "returns the user with the given id" do
-      %{id: id} = user = user_fixture()
-      assert %User{id: ^id} = Accounts.get_user!(user.id)
+    @tag :auth
+    test "logs in user with plain SHA1 password", %{user: user} do
+      {:ok, user} = Accounts.register_user(%{
+        username: "plainsha1#{System.unique_integer()}",
+        email: "plainsha1#{System.unique_integer()}@example.com",
+        password: "plain123",
+        password_confirmation: "plain123"
+      })
+
+      sha1_hash = :crypto.hash(:sha, "plain123") |> Base.encode16(case: :lower)
+      Repo.update!(%User{user | hashed_password: sha1_hash})
+
+      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.email, "plain123")
+      
+      updated_user = Repo.get!(User, user.user_id)
+      assert String.starts_with?(updated_user.hashed_password, "$2b$")
+    end
+
+    @tag :auth
+    test "logs in user with SHA256 legacy password", %{user: user} do
+      {:ok, user} = Accounts.register_user(%{
+        username: "sha256#{System.unique_integer()}",
+        email: "sha256#{System.unique_integer()}@example.com",
+        password: "sha256pass",
+        password_confirmation: "sha256pass"
+      })
+
+      salt = "salty"
+      sha256_hash = :crypto.hash(:sha256, salt <> "sha256pass") |> Base.encode16(case: :lower)
+      legacy_hash = "sha256$#{salt}$#{sha256_hash}"
+      Repo.update!(%User{user | hashed_password: legacy_hash})
+
+      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.email, "sha256pass")
     end
   end
 
   describe "register_user/1" do
-    test "requires email to be set" do
-      {:error, changeset} = Accounts.register_user(%{})
-
-      assert %{email: ["can't be blank"]} = errors_on(changeset)
+    test "registers user with valid data" do
+      attrs = %{
+        username: "newuser#{System.unique_integer()}",
+        email: "new#{System.unique_integer()}@example.com",
+        password: "password123",
+        password_confirmation: "password123"
+      }
+      
+      {:ok, user} = Accounts.register_user(attrs)
+      assert user.username == attrs[:username]
+      assert user.email == attrs[:email]
+      assert String.starts_with?(user.hashed_password, "$2b$")
+      assert user.disabled == 0
     end
 
-    test "validates email when given" do
-      {:error, changeset} = Accounts.register_user(%{email: "not valid"})
-
-      assert %{email: ["must have the @ sign and no spaces"]} = errors_on(changeset)
-    end
-
-    test "validates maximum values for email for security" do
-      too_long = String.duplicate("db", 100)
-      {:error, changeset} = Accounts.register_user(%{email: too_long})
-      assert "should be at most 160 character(s)" in errors_on(changeset).email
-    end
-
-    test "validates email uniqueness" do
-      %{email: email} = user_fixture()
-      {:error, changeset} = Accounts.register_user(%{email: email})
-      assert "has already been taken" in errors_on(changeset).email
-
-      # Now try with the uppercased email too, to check that email case is ignored.
-      {:error, changeset} = Accounts.register_user(%{email: String.upcase(email)})
-      assert "has already been taken" in errors_on(changeset).email
-    end
-
-    test "registers users without password" do
-      email = unique_user_email()
-      {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
-      assert user.email == email
-      assert is_nil(user.hashed_password)
-      assert is_nil(user.confirmed_at)
-      assert is_nil(user.password)
-    end
-  end
-
-  describe "sudo_mode?/2" do
-    test "validates the authenticated_at time" do
-      now = DateTime.utc_now()
-
-      assert Accounts.sudo_mode?(%User{authenticated_at: DateTime.utc_now()})
-      assert Accounts.sudo_mode?(%User{authenticated_at: DateTime.add(now, -19, :minute)})
-      refute Accounts.sudo_mode?(%User{authenticated_at: DateTime.add(now, -21, :minute)})
-
-      # minute override
-      refute Accounts.sudo_mode?(
-               %User{authenticated_at: DateTime.add(now, -11, :minute)},
-               -10
-             )
-
-      # not authenticated
-      refute Accounts.sudo_mode?(%User{})
-    end
-  end
-
-  describe "change_user_email/3" do
-    test "returns a user changeset" do
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_email(%User{})
-      assert changeset.required == [:email]
-    end
-  end
-
-  describe "deliver_user_update_email_instructions/3" do
-    setup do
-      %{user: user_fixture()}
-    end
-
-    test "sends token through notification", %{user: user} do
-      token =
-        extract_user_token(fn url ->
-          Accounts.deliver_user_update_email_instructions(user, "current@example.com", url)
-        end)
-
-      {:ok, token} = Base.url_decode64(token, padding: false)
-      assert user_token = Repo.get_by(UserToken, token: :crypto.hash(:sha256, token))
-      assert user_token.user_id == user.id
-      assert user_token.sent_to == user.email
-      assert user_token.context == "change:current@example.com"
-    end
-  end
-
-  describe "update_user_email/2" do
-    setup do
-      user = unconfirmed_user_fixture()
-      email = unique_user_email()
-
-      token =
-        extract_user_token(fn url ->
-          Accounts.deliver_user_update_email_instructions(%{user | email: email}, user.email, url)
-        end)
-
-      %{user: user, token: token, email: email}
-    end
-
-    test "updates the email with a valid token", %{user: user, token: token, email: email} do
-      assert {:ok, %{email: ^email}} = Accounts.update_user_email(user, token)
-      changed_user = Repo.get!(User, user.id)
-      assert changed_user.email != user.email
-      assert changed_user.email == email
-      refute Repo.get_by(UserToken, user_id: user.id)
-    end
-
-    test "does not update email with invalid token", %{user: user} do
-      assert Accounts.update_user_email(user, "oops") ==
-               {:error, :transaction_aborted}
-
-      assert Repo.get!(User, user.id).email == user.email
-      assert Repo.get_by(UserToken, user_id: user.id)
-    end
-
-    test "does not update email if user email changed", %{user: user, token: token} do
-      assert Accounts.update_user_email(%{user | email: "current@example.com"}, token) ==
-               {:error, :transaction_aborted}
-
-      assert Repo.get!(User, user.id).email == user.email
-      assert Repo.get_by(UserToken, user_id: user.id)
-    end
-
-    test "does not update email if token expired", %{user: user, token: token} do
-      {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
-
-      assert Accounts.update_user_email(user, token) ==
-               {:error, :transaction_aborted}
-
-      assert Repo.get!(User, user.id).email == user.email
-      assert Repo.get_by(UserToken, user_id: user.id)
-    end
-  end
-
-  describe "change_user_password/3" do
-    test "returns a user changeset" do
-      assert %Ecto.Changeset{} = changeset = Accounts.change_user_password(%User{})
-      assert changeset.required == [:password]
-    end
-
-    test "allows fields to be set" do
-      changeset =
-        Accounts.change_user_password(
-          %User{},
-          %{
-            "password" => "new valid password"
-          },
-          hash_password: false
-        )
-
-      assert changeset.valid?
-      assert get_change(changeset, :password) == "new valid password"
-      assert is_nil(get_change(changeset, :hashed_password))
-    end
-  end
-
-  describe "update_user_password/2" do
-    setup do
-      %{user: user_fixture()}
-    end
-
-    test "validates password", %{user: user} do
-      {:error, changeset} =
-        Accounts.update_user_password(user, %{
-          password: "not valid",
-          password_confirmation: "another"
-        })
-
-      assert %{
-               password: ["should be at least 12 character(s)"],
-               password_confirmation: ["does not match password"]
-             } = errors_on(changeset)
-    end
-
-    test "validates maximum values for password for security", %{user: user} do
-      too_long = String.duplicate("db", 100)
-
-      {:error, changeset} =
-        Accounts.update_user_password(user, %{password: too_long})
-
-      assert "should be at most 72 character(s)" in errors_on(changeset).password
-    end
-
-    test "updates the password", %{user: user} do
-      {:ok, {user, expired_tokens}} =
-        Accounts.update_user_password(user, %{
-          password: "new valid password"
-        })
-
-      assert expired_tokens == []
-      assert is_nil(user.password)
-      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
-    end
-
-    test "deletes all tokens for the given user", %{user: user} do
-      _ = Accounts.generate_user_session_token(user)
-
-      {:ok, {_, _}} =
-        Accounts.update_user_password(user, %{
-          password: "new valid password"
-        })
-
-      refute Repo.get_by(UserToken, user_id: user.id)
-    end
-  end
-
-  describe "generate_user_session_token/1" do
-    setup do
-      %{user: user_fixture()}
-    end
-
-    test "generates a token", %{user: user} do
-      token = Accounts.generate_user_session_token(user)
-      assert user_token = Repo.get_by(UserToken, token: token)
-      assert user_token.context == "session"
-      assert user_token.authenticated_at != nil
-
-      # Creating the same token for another user should fail
-      assert_raise Ecto.ConstraintError, fn ->
-        Repo.insert!(%UserToken{
-          token: user_token.token,
-          user_id: user_fixture().id,
-          context: "session"
-        })
-      end
-    end
-
-    test "duplicates the authenticated_at of given user in new token", %{user: user} do
-      user = %{user | authenticated_at: DateTime.add(DateTime.utc_now(:second), -3600)}
-      token = Accounts.generate_user_session_token(user)
-      assert user_token = Repo.get_by(UserToken, token: token)
-      assert user_token.authenticated_at == user.authenticated_at
-      assert DateTime.compare(user_token.inserted_at, user.authenticated_at) == :gt
-    end
-  end
-
-  describe "get_user_by_session_token/1" do
-    setup do
+    test "rejects duplicate username" do
       user = user_fixture()
-      token = Accounts.generate_user_session_token(user)
-      %{user: user, token: token}
+      attrs = %{
+        username: user.username,
+        email: "different#{System.unique_integer()}@example.com",
+        password: "password123",
+        password_confirmation: "password123"
+      }
+      
+      {:error, changeset} = Accounts.register_user(attrs)
+      assert "has already been taken" in changeset.errors.username
     end
 
-    test "returns user by token", %{user: user, token: token} do
-      assert {session_user, token_inserted_at} = Accounts.get_user_by_session_token(token)
-      assert session_user.id == user.id
-      assert session_user.authenticated_at != nil
-      assert token_inserted_at != nil
+    test "rejects duplicate email" do
+      user = user_fixture()
+      attrs = %{
+        username: "different#{System.unique_integer()}",
+        email: user.email,
+        password: "password123",
+        password_confirmation: "password123"
+      }
+      
+      {:error, changeset} = Accounts.register_user(attrs)
+      assert "has already been taken" in changeset.errors.email
     end
 
-    test "does not return user for invalid token" do
-      refute Accounts.get_user_by_session_token("oops")
+    test "rejects invalid email format" do
+      attrs = %{
+        username: "test#{System.unique_integer()}",
+        email: "not-an-email",
+        password: "password123",
+        password_confirmation: "password123"
+      }
+      
+      {:error, changeset} = Accounts.register_user(attrs)
+      assert "format email tidak valid" in changeset.errors.email
     end
 
-    test "does not return user for expired token", %{token: token} do
-      dt = ~N[2020-01-01 00:00:00]
-      {1, nil} = Repo.update_all(UserToken, set: [inserted_at: dt, authenticated_at: dt])
-      refute Accounts.get_user_by_session_token(token)
+    test "rejects short password" do
+      attrs = %{
+        username: "test#{System.unique_integer()}",
+        email: "test#{System.unique_integer()}@example.com",
+        password: "short",
+        password_confirmation: "short"
+      }
+      
+      {:error, changeset} = Accounts.register_user(attrs)
+      assert "should be at least 6 character(s)" in changeset.errors.password
+    end
+
+    test "rejects mismatched password confirmation" do
+      attrs = %{
+        username: "test#{System.unique_integer()}",
+        email: "test#{System.unique_integer()}@example.com",
+        password: "password123",
+        password_confirmation: "different"
+      }
+      
+      {:error, changeset} = Accounts.register_user(attrs)
+      assert "tidak sama dengan password" in changeset.errors.password_confirmation
     end
   end
 
-  describe "get_user_by_magic_link_token/1" do
+  describe "User Settings EAV" do
     setup do
-      user = user_fixture()
-      {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
-      %{user: user, token: encoded_token}
+      {:ok, user: user_fixture()}
     end
 
-    test "returns user by token", %{user: user, token: token} do
-      assert session_user = Accounts.get_user_by_magic_link_token(token)
-      assert session_user.id == user.id
+    @tag :settings
+    test "put_setting and get_setting", %{user: user} do
+      :ok = Accounts.put_setting(user, "givenName", "John")
+      :ok = Accounts.put_setting(user, "familyName", "Doe")
+      :ok = Accounts.put_setting(user, "affiliation", "University X")
+      
+      assert Accounts.get_setting(user, "givenName") == "John"
+      assert Accounts.get_setting(user, "familyName") == "Doe"
+      assert Accounts.get_setting(user, "affiliation") == "University X"
     end
 
-    test "does not return user for invalid token" do
-      refute Accounts.get_user_by_magic_link_token("oops")
+    @tag :settings
+    test "get_setting with fallback locale", %{user: user} do
+      Accounts.put_setting(user, "givenName", "John", "en")
+      Accounts.put_setting(user, "givenName", "Juan", "es")
+      
+      assert Accounts.get_setting(user, "givenName", "es") == "Juan"
+      assert Accounts.get_setting(user, "givenName", "fr", "en") == "John"
     end
 
-    test "does not return user for expired token", %{token: token} do
-      {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
-      refute Accounts.get_user_by_magic_link_token(token)
+    @tag :settings
+    test "get_all_settings", %{user: user} do
+      Accounts.put_setting(user, "givenName", "John")
+      Accounts.put_setting(user, "familyName", "Doe")
+      
+      settings = Accounts.get_all_settings(user)
+      assert settings["givenName"] == "John"
+      assert settings["familyName"] == "Doe"
+    end
+
+    @tag :settings
+    test "get_profile", %{user: user} do
+      Accounts.put_setting(user, "givenName", "John")
+      Accounts.put_setting(user, "familyName", "Doe")
+      Accounts.put_setting(user, "affiliation", "University X")
+      Accounts.put_setting(user, "orcid", "0000-0000-0000-0000")
+      
+      profile = Accounts.get_profile(user)
+      assert profile.given_name == "John"
+      assert profile.family_name == "Doe"
+      assert profile.affiliation == "University X"
+      assert profile.orcid == "0000-0000-0000-0000"
+      assert profile.email == user.email
+      assert profile.username == user.username
+    end
+
+    @tag :settings
+    test "update_profile", %{user: user} do
+      :ok = Accounts.update_profile(user, %{
+        "givenName" => "Jane",
+        "familyName" => "Smith",
+        "affiliation" => "New University",
+        "email" => "jane.smith@example.com"
+      })
+      
+      updated_user = Repo.get!(User, user.user_id)
+      assert updated_user.email == "jane.smith@example.com"
+      
+      assert Accounts.get_setting(updated_user, "givenName") == "Jane"
+      assert Accounts.get_setting(updated_user, "familyName") == "Smith"
+      assert Accounts.get_setting(updated_user, "affiliation") == "New University"
+    end
+
+    @tag :settings
+    test "suspend_user and activate_user", %{user: user} do
+      {:ok, suspended} = Accounts.suspend_user(user, "Spam")
+      assert suspended.disabled == 1
+      assert suspended.disabled_reason == "Spam"
+      
+      {:ok, activated} = Accounts.activate_user(suspended)
+      assert activated.disabled == 0
+      assert is_nil(activated.disabled_reason)
     end
   end
 
-  describe "login_user_by_magic_link/1" do
-    test "confirms user and expires tokens" do
-      user = unconfirmed_user_fixture()
-      refute user.confirmed_at
-      {encoded_token, hashed_token} = generate_user_magic_link_token(user)
-
-      assert {:ok, {user, [%{token: ^hashed_token}]}} =
-               Accounts.login_user_by_magic_link(encoded_token)
-
-      assert user.confirmed_at
-    end
-
-    test "returns user and (deleted) token for confirmed user" do
-      user = user_fixture()
-      assert user.confirmed_at
-      {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
-      assert {:ok, {^user, []}} = Accounts.login_user_by_magic_link(encoded_token)
-      # one time use only
-      assert {:error, :not_found} = Accounts.login_user_by_magic_link(encoded_token)
-    end
-
-    test "raises when unconfirmed user has password set" do
-      user = unconfirmed_user_fixture()
-      {1, nil} = Repo.update_all(User, set: [hashed_password: "hashed"])
-      {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
-
-      assert_raise RuntimeError, ~r/magic link log in is not allowed/, fn ->
-        Accounts.login_user_by_magic_link(encoded_token)
-      end
-    end
-  end
-
-  describe "delete_user_session_token/1" do
-    test "deletes the token" do
-      user = user_fixture()
-      token = Accounts.generate_user_session_token(user)
-      assert Accounts.delete_user_session_token(token) == :ok
-      refute Accounts.get_user_by_session_token(token)
-    end
-  end
-
-  describe "deliver_login_instructions/2" do
+  describe "User Group CRUD" do
     setup do
-      %{user: unconfirmed_user_fixture()}
+      journal = Repo.get!(Journal, 1)  # ojs journal exists
+      {:ok, journal: journal}
     end
 
-    test "sends token through notification", %{user: user} do
-      token =
-        extract_user_token(fn url ->
-          Accounts.deliver_login_instructions(user, url)
-        end)
+    @tag :groups
+    test "list_user_groups", %{journal: journal} do
+      groups = Accounts.list_user_groups(journal.journal_id)
+      assert is_list(groups)
+      assert length(groups) > 0
+    end
 
-      {:ok, token} = Base.url_decode64(token, padding: false)
-      assert user_token = Repo.get_by(UserToken, token: :crypto.hash(:sha256, token))
-      assert user_token.user_id == user.id
-      assert user_token.sent_to == user.email
-      assert user_token.context == "login"
+    @tag :groups
+    test "create_user_group", %{journal: journal} do
+      {:ok, group} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.editor(),
+        is_default: 0
+      })
+      
+      assert group.context_id == journal.journal_id
+      assert group.role_id == Roles.editor()
+      assert group.is_default == 0
+    end
+
+    @tag :groups
+    test "create_user_group prevents duplicate role in same journal", %{journal: journal} do
+      {:ok, group1} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.editor(),
+        is_default: 0
+      })
+      
+      {:error, _changeset} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.editor(),
+        is_default: 0
+      })
+    end
+
+    @tag :groups
+    test "update_user_group", %{journal: journal} do
+      {:ok, group} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.author(),
+        is_default: 0
+      })
+      
+      {:ok, updated} = Accounts.update_user_group(group, %{
+        is_default: 1,
+        permit_self_registration: 1
+      })
+      
+      assert updated.is_default == 1
+      assert updated.permit_self_registration == 1
+    end
+
+    @tag :groups
+    test "delete_user_group prevents if users assigned", %{journal: journal} do
+      {:ok, group} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.reviewer(),
+        is_default: 0
+      })
+      
+      user = user_fixture()
+      Accounts.enroll_user(user.user_id, group.user_group_id, user.user_id)
+      
+      {:error, :has_assigned_users} = Accounts.delete_user_group(group)
+    end
+
+    @tag :groups
+    test "set_default_group", %{journal: journal} do
+      {:ok, group1} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.author(),
+        is_default: 1
+      })
+      
+      {:ok, group2} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.editor(),
+        is_default: 0
+      })
+      
+      :ok = Accounts.set_default_group(journal.journal_id, group2.user_group_id)
+      
+      reloaded1 = Repo.get!(UserGroup, group1.user_group_id)
+      reloaded2 = Repo.get!(UserGroup, group2.user_group_id)
+      assert reloaded1.is_default == 0
+      assert reloaded2.is_default == 1
     end
   end
 
-  describe "inspect/2 for the User module" do
-    test "does not include password" do
-      refute inspect(%User{password: "123456"}) =~ "password: \"123456\""
+  describe "Stage Assignment" do
+    setup do
+      journal = Repo.get!(Journal, 1)
+      {:ok, group} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.editor(),
+        is_default: 0
+      })
+      {:ok, journal: journal, group: group}
+    end
+
+    @tag :stages
+    test "set_stages and stages_for_group_in_journal", %{group: group, journal: journal} do
+      :ok = Accounts.set_stages(group.user_group_id, journal.journal_id, [1, 3, 4])
+      
+      stages = Accounts.stages_for_group_in_journal(group.user_group_id, journal.journal_id)
+      assert stages == [1, 3, 4]
+    end
+
+    @tag :stages
+    test "set_stages replaces existing stages", %{group: group, journal: journal} do
+      :ok = Accounts.set_stages(group.user_group_id, journal.journal_id, [1, 3])
+      :ok = Accounts.set_stages(group.user_group_id, journal.journal_id, [4, 5])
+      
+      stages = Accounts.stages_for_group_in_journal(group.user_group_id, journal.journal_id)
+      assert stages == [4, 5]
+    end
+  end
+
+  describe "User Role Assignment" do
+    setup do
+      journal = Repo.get!(Journal, 1)
+      {:ok, author_group} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.author(),
+        is_default: 1
+      })
+      
+      {:ok, editor_group} = Accounts.create_user_group(%{
+        context_id: journal.journal_id,
+        role_id: Roles.editor(),
+        is_default: 0
+      })
+      
+      {:ok, journal: journal, author_group: author_group, editor_group: editor_group}
+    end
+
+    @tag :enrollment
+    test "enroll_user", %{author_group: author_group} do
+      user = user_fixture()
+      
+      {:ok, :enrolled} = Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
+      
+      roles = Accounts.list_user_roles(user.user_id)
+      assert length(roles) == 1
+      assert Enum.any?(roles, &(&1.role_id == Roles.author()))
+    end
+
+    @tag :enrollment
+    test "enroll_user prevents duplicate", %{author_group: author_group} do
+      user = user_fixture()
+      Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
+      
+      {:error, :already_enrolled} = Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
+    end
+
+    @tag :enrollment
+    test "unenroll_user", %{author_group: author_group} do
+      user = user_fixture()
+      Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
+      
+      {:ok, :unenrolled} = Accounts.unenroll_user(user.user_id, author_group.user_group_id, user.user_id)
+      
+      roles = Accounts.list_user_roles(user.user_id)
+      assert roles == []
+    end
+
+    @tag :enrollment
+    test "list_user_roles across journals", %{author_group: author_group, editor_group: editor_group, journal: journal} do
+      user = user_fixture()
+      Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
+      
+      # Add editor group for another journal
+      journal2 = Repo.get!(Journal, 2)
+      {:ok, editor_group2} = Accounts.create_user_group(%{
+        context_id: journal2.journal_id,
+        role_id: Roles.editor(),
+        is_default: 0
+      })
+      Accounts.enroll_user(user.user_id, editor_group2.user_group_id, user.user_id)
+      
+      roles = Accounts.list_user_roles(user.user_id)
+      assert length(roles) == 2
+      assert Enum.any?(roles, &(&1.role_id == Roles.author()))
+      assert Enum.any?(roles, &(&1.role_id == Roles.editor()))
+    end
+
+    @tag :enrollment
+    test "bulk_enroll", %{author_group: author_group} do
+      users = Enum.map(1..3, fn _ -> user_fixture() end)
+      user_ids = Enum.map(users, & &1.user_id)
+      
+      {:ok, results} = Accounts.bulk_enroll(user_ids, author_group.user_group_id, user_ids |> List.first())
+      
+      assert length(results) == 3
+      assert Enum.all?(results, &match?({:ok, _}, &1))
+    end
+  end
+
+  describe "Approve/Reject User" do
+    @tag :approval
+    test "approve_user", %{user: user} do
+      {:ok, suspended} = Accounts.suspend_user(user, "Test")
+      {:ok, approved} = Accounts.approve_user(suspended.user_id, suspended.user_id)
+      
+      assert approved.disabled == 0
+      assert is_nil(approved.disabled_reason)
+    end
+
+    @tag :approval
+    test "reject_user", %{user: user} do
+      {:ok, rejected} = Accounts.reject_user(user.user_id, "Policy violation", user.user_id)
+      
+      assert rejected.disabled == 1
+      assert rejected.disabled_reason == "Policy violation"
+    end
+  end
+
+  describe "export_users_csv" do
+    setup do
+      user1 = user_fixture()
+      user2 = user_fixture()
+      
+      {:ok, group} = Accounts.create_user_group(%{
+        context_id: 1,
+        role_id: Roles.author(),
+        is_default: 1
+      })
+      
+      Accounts.enroll_user(user1.user_id, group.user_group_id, user1.user_id)
+      Accounts.enroll_user(user2.user_id, group.user_group_id, user2.user_id)
+      
+      :ok
+    end
+
+    @tag :csv
+    test "exports users with all columns", _ do
+      csv = Accounts.export_users_csv(%{})
+      
+      lines = String.split(csv, "\n", trim: true)
+      assert length(lines) >= 2  # header + data
+      
+      header = lines[0]
+      assert "User ID" in header
+      assert "Username" in header
+      assert "Email" in header
+      assert "Roles" in header
+      assert "Journals" in header
     end
   end
 end
