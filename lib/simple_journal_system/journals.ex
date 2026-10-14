@@ -86,7 +86,7 @@ defmodule SimpleJournalSystem.Journals do
   """
   def switch_journal(user_id, journal_id) do
     # Verify user has role in this journal
-    has_access = Repo.exists(
+    has_access = Repo.exists?(
       from j in Journal,
       join: ug in assoc(j, :user_groups),
       join: uug in assoc(ug, :user_user_groups),

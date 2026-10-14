@@ -10,7 +10,9 @@ defmodule SimpleJournalSystem.Accounts do
   alias SimpleJournalSystem.Accounts.UserUserGroup
   alias SimpleJournalSystem.Accounts.Roles
   alias SimpleJournalSystem.Accounts.Stages
+  alias SimpleJournalSystem.Journals
   alias SimpleJournalSystem.Journals.Journal
+  alias SimpleJournalSystem.Accounts.UserSetting
   alias SimpleJournalSystem.Audit
   alias SimpleJournalSystem.Audit.RoleChangeLog
 
