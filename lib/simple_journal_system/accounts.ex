@@ -466,7 +466,7 @@ defmodule SimpleJournalSystem.Accounts do
         Repo.insert!(%UserUserGroup{
           user_id: user_id,
           user_group_id: user_group_id,
-          date_start: NaiveDateTime.utc_now()
+          date_start: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
         # Audit log
         Audit.log_enroll(user_id, changed_by_id, user_group_id, group.context_id)

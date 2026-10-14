@@ -2,7 +2,7 @@ defmodule SimpleJournalSystem.Journals.Journal do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:journal_id, :id, []}
+  @primary_key {:journal_id, :id, autogenerate: true}
   @derive {Phoenix.Param, key: :journal_id}
 
   schema "journals" do

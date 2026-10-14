@@ -2,7 +2,7 @@ defmodule SimpleJournalSystem.Accounts.UserUserGroup do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:user_user_group_id, :id, []}
+  @primary_key {:user_user_group_id, :id, autogenerate: true}
   @derive {Phoenix.Param, key: :user_user_group_id}
 
   schema "user_user_groups" do

@@ -2,7 +2,7 @@ defmodule SimpleJournalSystem.Accounts.UserSetting do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:user_setting_id, :id, []}
+  @primary_key {:user_setting_id, :id, autogenerate: true}
   @derive {Phoenix.Param, key: :user_setting_id}
 
   schema "user_settings" do

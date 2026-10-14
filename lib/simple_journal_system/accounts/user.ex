@@ -2,7 +2,7 @@ defmodule SimpleJournalSystem.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:user_id, :id, []}
+  @primary_key {:user_id, :id, autogenerate: true}
   @derive {Phoenix.Param, key: :user_id}
 
   schema "users" do

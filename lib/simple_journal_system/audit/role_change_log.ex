@@ -2,7 +2,7 @@ defmodule SimpleJournalSystem.Audit.RoleChangeLog do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key {:role_change_log_id, :id, []}
+  @primary_key {:role_change_log_id, :id, autogenerate: true}
   @derive {Phoenix.Param, key: :role_change_log_id}
 
   schema "role_change_logs" do

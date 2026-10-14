@@ -135,6 +135,8 @@ defmodule SimpleJournalSystem.Audit do
     }
   end
 
+  defp get_client_ip(nil), do: "unknown"
+
   defp get_client_ip(conn) do
     case conn.req_headers do
       [{"x-forwarded-for", ip} | _] -> ip
@@ -147,6 +149,8 @@ defmodule SimpleJournalSystem.Audit do
         end
     end
   end
+
+  defp get_user_agent(nil), do: "unknown"
 
   defp get_user_agent(conn) do
     case conn.req_headers do
