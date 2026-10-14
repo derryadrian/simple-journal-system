@@ -1,5 +1,6 @@
 defmodule SimpleJournalSystem.JournalsTest do
   use SimpleJournalSystem.DataCase
+  import SimpleJournalSystem.AccountsFixtures
 
   alias SimpleJournalSystem.Journals
   alias SimpleJournalSystem.Journals.Journal

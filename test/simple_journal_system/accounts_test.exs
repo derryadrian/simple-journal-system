@@ -14,7 +14,7 @@ defmodule SimpleJournalSystem.AccountsTest do
   describe "get_user_by_email_and_password/2" do
     @tag :auth
     test "returns user with valid Bcrypt password", %{user: user} do
-      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.email, "password123")
+      assert (Accounts.get_user_by_email_and_password(user.email, "password123")).user_id == user.user_id
     end
 
     @tag :auth
@@ -29,7 +29,7 @@ defmodule SimpleJournalSystem.AccountsTest do
 
     @tag :auth
     test "works with username instead of email", %{user: user} do
-      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.username, "password123")
+      assert (Accounts.get_user_by_email_and_password(user.username, "password123")).user_id == user.user_id
     end
   end
 
@@ -51,7 +51,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       Repo.update!(%User{user | hashed_password: legacy_hash})
 
       # Should login with legacy password
-      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.email, "legacy123")
+      assert (Accounts.get_user_by_email_and_password(user.email, "legacy123")).user_id == user.user_id
       
       # Password should be upgraded to Bcrypt
       updated_user = Repo.get!(User, user.user_id)
@@ -70,7 +70,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       sha1_hash = :crypto.hash(:sha, "plain123") |> Base.encode16(case: :lower)
       Repo.update!(%User{user | hashed_password: sha1_hash})
 
-      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.email, "plain123")
+      assert (Accounts.get_user_by_email_and_password(user.email, "plain123")).user_id == user.user_id
       
       updated_user = Repo.get!(User, user.user_id)
       assert String.starts_with?(updated_user.hashed_password, "$2b$")
@@ -90,7 +90,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       legacy_hash = "sha256$#{salt}$#{sha256_hash}"
       Repo.update!(%User{user | hashed_password: legacy_hash})
 
-      assert %User{user_id: ^user.user_id} = Accounts.get_user_by_email_and_password(user.email, "sha256pass")
+      assert (Accounts.get_user_by_email_and_password(user.email, "sha256pass")).user_id == user.user_id
     end
   end
 
