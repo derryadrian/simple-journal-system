@@ -56,7 +56,7 @@ defmodule SimpleJournalSystem.AuthorizationTest do
 
     @tag :get_roles
     test "returns empty list for user without roles" do
-      user = user_fixture()
+      user = user_fixture() |> Repo.preload(user_user_groups: :user_group)
       assert Authorization.get_roles(user) == []
     end
 
