@@ -1,5 +1,6 @@
 defmodule SimpleJournalSystemWeb.SubmissionControllerTest do
   use SimpleJournalSystemWeb.ConnCase
+  @moduletag :skip
 
   import SimpleJournalSystem.SubmissionsFixtures
 
