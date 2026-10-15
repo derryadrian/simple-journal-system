@@ -1,146 +1,111 @@
 defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
   use SimpleJournalSystemWeb.ConnCase
 
+  import SimpleJournalSystem.AccountsFixtures
+
   alias SimpleJournalSystem.Accounts
-  alias SimpleJournalSystem.Accounts.User
-  alias SimpleJournalSystem.Accounts.UserGroup
-  alias SimpleJournalSystem.Accounts.UserUserGroup
   alias SimpleJournalSystem.Accounts.Roles
+  alias SimpleJournalSystem.Accounts.Scope
+  alias SimpleJournalSystem.Accounts.User
+  alias SimpleJournalSystem.Repo
   alias SimpleJournalSystemWeb.UserAuth
 
-  @tag :plug
-  describe "require_role plugs" do
-    setup do
-      # Create user
-      {:ok, user} = Accounts.register_user(%{
-        username: "plugtest#{System.unique_integer()}",
-        email: "plugtest#{System.unique_integer()}@example.com",
-        password: "password123",
-        password_confirmation: "password123"
-      })
+  describe "role plugs (dipanggil langsung)" do
+    setup %{conn: conn} do
+      conn =
+        conn
+        |> init_test_session(%{})
+        |> Phoenix.Controller.fetch_flash([])
 
-      # Create groups
-      {:ok, author_group} = Accounts.create_user_group(%{
-        context_id: 1,
-        role_id: Roles.author(),
-        is_default: 0
-      })
-
-      {:ok, editor_group} = Accounts.create_user_group(%{
-        context_id: 1,
-        role_id: Roles.editor(),
-        is_default: 0
-      })
-
-      {:ok, manager_group} = Accounts.create_user_group(%{
-        context_id: 1,
-        role_id: Roles.manager(),
-        is_default: 0
-      })
-
-      {:ok, site_admin_group} = Accounts.create_user_group(%{
-        context_id: nil,
-        role_id: Roles.site_admin(),
-        is_default: 0
-      })
-
-      {:ok, reviewer_group} = Accounts.create_user_group(%{
-        context_id: 1,
-        role_id: Roles.reviewer(),
-        is_default: 0
-      })
-
-      %{
-        user: user,
-        author_group: author_group,
-        editor_group: editor_group,
-        manager_group: manager_group,
-        site_admin_group: site_admin_group,
-        reviewer_group: reviewer_group
-      }
+      %{conn: conn}
     end
 
-    @tag :require_author
-    test "require_author allows user with author role", %{conn: conn, user: user, author_group: author_group} do
-      Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
-      conn = login_via_form(conn, user)
-
-      conn = get(conn, ~p"/author")
-      assert html_response(conn, 200)
+    test "require_author meloloskan user dengan role author", %{conn: conn} do
+      user = enrolled_user(Roles.author(), 1)
+      conn = conn |> with_scope(user) |> UserAuth.require_author([])
+      refute conn.halted
     end
 
-    @tag :require_author
-    test "require_author denies user without author role", %{conn: conn, user: user} do
-      conn = login_via_form(conn, user)
+    test "require_editor meloloskan user dengan role editor", %{conn: conn} do
+      user = enrolled_user(Roles.editor(), 1)
+      conn = conn |> with_scope(user) |> UserAuth.require_editor([])
+      refute conn.halted
+    end
 
-      conn = get(conn, ~p"/author")
+    test "require_manager meloloskan user dengan role manager", %{conn: conn} do
+      user = enrolled_user(Roles.manager(), 1)
+      conn = conn |> with_scope(user) |> UserAuth.require_manager([])
+      refute conn.halted
+    end
+
+    test "require_admin meloloskan user dengan role site admin", %{conn: conn} do
+      user = enrolled_user(Roles.site_admin(), nil)
+      conn = conn |> with_scope(user) |> UserAuth.require_admin([])
+      refute conn.halted
+    end
+
+    test "require_reviewer meloloskan user dengan role reviewer", %{conn: conn} do
+      user = enrolled_user(Roles.reviewer(), 1)
+      conn = conn |> with_scope(user) |> UserAuth.require_reviewer([])
+      refute conn.halted
+    end
+
+    test "require_author menolak user yang hanya punya role editor", %{conn: conn} do
+      user = enrolled_user(Roles.editor(), 1)
+      conn = conn |> with_scope(user) |> UserAuth.require_author([])
+
+      assert conn.halted
       assert redirected_to(conn) == ~p"/"
-      assert get_flash(conn, :error) == "You are not authorized to access this page."
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) == "You are not authorized to access this page."
     end
 
-    @tag :require_editor
-    test "require_editor allows user with editor role", %{conn: conn, user: user, editor_group: editor_group} do
-      Accounts.enroll_user(user.user_id, editor_group.user_group_id, user.user_id)
-      conn = login_via_form(conn, user)
+    test "require_author menolak user tanpa role apa pun", %{conn: conn} do
+      user = user_fixture() |> Repo.preload(user_user_groups: :user_group)
+      conn = conn |> with_scope(user) |> UserAuth.require_author([])
 
-      # Need to add a route for testing - using a test route
-      conn = get_test_authorized_route(conn, :editor)
-      assert html_response(conn, 200)
+      assert conn.halted
+      assert redirected_to(conn) == ~p"/"
     end
 
-    @tag :require_manager
-    test "require_manager allows user with manager role", %{conn: conn, user: user, manager_group: manager_group} do
-      Accounts.enroll_user(user.user_id, manager_group.user_group_id, user.user_id)
-      conn = login_via_form(conn, user)
+    test "require_role mengarahkan ke login kalau belum login", %{conn: conn} do
+      conn = UserAuth.require_author(conn, [])
 
-      conn = get_test_authorized_route(conn, :manager)
-      assert html_response(conn, 200)
-    end
-
-    @tag :require_admin
-    test "require_admin allows user with site_admin role", %{conn: conn, user: user, site_admin_group: site_admin_group} do
-      Accounts.enroll_user(user.user_id, site_admin_group.user_group_id, user.user_id)
-      conn = login_via_form(conn, user)
-
-      conn = get_test_authorized_route(conn, :admin)
-      assert html_response(conn, 200)
-    end
-
-    @tag :require_reviewer
-    test "require_reviewer allows user with reviewer role", %{conn: conn, user: user, reviewer_group: reviewer_group} do
-      Accounts.enroll_user(user.user_id, reviewer_group.user_group_id, user.user_id)
-      conn = login_via_form(conn, user)
-
-      conn = get_test_authorized_route(conn, :reviewer)
-      assert html_response(conn, 200)
-    end
-
-    @tag :unauthenticated
-    test "redirects to login when not authenticated", %{conn: conn} do
-      conn = get(conn, ~p"/author")
+      assert conn.halted
       assert redirected_to(conn) == ~p"/users/log-in"
-      assert get_flash(conn, :error) == "You must log in to access this page."
     end
   end
+
+  describe "lewat router" do
+    test "user tanpa role author ditolak dan diarahkan ke halaman utama", %{conn: conn} do
+      user = user_fixture()
+      conn = conn |> login_via_form(user) |> get(~p"/author")
+
+      assert redirected_to(conn) == ~p"/"
+    end
+
+    test "belum login diarahkan ke halaman login", %{conn: conn} do
+      conn = get(conn, ~p"/author")
+
+      assert redirected_to(conn) == ~p"/users/log-in"
+    end
+  end
+
+  defp enrolled_user(role_id, context_id) do
+    user = user_fixture()
+
+    {:ok, group} =
+      Accounts.create_user_group(%{context_id: context_id, role_id: role_id, is_default: 0})
+
+    {:ok, :enrolled} = Accounts.enroll_user(user.user_id, group.user_group_id, user.user_id)
+
+    User
+    |> Repo.get!(user.user_id)
+    |> Repo.preload(user_user_groups: :user_group)
+  end
+
+  defp with_scope(conn, user), do: assign(conn, :current_scope, Scope.for_user(user))
 
   defp login_via_form(conn, user) do
-    conn
-    |> post(~p"/users/log-in", user: %{
-      email: user.email,
-      password: "password123"
-    })
-  end
-
-  defp get_test_authorized_route(conn, role) do
-    # We need to test via the actual routes defined in router
-    # For now test the plug directly
-    path = case role do
-      :author -> ~p"/author"
-      :editor -> ~p"/editor/test"
-      :manager -> ~p"/manager/test"
-      :admin -> ~p"/admin"
-      _ -> ~p"/"
-    end
-    get(conn, path)
+    post(conn, ~p"/users/log-in", user: %{email: user.email, password: "password123"})
   end
 end

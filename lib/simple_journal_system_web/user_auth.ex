@@ -255,14 +255,6 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   def require_role(conn, role_id) do
     case conn.assigns[:current_scope] do
       %{user: user} when not is_nil(user) ->
-        # --- DEBUG ROLE MANAGEMENT ---
-        IO.puts("\n=== DEBUG ROLE PROTECTION ===")
-        IO.inspect(user.user_user_groups, label: "USER GROUPS PRELOAD")
-        roles = Authorization.get_roles(user)
-        IO.inspect(roles, label: "ROLES DETECTED")
-        IO.puts("Target Role Required: #{role_id}")
-        IO.puts("=============================\n")
-        # -----------------------------
 
         if Authorization.has_role?(user, role_id) do
           conn
