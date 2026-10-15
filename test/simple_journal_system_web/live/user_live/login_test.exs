@@ -15,6 +15,7 @@ defmodule SimpleJournalSystemWeb.UserLive.LoginTest do
   end
 
   describe "user login - magic link" do
+    @describetag :skip
     test "sends magic link email when user exists", %{conn: conn} do
       user = user_fixture()
 

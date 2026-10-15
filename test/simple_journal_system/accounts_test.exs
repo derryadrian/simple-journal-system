@@ -283,14 +283,14 @@ defmodule SimpleJournalSystem.AccountsTest do
     end
 
     @tag :groups
-    test "create_user_group prevents duplicate role in same journal", %{journal: journal} do
+    test "create_user_group allows several groups with the same role in one journal (as in OJS)", %{journal: journal} do
       {:ok, group1} = Accounts.create_user_group(%{
         context_id: journal.journal_id,
         role_id: Roles.editor(),
         is_default: 0
       })
       
-      {:error, _changeset} = Accounts.create_user_group(%{
+      {:ok, _group2} = Accounts.create_user_group(%{
         context_id: journal.journal_id,
         role_id: Roles.editor(),
         is_default: 0

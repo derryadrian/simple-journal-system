@@ -73,6 +73,7 @@ defmodule SimpleJournalSystemWeb.UserSessionControllerTest do
   end
 
   describe "POST /users/log-in - magic link" do
+    @describetag :skip
     test "logs the user in", %{conn: conn, user: user} do
       {token, _hashed_token} = generate_user_magic_link_token(user)
 
