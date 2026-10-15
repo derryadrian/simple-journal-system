@@ -123,7 +123,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       }
       
       {:error, changeset} = Accounts.register_user(attrs)
-      assert "has already been taken" in changeset.errors.username
+      assert "has already been taken" in errors_on(changeset).username
     end
 
     test "rejects duplicate email" do
@@ -136,7 +136,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       }
       
       {:error, changeset} = Accounts.register_user(attrs)
-      assert "has already been taken" in changeset.errors.email
+      assert "has already been taken" in errors_on(changeset).email
     end
 
     test "rejects invalid email format" do
@@ -148,7 +148,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       }
       
       {:error, changeset} = Accounts.register_user(attrs)
-      assert "format email tidak valid" in changeset.errors.email
+      assert "format email tidak valid" in errors_on(changeset).email
     end
 
     test "rejects short password" do
@@ -160,7 +160,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       }
       
       {:error, changeset} = Accounts.register_user(attrs)
-      assert "should be at least 6 character(s)" in changeset.errors.password
+      assert "should be at least 6 character(s)" in errors_on(changeset).password
     end
 
     test "rejects mismatched password confirmation" do
@@ -172,7 +172,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       }
       
       {:error, changeset} = Accounts.register_user(attrs)
-      assert "tidak sama dengan password" in changeset.errors.password_confirmation
+      assert "tidak sama dengan password" in errors_on(changeset).password_confirmation
     end
   end
 
@@ -183,9 +183,9 @@ defmodule SimpleJournalSystem.AccountsTest do
 
     @tag :settings
     test "put_setting and get_setting", %{user: user} do
-      :ok = Accounts.put_setting(user, "givenName", "John")
-      :ok = Accounts.put_setting(user, "familyName", "Doe")
-      :ok = Accounts.put_setting(user, "affiliation", "University X")
+      {:ok, _} = Accounts.put_setting(user, "givenName", "John")
+      {:ok, _} = Accounts.put_setting(user, "familyName", "Doe")
+      {:ok, _} = Accounts.put_setting(user, "affiliation", "University X")
       
       assert Accounts.get_setting(user, "givenName") == "John"
       assert Accounts.get_setting(user, "familyName") == "Doe"
@@ -229,7 +229,7 @@ defmodule SimpleJournalSystem.AccountsTest do
 
     @tag :settings
     test "update_profile", %{user: user} do
-      :ok = Accounts.update_profile(user, %{
+      {:ok, _} = Accounts.update_profile(user, %{
         "givenName" => "Jane",
         "familyName" => "Smith",
         "affiliation" => "New University",
@@ -342,7 +342,7 @@ defmodule SimpleJournalSystem.AccountsTest do
         is_default: 0
       })
       
-      :ok = Accounts.set_default_group(journal.journal_id, group2.user_group_id)
+      {:ok, _} = Accounts.set_default_group(journal.journal_id, group2.user_group_id)
       
       reloaded1 = Repo.get!(UserGroup, group1.user_group_id)
       reloaded2 = Repo.get!(UserGroup, group2.user_group_id)
@@ -364,7 +364,7 @@ defmodule SimpleJournalSystem.AccountsTest do
 
     @tag :stages
     test "set_stages and stages_for_group_in_journal", %{group: group, journal: journal} do
-      :ok = Accounts.set_stages(group.user_group_id, journal.journal_id, [1, 3, 4])
+      {:ok, :stages_updated} = Accounts.set_stages(group.user_group_id, journal.journal_id, [1, 3, 4])
       
       stages = Accounts.stages_for_group_in_journal(group.user_group_id, journal.journal_id)
       assert stages == [1, 3, 4]
@@ -372,8 +372,8 @@ defmodule SimpleJournalSystem.AccountsTest do
 
     @tag :stages
     test "set_stages replaces existing stages", %{group: group, journal: journal} do
-      :ok = Accounts.set_stages(group.user_group_id, journal.journal_id, [1, 3])
-      :ok = Accounts.set_stages(group.user_group_id, journal.journal_id, [4, 5])
+      {:ok, :stages_updated} = Accounts.set_stages(group.user_group_id, journal.journal_id, [1, 3])
+      {:ok, :stages_updated} = Accounts.set_stages(group.user_group_id, journal.journal_id, [4, 5])
       
       stages = Accounts.stages_for_group_in_journal(group.user_group_id, journal.journal_id)
       assert stages == [4, 5]

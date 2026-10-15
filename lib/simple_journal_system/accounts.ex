@@ -678,8 +678,9 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def approve_user(user_id, changed_by_id) do
     Repo.transaction(fn ->
-      Repo.get!(User, user_id) |> Ecto.Changeset.change(disabled: 0, disabled_reason: nil) |> Repo.update()
+      user = Repo.get!(User, user_id) |> Ecto.Changeset.change(disabled: 0, disabled_reason: nil) |> Repo.update!()
       Audit.log_approve(user_id, changed_by_id)
+      user
     end)
   end
 
@@ -688,8 +689,9 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def reject_user(user_id, reason, changed_by_id) do
     Repo.transaction(fn ->
-      Repo.get!(User, user_id) |> Ecto.Changeset.change(disabled: 1, disabled_reason: reason) |> Repo.update()
+      user = Repo.get!(User, user_id) |> Ecto.Changeset.change(disabled: 1, disabled_reason: reason) |> Repo.update!()
       Audit.log_reject(user_id, changed_by_id, reason)
+      user
     end)
   end
 
@@ -697,7 +699,7 @@ defmodule SimpleJournalSystem.Accounts do
   Exports users to CSV format.
   """
   def export_users_csv(filters \\ %{}) do
-    {results, _total} = Repo.paginate(list_users(filters), page: 1, page_size: 10000)
+    %{users: results} = list_users(Map.merge(Map.new(filters), %{page: 1, per_page: 10000}))
     
     headers = ["User ID", "Username", "Email", "Disabled", "Disabled Reason", "Date Registered", "Roles", "Journals"]
     

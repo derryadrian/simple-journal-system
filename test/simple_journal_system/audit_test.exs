@@ -122,9 +122,8 @@ defmodule SimpleJournalSystem.AuditTest do
       assert length(logs) >= 1
       
       # Should be ordered by inserted_at desc
-      for i <- 0..(length(logs)-2) do
-        assert logs[i].inserted_at >= logs[i+1].inserted_at
-      end
+      times = Enum.map(logs, fn l -> to_string(l.inserted_at) end)
+      assert times == Enum.sort(times, :desc)
     end
 
     @tag :query

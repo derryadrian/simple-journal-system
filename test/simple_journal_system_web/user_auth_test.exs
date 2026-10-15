@@ -34,7 +34,7 @@ defmodule SimpleJournalSystemWeb.UserAuthTest do
     @tag :plug
     test "assigns nil current_scope when not logged in", %{conn: conn} do
       conn = get(conn, ~p"/")
-      assert conn.assigns[:current_scope].user == nil
+      assert conn.assigns[:current_scope] == nil
     end
   end
 

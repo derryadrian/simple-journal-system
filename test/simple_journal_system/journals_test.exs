@@ -78,7 +78,7 @@ defmodule SimpleJournalSystem.JournalsTest do
         enabled: 1
       })
       
-      :ok = Journals.delete_journal(journal)
+      {:ok, _} = Journals.delete_journal(journal)
       refute Repo.get(Journal, journal.journal_id)
     end
   end
