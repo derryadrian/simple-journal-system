@@ -91,7 +91,7 @@ defmodule SimpleJournalSystem.Accounts do
     hashed = user.hashed_password
     if hashed && !String.starts_with?(hashed, "$2b$") and !String.starts_with?(hashed, "$2a$") and !String.starts_with?(hashed, "$2y$") do
       new_hash = Bcrypt.hash_pwd_salt(password)
-      Repo.update(%User{user | hashed_password: new_hash})
+      user |> Ecto.Changeset.change(hashed_password: new_hash) |> Repo.update()
       :ok
     else
       :ok
@@ -304,7 +304,7 @@ defmodule SimpleJournalSystem.Accounts do
       existing = Repo.one(from ugs in UserGroupSetting,
         where: ugs.user_group_id == ^user_group_id and ugs.setting_name == ^setting_name and ugs.locale == ^locale)
       if existing do
-        Repo.update(%UserGroupSetting{existing | setting_value: setting_value})
+        existing |> Ecto.Changeset.change(setting_value: setting_value) |> Repo.update()
       else
         Repo.insert(%UserGroupSetting{user_group_id: user_group_id, setting_name: setting_name, setting_value: setting_value, locale: locale})
       end
@@ -438,14 +438,14 @@ defmodule SimpleJournalSystem.Accounts do
   Suspends a user account (soft disable).
   """
   def suspend_user(user, reason) do
-    Repo.update(%User{user | disabled: 1, disabled_reason: reason})
+    user |> Ecto.Changeset.change(disabled: 1, disabled_reason: reason) |> Repo.update()
   end
 
   @doc """
   Activates a suspended user account.
   """
   def activate_user(user) do
-    Repo.update(%User{user | disabled: 0, disabled_reason: nil})
+    user |> Ecto.Changeset.change(disabled: 0, disabled_reason: nil) |> Repo.update()
   end
 
   ## User Role Assignment (E)
@@ -454,6 +454,13 @@ defmodule SimpleJournalSystem.Accounts do
   Enrolls a user into a user group (role).
   """
   def enroll_user(user_id, user_group_id, changed_by_id) do
+    case do_enroll_user(user_id, user_group_id, changed_by_id) do
+      {:ok, result} -> result
+      other -> other
+    end
+  end
+
+  defp do_enroll_user(user_id, user_group_id, changed_by_id) do
     Repo.transaction(fn ->
       _user = Repo.get!(User, user_id)
       group = Repo.get!(UserGroup, user_group_id)
@@ -481,6 +488,13 @@ defmodule SimpleJournalSystem.Accounts do
   Unenrolls a user from a user group (role).
   """
   def unenroll_user(user_id, user_group_id, changed_by_id) do
+    case do_unenroll_user(user_id, user_group_id, changed_by_id) do
+      {:ok, result} -> result
+      other -> other
+    end
+  end
+
+  defp do_unenroll_user(user_id, user_group_id, changed_by_id) do
     Repo.transaction(fn ->
       group = Repo.get!(UserGroup, user_group_id)
       deleted = Repo.delete_all(from uug in UserUserGroup,
@@ -664,7 +678,7 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def approve_user(user_id, changed_by_id) do
     Repo.transaction(fn ->
-      Repo.update(%User{user_id: user_id, disabled: 0, disabled_reason: nil})
+      Repo.get!(User, user_id) |> Ecto.Changeset.change(disabled: 0, disabled_reason: nil) |> Repo.update()
       Audit.log_approve(user_id, changed_by_id)
     end)
   end
@@ -674,7 +688,7 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def reject_user(user_id, reason, changed_by_id) do
     Repo.transaction(fn ->
-      Repo.update(%User{user_id: user_id, disabled: 1, disabled_reason: reason})
+      Repo.get!(User, user_id) |> Ecto.Changeset.change(disabled: 1, disabled_reason: reason) |> Repo.update()
       Audit.log_reject(user_id, changed_by_id, reason)
     end)
   end
