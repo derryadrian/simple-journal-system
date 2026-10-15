@@ -1,5 +1,7 @@
 defmodule SimpleJournalSystem.AuditTest do
   use SimpleJournalSystem.DataCase
+  alias SimpleJournalSystem.Repo
+  alias SimpleJournalSystem.Journals.Journal
   import SimpleJournalSystem.AccountsFixtures
 
   alias SimpleJournalSystem.Accounts

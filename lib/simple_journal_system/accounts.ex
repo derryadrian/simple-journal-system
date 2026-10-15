@@ -372,9 +372,9 @@ defmodule SimpleJournalSystem.Accounts do
       existing = Repo.one(from us in UserSetting,
         where: us.user_id == ^user.user_id and us.setting_name == ^key and us.locale == ^locale)
       if existing do
-        Repo.update(%{existing | setting_value: value})
+        existing |> Ecto.Changeset.change(setting_value: value) |> Repo.update()
       else
-        Repo.insert(%{user_id: user.user_id, setting_name: key, setting_value: value, locale: locale})
+        Repo.insert(%UserSetting{user_id: user.user_id, setting_name: key, setting_value: value, locale: locale})
       end
     end)
   end

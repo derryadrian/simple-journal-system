@@ -10,6 +10,9 @@ defmodule SimpleJournalSystem.AccountsTest do
   alias SimpleJournalSystem.Repo
 
   import SimpleJournalSystem.AccountsFixtures
+  setup do
+    %{user: user_fixture()}
+  end
 
   describe "get_user_by_email_and_password/2" do
     @tag :auth
