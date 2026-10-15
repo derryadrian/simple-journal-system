@@ -1,46 +1,42 @@
 defmodule SimpleJournalSystemWeb.RateLimit do
   @moduledoc """
-  Rate limiting for login attempts using Hammer.
+  Rate limiting untuk percobaan login, memakai Hammer 7 (backend ETS).
+
+  Aturan: maksimal 5 percobaan gagal per 15 menit untuk setiap
+  kombinasi IP + email.
+
+  Modul ini harus dijalankan di supervision tree (lihat application.ex).
   """
 
-  use Hammer,
-    backend: :ets,
-    expiry_ms: 15 * 60 * 1000 # 15 minutes
+  use Hammer, backend: :ets
 
-  @doc """
-  Checks rate limit for login attempts.
-  Returns {:ok, remaining} or {:error, retry_after_ms}
-  """
+  @max_attempts 5
+  @window_ms 15 * 60 * 1000
+
   def check_login_limit(identifier) do
-    case Hammer.check_rate(__MODULE__, "login:#{identifier}", 5, 15 * 60) do
-      {:allow, count, _} ->
-        {:ok, 5 - count}
-      {:deny, _count, retry_after} ->
-        {:error, retry_after}
+    count = get(key(identifier), @window_ms)
+
+    if count >= @max_attempts do
+      {:error, @window_ms}
+    else
+      {:ok, @max_attempts - count}
     end
   end
 
-  @doc """
-  Increments login attempt counter.
-  """
   def increment_login_attempt(identifier) do
-    Hammer.increment(__MODULE__, "login:#{identifier}")
+    inc(key(identifier), @window_ms)
   end
 
-  @doc """
-  Resets login attempts on successful login.
-  """
   def reset_login_attempts(identifier) do
-    Hammer.delete(__MODULE__, "login:#{identifier}")
+    set(key(identifier), @window_ms, 0)
   end
 
-  @doc """
-  Gets rate limit identifier for email login.
-  """
   def get_identifier_for_email(conn, email) do
     ip = get_client_ip(conn)
     "#{ip}:#{String.downcase(email)}"
   end
+
+  defp key(identifier), do: "login:#{identifier}"
 
   defp get_client_ip(conn) do
     case conn.req_headers do
@@ -50,8 +46,12 @@ defmodule SimpleJournalSystemWeb.RateLimit do
         case conn.remote_ip do
           {_, _, _, _} = ip_tuple ->
             ip_tuple |> Tuple.to_list() |> Enum.join(".")
-          ip when is_binary(ip) -> ip
-          _ -> "unknown"
+
+          ip when is_binary(ip) ->
+            ip
+
+          _ ->
+            "unknown"
         end
     end
   end

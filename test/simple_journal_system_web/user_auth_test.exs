@@ -1,5 +1,7 @@
 defmodule SimpleJournalSystemWeb.UserAuthTest do
   use SimpleJournalSystemWeb.ConnCase
+  alias SimpleJournalSystem.Repo
+  alias SimpleJournalSystem.Journals.Journal
 
   alias SimpleJournalSystem.Accounts
   alias SimpleJournalSystem.Accounts.User

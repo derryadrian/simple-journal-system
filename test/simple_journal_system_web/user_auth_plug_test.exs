@@ -62,7 +62,7 @@ defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
 
     @tag :require_author
     test "require_author allows user with author role", %{conn: conn, user: user, author_group: author_group} do
-      Accounts.enroll_user(user.user_id, author_group.user_group_id)
+      Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
       conn = login_via_form(conn, user)
 
       conn = get(conn, ~p"/author")
@@ -80,7 +80,7 @@ defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
 
     @tag :require_editor
     test "require_editor allows user with editor role", %{conn: conn, user: user, editor_group: editor_group} do
-      Accounts.enroll_user(user.user_id, editor_group.user_group_id)
+      Accounts.enroll_user(user.user_id, editor_group.user_group_id, user.user_id)
       conn = login_via_form(conn, user)
 
       # Need to add a route for testing - using a test route
@@ -90,7 +90,7 @@ defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
 
     @tag :require_manager
     test "require_manager allows user with manager role", %{conn: conn, user: user, manager_group: manager_group} do
-      Accounts.enroll_user(user.user_id, manager_group.user_group_id)
+      Accounts.enroll_user(user.user_id, manager_group.user_group_id, user.user_id)
       conn = login_via_form(conn, user)
 
       conn = get_test_authorized_route(conn, :manager)
@@ -99,7 +99,7 @@ defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
 
     @tag :require_admin
     test "require_admin allows user with site_admin role", %{conn: conn, user: user, site_admin_group: site_admin_group} do
-      Accounts.enroll_user(user.user_id, site_admin_group.user_group_id)
+      Accounts.enroll_user(user.user_id, site_admin_group.user_group_id, user.user_id)
       conn = login_via_form(conn, user)
 
       conn = get_test_authorized_route(conn, :admin)
@@ -108,7 +108,7 @@ defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
 
     @tag :require_reviewer
     test "require_reviewer allows user with reviewer role", %{conn: conn, user: user, reviewer_group: reviewer_group} do
-      Accounts.enroll_user(user.user_id, reviewer_group.user_group_id)
+      Accounts.enroll_user(user.user_id, reviewer_group.user_group_id, user.user_id)
       conn = login_via_form(conn, user)
 
       conn = get_test_authorized_route(conn, :reviewer)

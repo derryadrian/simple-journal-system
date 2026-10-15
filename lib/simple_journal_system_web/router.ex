@@ -126,7 +126,7 @@ defmodule SimpleJournalSystemWeb.Router do
       live "/users/log-in/:token", UserLive.Confirmation, :new
     end
 
-    scope "/", SimpleJournalSystemWeb do
+    scope "/" do
       pipe_through [:rate_limit_login]
       post "/users/log-in", UserSessionController, :create
     end
