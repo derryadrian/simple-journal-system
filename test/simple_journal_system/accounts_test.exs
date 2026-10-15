@@ -51,7 +51,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       salt = "testsalt123"
       sha1_hash = :crypto.hash(:sha, salt <> "legacy123") |> Base.encode16(case: :lower)
       legacy_hash = "sha1$testsalt123$#{sha1_hash}"
-      Repo.update!(%User{user | hashed_password: legacy_hash})
+      user |> Ecto.Changeset.change(hashed_password: legacy_hash) |> Repo.update!()
 
       # Should login with legacy password
       assert (Accounts.get_user_by_email_and_password(user.email, "legacy123")).user_id == user.user_id
@@ -71,7 +71,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       })
 
       sha1_hash = :crypto.hash(:sha, "plain123") |> Base.encode16(case: :lower)
-      Repo.update!(%User{user | hashed_password: sha1_hash})
+      user |> Ecto.Changeset.change(hashed_password: sha1_hash) |> Repo.update!()
 
       assert (Accounts.get_user_by_email_and_password(user.email, "plain123")).user_id == user.user_id
       
@@ -91,7 +91,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       salt = "salty"
       sha256_hash = :crypto.hash(:sha256, salt <> "sha256pass") |> Base.encode16(case: :lower)
       legacy_hash = "sha256$#{salt}$#{sha256_hash}"
-      Repo.update!(%User{user | hashed_password: legacy_hash})
+      user |> Ecto.Changeset.change(hashed_password: legacy_hash) |> Repo.update!()
 
       assert (Accounts.get_user_by_email_and_password(user.email, "sha256pass")).user_id == user.user_id
     end

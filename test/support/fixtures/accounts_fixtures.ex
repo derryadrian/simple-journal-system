@@ -63,7 +63,7 @@ defmodule SimpleJournalSystem.AccountsFixtures do
     sha1_hash = :crypto.hash(:sha, salt <> password) |> Base.encode16(case: :lower)
     legacy_hash = "sha1$#{salt}$#{sha1_hash}"
 
-    Repo.update!(%User{user | hashed_password: legacy_hash})
+    user |> Ecto.Changeset.change(hashed_password: legacy_hash) |> Repo.update!()
     user
   end
 

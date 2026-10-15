@@ -268,7 +268,7 @@ defmodule SimpleJournalSystem.Accounts do
   Deletes a user group. Prevents deletion if users are assigned.
   """
   def delete_user_group(%UserGroup{} = group) do
-    count = Repo.one(from uug in UserUserGroup, where: uug.user_group_id == ^group.user_group_id, select: count(uug.id))
+    count = Repo.one(from uug in UserUserGroup, where: uug.user_group_id == ^group.user_group_id, select: count(uug.user_group_id))
     if count > 0 do
       {:error, :has_assigned_users}
     else
@@ -281,8 +281,8 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def set_default_group(journal_id, user_group_id) do
     Repo.transaction(fn ->
-      Repo.update_all(UserGroup, set: [is_default: 0], where: [context_id: journal_id])
-      Repo.update_all(UserGroup, set: [is_default: 1], where: [user_group_id: user_group_id])
+      from(g in UserGroup, where: g.context_id == ^journal_id) |> Repo.update_all(set: [is_default: 0])
+      from(g in UserGroup, where: g.user_group_id == ^user_group_id) |> Repo.update_all(set: [is_default: 1])
     end)
   end
 
