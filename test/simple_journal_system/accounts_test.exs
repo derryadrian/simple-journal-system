@@ -503,12 +503,12 @@ defmodule SimpleJournalSystem.AccountsTest do
       lines = String.split(csv, "\n", trim: true)
       assert length(lines) >= 2  # header + data
       
-      header = lines[0]
-      assert "User ID" in header
-      assert "Username" in header
-      assert "Email" in header
-      assert "Roles" in header
-      assert "Journals" in header
+      header = Enum.at(lines, 0)
+      assert header =~ "User ID"
+      assert header =~ "Username"
+      assert header =~ "Email"
+      assert header =~ "Roles"
+      assert header =~ "Journals"
     end
   end
 end
