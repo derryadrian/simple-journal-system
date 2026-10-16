@@ -69,15 +69,6 @@ defmodule SimpleJournalSystemWeb.UserAuth do
     with {token, conn} <- ensure_user_token(conn),
          {user, token_inserted_at} <- Accounts.get_user_by_session_token(token) do
 
-      # --- DEBUG GLOBAL SESSION PRELOAD ---
-      IO.puts("\n=== DEBUG GLOBAL SESSION PRELOAD ===")
-      IO.inspect(user.user_user_groups, label: "USER GROUPS")
-      IO.inspect(
-        Authorization.get_roles(user),
-        label: "ROLES"
-      )
-      IO.puts("====================================\n")
-      # ------------------------------------
 
       conn
       |> assign(:current_scope, Scope.for_user(user))

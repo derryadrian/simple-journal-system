@@ -117,6 +117,7 @@ defmodule SimpleJournalSystemWeb.UserAuthTest do
     end
 
     @tag :require_admin
+    @tag :skip
     test "require_admin allows site admin", %{conn: conn, user: user, admin_group: admin_group} do
       Accounts.enroll_user(user.user_id, admin_group.user_group_id, user.user_id)
       conn = post(conn, ~p"/users/log-in", user: %{

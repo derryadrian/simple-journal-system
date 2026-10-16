@@ -101,4 +101,43 @@ defmodule SimpleJournalSystem.Accounts.User do
       inline_help: 1
     })
   end
+
+  @doc """
+  Changeset untuk ganti password. Opsi `hash_password: false` dipakai untuk
+  validasi di form (tanpa hashing).
+  """
+  def password_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:password, :password_confirmation])
+    |> validate_required([:password])
+    |> validate_length(:password, min: 6)
+    |> validate_confirmation(:password, message: "tidak sama dengan password")
+    |> maybe_put_password_hash(opts)
+  end
+
+  defp maybe_put_password_hash(changeset, opts) do
+    if Keyword.get(opts, :hash_password, true) do
+      put_password_hash(changeset)
+    else
+      changeset
+    end
+  end
+
+  @doc """
+  Menambahkan error kalau password saat ini salah.
+  """
+  def validate_current_password(changeset, password) do
+    if valid_password?(changeset.data, password) do
+      changeset
+    else
+      add_error(changeset, :current_password, "is not valid")
+    end
+  end
+
+  defp valid_password?(%__MODULE__{hashed_password: hash}, password)
+       when is_binary(hash) and is_binary(password) and byte_size(password) > 0 do
+    String.starts_with?(hash, "$2") and Bcrypt.verify_pass(password, hash)
+  end
+
+  defp valid_password?(_user, _password), do: false
 end

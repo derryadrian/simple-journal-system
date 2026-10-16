@@ -167,6 +167,10 @@ defmodule SimpleJournalSystem.Accounts do
     |> Repo.update()
   end
 
+  def change_user_password(user, attrs, opts) do
+    User.password_changeset(user, attrs, opts)
+  end
+
   def update_user_password(user, password, attrs) do
     user
     |> User.password_changeset(attrs)
@@ -571,7 +575,7 @@ defmodule SimpleJournalSystem.Accounts do
           error -> error
         end
       end)
-      {:ok, results}
+      results
     end)
   end
 
@@ -669,7 +673,7 @@ defmodule SimpleJournalSystem.Accounts do
         end
       end)
 
-      {:ok, list_user_roles(user_id)}
+      list_user_roles(user_id)
     end)
   end
 
