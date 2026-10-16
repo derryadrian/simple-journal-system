@@ -52,14 +52,15 @@ defmodule SimpleJournalSystemWeb.UserSessionController do
     end
   end
 
-  def update_password(conn, %{"user" => user_params} = params) do
+  def update_password(conn, %{"user" => user_params}) do
     user = conn.assigns.current_scope.user
 
     case Accounts.update_user_password(user, user_params["current_password"], user_params) do
-      {:ok, _user} ->
+      {:ok, user} ->
         conn
         |> put_session(:user_return_to, ~p"/users/settings")
-        |> create(params, "Password updated successfully!")
+        |> put_flash(:info, "Password updated successfully!")
+        |> UserAuth.log_in_user(user)
 
       {:error, _changeset} ->
         conn

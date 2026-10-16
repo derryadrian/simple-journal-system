@@ -126,18 +126,15 @@ defmodule SimpleJournalSystemWeb.UserLive.Registration do
 
   @impl true
   def handle_event("save", %{"user" => user_params}, socket) do
-    IO.inspect(user_params, label: "📝 REGISTER PARAMS")
 
     case Accounts.register_user(user_params) do
-      {:ok, user} ->
-        IO.inspect(user, label: "✅ REGISTER SUCCESS")
+      {:ok, _user} ->
         {:noreply,
          socket
          |> put_flash(:info, "Akun berhasil dibuat. Silakan login.")
          |> push_navigate(to: ~p"/users/log-in")}
 
       {:error, changeset} ->
-        IO.inspect(changeset.errors, label: "❌ REGISTER ERROR")
         form = to_form(changeset, as: "user")
         {:noreply, assign(socket, form: form)}
     end

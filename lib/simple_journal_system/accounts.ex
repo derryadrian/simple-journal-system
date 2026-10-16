@@ -707,7 +707,7 @@ defmodule SimpleJournalSystem.Accounts do
     
     headers = ["User ID", "Username", "Email", "Disabled", "Disabled Reason", "Date Registered", "Roles", "Journals"]
     
-    rows = Enum.map(results.users, fn user ->
+    rows = Enum.map(results, fn user ->
       roles = list_user_roles(user.user_id)
       journals = Journals.list_user_journals(user.user_id)
       role_str = Enum.map_join(roles, ", ", fn r -> "#{r.role_name} (#{r.journal_path})" end)
