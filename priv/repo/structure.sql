@@ -35,7 +35,6 @@ CREATE TABLE public.announcement_settings (
 );
 
 
-ALTER TABLE public.announcement_settings OWNER TO adrianasofi;
 
 --
 -- Name: announcement_settings_announcement_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -49,7 +48,6 @@ CREATE SEQUENCE public.announcement_settings_announcement_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.announcement_settings_announcement_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: announcement_settings_announcement_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -72,7 +70,6 @@ CREATE TABLE public.announcement_type_settings (
 );
 
 
-ALTER TABLE public.announcement_type_settings OWNER TO adrianasofi;
 
 --
 -- Name: announcement_type_settings_announcement_type_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -86,7 +83,6 @@ CREATE SEQUENCE public.announcement_type_settings_announcement_type_setting_id_s
     CACHE 1;
 
 
-ALTER SEQUENCE public.announcement_type_settings_announcement_type_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: announcement_type_settings_announcement_type_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -105,7 +101,6 @@ CREATE TABLE public.announcement_types (
 );
 
 
-ALTER TABLE public.announcement_types OWNER TO adrianasofi;
 
 --
 -- Name: announcement_types_type_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -119,7 +114,6 @@ CREATE SEQUENCE public.announcement_types_type_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.announcement_types_type_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: announcement_types_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -142,7 +136,6 @@ CREATE TABLE public.announcements (
 );
 
 
-ALTER TABLE public.announcements OWNER TO adrianasofi;
 
 --
 -- Name: announcements_announcement_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -156,7 +149,6 @@ CREATE SEQUENCE public.announcements_announcement_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.announcements_announcement_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: announcements_announcement_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -178,7 +170,6 @@ CREATE TABLE public.author_affiliation_settings (
 );
 
 
-ALTER TABLE public.author_affiliation_settings OWNER TO adrianasofi;
 
 --
 -- Name: author_affiliation_settings_author_affiliation_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -192,7 +183,6 @@ CREATE SEQUENCE public.author_affiliation_settings_author_affiliation_setting_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.author_affiliation_settings_author_affiliation_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: author_affiliation_settings_author_affiliation_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -212,7 +202,6 @@ CREATE TABLE public.author_affiliations (
 );
 
 
-ALTER TABLE public.author_affiliations OWNER TO adrianasofi;
 
 --
 -- Name: author_affiliations_author_affiliation_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -226,7 +215,6 @@ CREATE SEQUENCE public.author_affiliations_author_affiliation_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.author_affiliations_author_affiliation_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: author_affiliations_author_affiliation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -248,7 +236,6 @@ CREATE TABLE public.author_settings (
 );
 
 
-ALTER TABLE public.author_settings OWNER TO adrianasofi;
 
 --
 -- Name: author_settings_author_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -262,7 +249,6 @@ CREATE SEQUENCE public.author_settings_author_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.author_settings_author_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: author_settings_author_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -285,7 +271,6 @@ CREATE TABLE public.authors (
 );
 
 
-ALTER TABLE public.authors OWNER TO adrianasofi;
 
 --
 -- Name: authors_author_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -299,7 +284,6 @@ CREATE SEQUENCE public.authors_author_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.authors_author_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: authors_author_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -322,7 +306,6 @@ CREATE TABLE public.categories (
 );
 
 
-ALTER TABLE public.categories OWNER TO adrianasofi;
 
 --
 -- Name: categories_category_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -336,7 +319,6 @@ CREATE SEQUENCE public.categories_category_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.categories_category_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: categories_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -358,7 +340,6 @@ CREATE TABLE public.category_settings (
 );
 
 
-ALTER TABLE public.category_settings OWNER TO adrianasofi;
 
 --
 -- Name: category_settings_category_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -372,7 +353,6 @@ CREATE SEQUENCE public.category_settings_category_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.category_settings_category_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: category_settings_category_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -395,7 +375,6 @@ CREATE TABLE public.citation_settings (
 );
 
 
-ALTER TABLE public.citation_settings OWNER TO adrianasofi;
 
 --
 -- Name: citation_settings_citation_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -409,7 +388,6 @@ CREATE SEQUENCE public.citation_settings_citation_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.citation_settings_citation_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: citation_settings_citation_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -430,7 +408,6 @@ CREATE TABLE public.citations (
 );
 
 
-ALTER TABLE public.citations OWNER TO adrianasofi;
 
 --
 -- Name: citations_citation_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -444,7 +421,6 @@ CREATE SEQUENCE public.citations_citation_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.citations_citation_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: citations_citation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -470,7 +446,6 @@ CREATE TABLE public.completed_payments (
 );
 
 
-ALTER TABLE public.completed_payments OWNER TO adrianasofi;
 
 --
 -- Name: completed_payments_completed_payment_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -484,7 +459,6 @@ CREATE SEQUENCE public.completed_payments_completed_payment_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.completed_payments_completed_payment_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: completed_payments_completed_payment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -504,7 +478,6 @@ CREATE TABLE public.controlled_vocab_entries (
 );
 
 
-ALTER TABLE public.controlled_vocab_entries OWNER TO adrianasofi;
 
 --
 -- Name: controlled_vocab_entries_controlled_vocab_entry_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -518,7 +491,6 @@ CREATE SEQUENCE public.controlled_vocab_entries_controlled_vocab_entry_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.controlled_vocab_entries_controlled_vocab_entry_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: controlled_vocab_entries_controlled_vocab_entry_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -540,7 +512,6 @@ CREATE TABLE public.controlled_vocab_entry_settings (
 );
 
 
-ALTER TABLE public.controlled_vocab_entry_settings OWNER TO adrianasofi;
 
 --
 -- Name: controlled_vocab_entry_settin_controlled_vocab_entry_settin_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -554,7 +525,6 @@ CREATE SEQUENCE public.controlled_vocab_entry_settin_controlled_vocab_entry_sett
     CACHE 1;
 
 
-ALTER SEQUENCE public.controlled_vocab_entry_settin_controlled_vocab_entry_settin_seq OWNER TO adrianasofi;
 
 --
 -- Name: controlled_vocab_entry_settin_controlled_vocab_entry_settin_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -575,7 +545,6 @@ CREATE TABLE public.controlled_vocabs (
 );
 
 
-ALTER TABLE public.controlled_vocabs OWNER TO adrianasofi;
 
 --
 -- Name: controlled_vocabs_controlled_vocab_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -589,7 +558,6 @@ CREATE SEQUENCE public.controlled_vocabs_controlled_vocab_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.controlled_vocabs_controlled_vocab_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: controlled_vocabs_controlled_vocab_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -610,7 +578,6 @@ CREATE TABLE public.custom_issue_orders (
 );
 
 
-ALTER TABLE public.custom_issue_orders OWNER TO adrianasofi;
 
 --
 -- Name: custom_issue_orders_custom_issue_order_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -624,7 +591,6 @@ CREATE SEQUENCE public.custom_issue_orders_custom_issue_order_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.custom_issue_orders_custom_issue_order_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: custom_issue_orders_custom_issue_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -645,7 +611,6 @@ CREATE TABLE public.custom_section_orders (
 );
 
 
-ALTER TABLE public.custom_section_orders OWNER TO adrianasofi;
 
 --
 -- Name: custom_section_orders_custom_section_order_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -659,7 +624,6 @@ CREATE SEQUENCE public.custom_section_orders_custom_section_order_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.custom_section_orders_custom_section_order_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: custom_section_orders_custom_section_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -680,7 +644,6 @@ CREATE TABLE public.data_object_tombstone_oai_set_objects (
 );
 
 
-ALTER TABLE public.data_object_tombstone_oai_set_objects OWNER TO adrianasofi;
 
 --
 -- Name: data_object_tombstone_oai_set_objects_object_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -694,7 +657,6 @@ CREATE SEQUENCE public.data_object_tombstone_oai_set_objects_object_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.data_object_tombstone_oai_set_objects_object_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: data_object_tombstone_oai_set_objects_object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -717,7 +679,6 @@ CREATE TABLE public.data_object_tombstone_settings (
 );
 
 
-ALTER TABLE public.data_object_tombstone_settings OWNER TO adrianasofi;
 
 --
 -- Name: data_object_tombstone_settings_tombstone_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -731,7 +692,6 @@ CREATE SEQUENCE public.data_object_tombstone_settings_tombstone_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.data_object_tombstone_settings_tombstone_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: data_object_tombstone_settings_tombstone_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -754,7 +714,6 @@ CREATE TABLE public.data_object_tombstones (
 );
 
 
-ALTER TABLE public.data_object_tombstones OWNER TO adrianasofi;
 
 --
 -- Name: data_object_tombstones_tombstone_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -768,7 +727,6 @@ CREATE SEQUENCE public.data_object_tombstones_tombstone_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.data_object_tombstones_tombstone_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: data_object_tombstones_tombstone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -790,7 +748,6 @@ CREATE TABLE public.doi_settings (
 );
 
 
-ALTER TABLE public.doi_settings OWNER TO adrianasofi;
 
 --
 -- Name: doi_settings_doi_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -804,7 +761,6 @@ CREATE SEQUENCE public.doi_settings_doi_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.doi_settings_doi_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: doi_settings_doi_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -825,7 +781,6 @@ CREATE TABLE public.dois (
 );
 
 
-ALTER TABLE public.dois OWNER TO adrianasofi;
 
 --
 -- Name: dois_doi_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -839,7 +794,6 @@ CREATE SEQUENCE public.dois_doi_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.dois_doi_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: dois_doi_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -864,7 +818,6 @@ CREATE TABLE public.edit_decisions (
 );
 
 
-ALTER TABLE public.edit_decisions OWNER TO adrianasofi;
 
 --
 -- Name: edit_decisions_edit_decision_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -878,7 +831,6 @@ CREATE SEQUENCE public.edit_decisions_edit_decision_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.edit_decisions_edit_decision_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: edit_decisions_edit_decision_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -907,7 +859,6 @@ CREATE TABLE public.email_log (
 );
 
 
-ALTER TABLE public.email_log OWNER TO adrianasofi;
 
 --
 -- Name: email_log_log_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -921,7 +872,6 @@ CREATE SEQUENCE public.email_log_log_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.email_log_log_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: email_log_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -941,7 +891,6 @@ CREATE TABLE public.email_log_users (
 );
 
 
-ALTER TABLE public.email_log_users OWNER TO adrianasofi;
 
 --
 -- Name: email_log_users_email_log_user_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -955,7 +904,6 @@ CREATE SEQUENCE public.email_log_users_email_log_user_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.email_log_users_email_log_user_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: email_log_users_email_log_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -976,7 +924,6 @@ CREATE TABLE public.email_templates (
 );
 
 
-ALTER TABLE public.email_templates OWNER TO adrianasofi;
 
 --
 -- Name: email_templates_default_data; Type: TABLE; Schema: public; Owner: adrianasofi
@@ -992,7 +939,6 @@ CREATE TABLE public.email_templates_default_data (
 );
 
 
-ALTER TABLE public.email_templates_default_data OWNER TO adrianasofi;
 
 --
 -- Name: email_templates_default_data_email_templates_default_data_i_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1006,7 +952,6 @@ CREATE SEQUENCE public.email_templates_default_data_email_templates_default_data
     CACHE 1;
 
 
-ALTER SEQUENCE public.email_templates_default_data_email_templates_default_data_i_seq OWNER TO adrianasofi;
 
 --
 -- Name: email_templates_default_data_email_templates_default_data_i_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1027,7 +972,6 @@ CREATE SEQUENCE public.email_templates_email_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.email_templates_email_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: email_templates_email_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1049,7 +993,6 @@ CREATE TABLE public.email_templates_settings (
 );
 
 
-ALTER TABLE public.email_templates_settings OWNER TO adrianasofi;
 
 --
 -- Name: email_templates_settings_email_template_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1063,7 +1006,6 @@ CREATE SEQUENCE public.email_templates_settings_email_template_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.email_templates_settings_email_template_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: email_templates_settings_email_template_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1088,7 +1030,6 @@ CREATE TABLE public.event_log (
 );
 
 
-ALTER TABLE public.event_log OWNER TO adrianasofi;
 
 --
 -- Name: event_log_log_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1102,7 +1043,6 @@ CREATE SEQUENCE public.event_log_log_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.event_log_log_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: event_log_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1124,7 +1064,6 @@ CREATE TABLE public.event_log_settings (
 );
 
 
-ALTER TABLE public.event_log_settings OWNER TO adrianasofi;
 
 --
 -- Name: event_log_settings_event_log_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1138,7 +1077,6 @@ CREATE SEQUENCE public.event_log_settings_event_log_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.event_log_settings_event_log_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: event_log_settings_event_log_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1161,7 +1099,6 @@ CREATE TABLE public.failed_jobs (
 );
 
 
-ALTER TABLE public.failed_jobs OWNER TO adrianasofi;
 
 --
 -- Name: failed_jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1175,7 +1112,6 @@ CREATE SEQUENCE public.failed_jobs_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.failed_jobs_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: failed_jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1195,7 +1131,6 @@ CREATE TABLE public.files (
 );
 
 
-ALTER TABLE public.files OWNER TO adrianasofi;
 
 --
 -- Name: files_file_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1209,7 +1144,6 @@ CREATE SEQUENCE public.files_file_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.files_file_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: files_file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1232,7 +1166,6 @@ CREATE TABLE public.filter_groups (
 );
 
 
-ALTER TABLE public.filter_groups OWNER TO adrianasofi;
 
 --
 -- Name: filter_groups_filter_group_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1246,7 +1179,6 @@ CREATE SEQUENCE public.filter_groups_filter_group_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.filter_groups_filter_group_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: filter_groups_filter_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1269,7 +1201,6 @@ CREATE TABLE public.filter_settings (
 );
 
 
-ALTER TABLE public.filter_settings OWNER TO adrianasofi;
 
 --
 -- Name: filter_settings_filter_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1283,7 +1214,6 @@ CREATE SEQUENCE public.filter_settings_filter_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.filter_settings_filter_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: filter_settings_filter_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1308,7 +1238,6 @@ CREATE TABLE public.filters (
 );
 
 
-ALTER TABLE public.filters OWNER TO adrianasofi;
 
 --
 -- Name: filters_filter_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1322,7 +1251,6 @@ CREATE SEQUENCE public.filters_filter_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.filters_filter_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: filters_filter_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1345,7 +1273,6 @@ CREATE TABLE public.genre_settings (
 );
 
 
-ALTER TABLE public.genre_settings OWNER TO adrianasofi;
 
 --
 -- Name: genre_settings_genre_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1359,7 +1286,6 @@ CREATE SEQUENCE public.genre_settings_genre_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.genre_settings_genre_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: genre_settings_genre_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1385,7 +1311,6 @@ CREATE TABLE public.genres (
 );
 
 
-ALTER TABLE public.genres OWNER TO adrianasofi;
 
 --
 -- Name: genres_genre_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1399,7 +1324,6 @@ CREATE SEQUENCE public.genres_genre_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.genres_genre_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: genres_genre_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1421,7 +1345,6 @@ CREATE TABLE public.highlight_settings (
 );
 
 
-ALTER TABLE public.highlight_settings OWNER TO adrianasofi;
 
 --
 -- Name: highlight_settings_highlight_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1435,7 +1358,6 @@ CREATE SEQUENCE public.highlight_settings_highlight_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.highlight_settings_highlight_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: highlight_settings_highlight_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1456,7 +1378,6 @@ CREATE TABLE public.highlights (
 );
 
 
-ALTER TABLE public.highlights OWNER TO adrianasofi;
 
 --
 -- Name: highlights_highlight_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1470,7 +1391,6 @@ CREATE SEQUENCE public.highlights_highlight_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.highlights_highlight_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: highlights_highlight_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1492,7 +1412,6 @@ CREATE TABLE public.institution_ip (
 );
 
 
-ALTER TABLE public.institution_ip OWNER TO adrianasofi;
 
 --
 -- Name: institution_ip_institution_ip_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1506,7 +1425,6 @@ CREATE SEQUENCE public.institution_ip_institution_ip_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.institution_ip_institution_ip_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: institution_ip_institution_ip_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1528,7 +1446,6 @@ CREATE TABLE public.institution_settings (
 );
 
 
-ALTER TABLE public.institution_settings OWNER TO adrianasofi;
 
 --
 -- Name: institution_settings_institution_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1542,7 +1459,6 @@ CREATE SEQUENCE public.institution_settings_institution_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.institution_settings_institution_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: institution_settings_institution_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1564,7 +1480,6 @@ CREATE TABLE public.institutional_subscriptions (
 );
 
 
-ALTER TABLE public.institutional_subscriptions OWNER TO adrianasofi;
 
 --
 -- Name: institutional_subscriptions_institutional_subscription_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1578,7 +1493,6 @@ CREATE SEQUENCE public.institutional_subscriptions_institutional_subscription_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.institutional_subscriptions_institutional_subscription_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: institutional_subscriptions_institutional_subscription_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1599,7 +1513,6 @@ CREATE TABLE public.institutions (
 );
 
 
-ALTER TABLE public.institutions OWNER TO adrianasofi;
 
 --
 -- Name: institutions_institution_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1613,7 +1526,6 @@ CREATE SEQUENCE public.institutions_institution_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.institutions_institution_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: institutions_institution_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1642,7 +1554,6 @@ CREATE TABLE public.invitations (
 );
 
 
-ALTER TABLE public.invitations OWNER TO adrianasofi;
 
 --
 -- Name: invitations_invitation_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1656,7 +1567,6 @@ CREATE SEQUENCE public.invitations_invitation_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.invitations_invitation_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: invitations_invitation_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1682,7 +1592,6 @@ CREATE TABLE public.issue_files (
 );
 
 
-ALTER TABLE public.issue_files OWNER TO adrianasofi;
 
 --
 -- Name: issue_files_file_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1696,7 +1605,6 @@ CREATE SEQUENCE public.issue_files_file_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.issue_files_file_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: issue_files_file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1719,7 +1627,6 @@ CREATE TABLE public.issue_galley_settings (
 );
 
 
-ALTER TABLE public.issue_galley_settings OWNER TO adrianasofi;
 
 --
 -- Name: issue_galley_settings_issue_galley_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1733,7 +1640,6 @@ CREATE SEQUENCE public.issue_galley_settings_issue_galley_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.issue_galley_settings_issue_galley_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: issue_galley_settings_issue_galley_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1757,7 +1663,6 @@ CREATE TABLE public.issue_galleys (
 );
 
 
-ALTER TABLE public.issue_galleys OWNER TO adrianasofi;
 
 --
 -- Name: issue_galleys_galley_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1771,7 +1676,6 @@ CREATE SEQUENCE public.issue_galleys_galley_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.issue_galleys_galley_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: issue_galleys_galley_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1793,7 +1697,6 @@ CREATE TABLE public.issue_settings (
 );
 
 
-ALTER TABLE public.issue_settings OWNER TO adrianasofi;
 
 --
 -- Name: issue_settings_issue_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1807,7 +1710,6 @@ CREATE SEQUENCE public.issue_settings_issue_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.issue_settings_issue_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: issue_settings_issue_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1843,7 +1745,6 @@ CREATE TABLE public.issues (
 );
 
 
-ALTER TABLE public.issues OWNER TO adrianasofi;
 
 --
 -- Name: issues_issue_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1857,7 +1758,6 @@ CREATE SEQUENCE public.issues_issue_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.issues_issue_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: issues_issue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1884,7 +1784,6 @@ CREATE TABLE public.job_batches (
 );
 
 
-ALTER TABLE public.job_batches OWNER TO adrianasofi;
 
 --
 -- Name: jobs; Type: TABLE; Schema: public; Owner: adrianasofi
@@ -1901,7 +1800,6 @@ CREATE TABLE public.jobs (
 );
 
 
-ALTER TABLE public.jobs OWNER TO adrianasofi;
 
 --
 -- Name: jobs_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1915,7 +1813,6 @@ CREATE SEQUENCE public.jobs_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.jobs_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: jobs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1937,7 +1834,6 @@ CREATE TABLE public.journal_settings (
 );
 
 
-ALTER TABLE public.journal_settings OWNER TO adrianasofi;
 
 --
 -- Name: journal_settings_journal_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1951,7 +1847,6 @@ CREATE SEQUENCE public.journal_settings_journal_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.journal_settings_journal_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: journal_settings_journal_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -1974,7 +1869,6 @@ CREATE TABLE public.journals (
 );
 
 
-ALTER TABLE public.journals OWNER TO adrianasofi;
 
 --
 -- Name: journals_journal_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -1988,7 +1882,6 @@ CREATE SEQUENCE public.journals_journal_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.journals_journal_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: journals_journal_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2011,7 +1904,6 @@ CREATE TABLE public.library_file_settings (
 );
 
 
-ALTER TABLE public.library_file_settings OWNER TO adrianasofi;
 
 --
 -- Name: library_file_settings_library_file_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2025,7 +1917,6 @@ CREATE SEQUENCE public.library_file_settings_library_file_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.library_file_settings_library_file_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: library_file_settings_library_file_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2053,7 +1944,6 @@ CREATE TABLE public.library_files (
 );
 
 
-ALTER TABLE public.library_files OWNER TO adrianasofi;
 
 --
 -- Name: library_files_file_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2067,7 +1957,6 @@ CREATE SEQUENCE public.library_files_file_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.library_files_file_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: library_files_file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2089,7 +1978,6 @@ CREATE TABLE public.metrics_context (
 );
 
 
-ALTER TABLE public.metrics_context OWNER TO adrianasofi;
 
 --
 -- Name: metrics_context_metrics_context_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2103,7 +1991,6 @@ CREATE SEQUENCE public.metrics_context_metrics_context_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_context_metrics_context_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: metrics_context_metrics_context_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2129,7 +2016,6 @@ CREATE TABLE public.metrics_counter_submission_daily (
 );
 
 
-ALTER TABLE public.metrics_counter_submission_daily OWNER TO adrianasofi;
 
 --
 -- Name: metrics_counter_submission_da_metrics_counter_submission_da_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2143,7 +2029,6 @@ CREATE SEQUENCE public.metrics_counter_submission_da_metrics_counter_submission_
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_counter_submission_da_metrics_counter_submission_da_seq OWNER TO adrianasofi;
 
 --
 -- Name: metrics_counter_submission_da_metrics_counter_submission_da_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2169,7 +2054,6 @@ CREATE TABLE public.metrics_counter_submission_institution_monthly (
 );
 
 
-ALTER TABLE public.metrics_counter_submission_institution_monthly OWNER TO adrianasofi;
 
 --
 -- Name: metrics_counter_submission_in_metrics_counter_submission_i_seq1; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2183,7 +2067,6 @@ CREATE SEQUENCE public.metrics_counter_submission_in_metrics_counter_submission_
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_counter_submission_in_metrics_counter_submission_i_seq1 OWNER TO adrianasofi;
 
 --
 -- Name: metrics_counter_submission_in_metrics_counter_submission_i_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2210,7 +2093,6 @@ CREATE TABLE public.metrics_counter_submission_institution_daily (
 );
 
 
-ALTER TABLE public.metrics_counter_submission_institution_daily OWNER TO adrianasofi;
 
 --
 -- Name: metrics_counter_submission_in_metrics_counter_submission_in_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2224,7 +2106,6 @@ CREATE SEQUENCE public.metrics_counter_submission_in_metrics_counter_submission_
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_counter_submission_in_metrics_counter_submission_in_seq OWNER TO adrianasofi;
 
 --
 -- Name: metrics_counter_submission_in_metrics_counter_submission_in_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2249,7 +2130,6 @@ CREATE TABLE public.metrics_counter_submission_monthly (
 );
 
 
-ALTER TABLE public.metrics_counter_submission_monthly OWNER TO adrianasofi;
 
 --
 -- Name: metrics_counter_submission_mo_metrics_counter_submission_mo_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2263,7 +2143,6 @@ CREATE SEQUENCE public.metrics_counter_submission_mo_metrics_counter_submission_
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_counter_submission_mo_metrics_counter_submission_mo_seq OWNER TO adrianasofi;
 
 --
 -- Name: metrics_counter_submission_mo_metrics_counter_submission_mo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2287,7 +2166,6 @@ CREATE TABLE public.metrics_issue (
 );
 
 
-ALTER TABLE public.metrics_issue OWNER TO adrianasofi;
 
 --
 -- Name: metrics_issue_metrics_issue_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2301,7 +2179,6 @@ CREATE SEQUENCE public.metrics_issue_metrics_issue_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_issue_metrics_issue_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: metrics_issue_metrics_issue_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2328,7 +2205,6 @@ CREATE TABLE public.metrics_submission (
 );
 
 
-ALTER TABLE public.metrics_submission OWNER TO adrianasofi;
 
 --
 -- Name: metrics_submission_geo_daily; Type: TABLE; Schema: public; Owner: adrianasofi
@@ -2348,7 +2224,6 @@ CREATE TABLE public.metrics_submission_geo_daily (
 );
 
 
-ALTER TABLE public.metrics_submission_geo_daily OWNER TO adrianasofi;
 
 --
 -- Name: metrics_submission_geo_daily_metrics_submission_geo_daily_i_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2362,7 +2237,6 @@ CREATE SEQUENCE public.metrics_submission_geo_daily_metrics_submission_geo_daily
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_submission_geo_daily_metrics_submission_geo_daily_i_seq OWNER TO adrianasofi;
 
 --
 -- Name: metrics_submission_geo_daily_metrics_submission_geo_daily_i_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2388,7 +2262,6 @@ CREATE TABLE public.metrics_submission_geo_monthly (
 );
 
 
-ALTER TABLE public.metrics_submission_geo_monthly OWNER TO adrianasofi;
 
 --
 -- Name: metrics_submission_geo_monthl_metrics_submission_geo_monthl_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2402,7 +2275,6 @@ CREATE SEQUENCE public.metrics_submission_geo_monthl_metrics_submission_geo_mont
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_submission_geo_monthl_metrics_submission_geo_monthl_seq OWNER TO adrianasofi;
 
 --
 -- Name: metrics_submission_geo_monthl_metrics_submission_geo_monthl_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2423,7 +2295,6 @@ CREATE SEQUENCE public.metrics_submission_metrics_submission_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.metrics_submission_metrics_submission_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: metrics_submission_metrics_submission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2446,7 +2317,6 @@ CREATE TABLE public.navigation_menu_item_assignment_settings (
 );
 
 
-ALTER TABLE public.navigation_menu_item_assignment_settings OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menu_item_assignme_navigation_menu_item_assignm_seq1; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2460,7 +2330,6 @@ CREATE SEQUENCE public.navigation_menu_item_assignme_navigation_menu_item_assign
     CACHE 1;
 
 
-ALTER SEQUENCE public.navigation_menu_item_assignme_navigation_menu_item_assignm_seq1 OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menu_item_assignme_navigation_menu_item_assignm_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2482,7 +2351,6 @@ CREATE TABLE public.navigation_menu_item_assignments (
 );
 
 
-ALTER TABLE public.navigation_menu_item_assignments OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menu_item_assignme_navigation_menu_item_assignme_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2496,7 +2364,6 @@ CREATE SEQUENCE public.navigation_menu_item_assignme_navigation_menu_item_assign
     CACHE 1;
 
 
-ALTER SEQUENCE public.navigation_menu_item_assignme_navigation_menu_item_assignme_seq OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menu_item_assignme_navigation_menu_item_assignme_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2519,7 +2386,6 @@ CREATE TABLE public.navigation_menu_item_settings (
 );
 
 
-ALTER TABLE public.navigation_menu_item_settings OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menu_item_settings_navigation_menu_item_setting__seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2533,7 +2399,6 @@ CREATE SEQUENCE public.navigation_menu_item_settings_navigation_menu_item_settin
     CACHE 1;
 
 
-ALTER SEQUENCE public.navigation_menu_item_settings_navigation_menu_item_setting__seq OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menu_item_settings_navigation_menu_item_setting__seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2554,7 +2419,6 @@ CREATE TABLE public.navigation_menu_items (
 );
 
 
-ALTER TABLE public.navigation_menu_items OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menu_items_navigation_menu_item_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2568,7 +2432,6 @@ CREATE SEQUENCE public.navigation_menu_items_navigation_menu_item_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.navigation_menu_items_navigation_menu_item_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menu_items_navigation_menu_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2589,7 +2452,6 @@ CREATE TABLE public.navigation_menus (
 );
 
 
-ALTER TABLE public.navigation_menus OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menus_navigation_menu_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2603,7 +2465,6 @@ CREATE SEQUENCE public.navigation_menus_navigation_menu_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.navigation_menus_navigation_menu_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: navigation_menus_navigation_menu_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2628,7 +2489,6 @@ CREATE TABLE public.notes (
 );
 
 
-ALTER TABLE public.notes OWNER TO adrianasofi;
 
 --
 -- Name: notes_note_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2642,7 +2502,6 @@ CREATE SEQUENCE public.notes_note_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.notes_note_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: notes_note_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2665,7 +2524,6 @@ CREATE TABLE public.notification_settings (
 );
 
 
-ALTER TABLE public.notification_settings OWNER TO adrianasofi;
 
 --
 -- Name: notification_settings_notification_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2679,7 +2537,6 @@ CREATE SEQUENCE public.notification_settings_notification_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.notification_settings_notification_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: notification_settings_notification_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2702,7 +2559,6 @@ CREATE TABLE public.notification_subscription_settings (
 );
 
 
-ALTER TABLE public.notification_subscription_settings OWNER TO adrianasofi;
 
 --
 -- Name: notification_subscription_settings_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2716,7 +2572,6 @@ CREATE SEQUENCE public.notification_subscription_settings_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.notification_subscription_settings_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: notification_subscription_settings_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2742,7 +2597,6 @@ CREATE TABLE public.notifications (
 );
 
 
-ALTER TABLE public.notifications OWNER TO adrianasofi;
 
 --
 -- Name: notifications_notification_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2756,7 +2610,6 @@ CREATE SEQUENCE public.notifications_notification_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.notifications_notification_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: notifications_notification_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2778,7 +2631,6 @@ CREATE TABLE public.oai_resumption_tokens (
 );
 
 
-ALTER TABLE public.oai_resumption_tokens OWNER TO adrianasofi;
 
 --
 -- Name: oai_resumption_tokens_oai_resumption_token_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2792,7 +2644,6 @@ CREATE SEQUENCE public.oai_resumption_tokens_oai_resumption_token_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.oai_resumption_tokens_oai_resumption_token_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: oai_resumption_tokens_oai_resumption_token_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2815,7 +2666,6 @@ CREATE TABLE public.plugin_settings (
 );
 
 
-ALTER TABLE public.plugin_settings OWNER TO adrianasofi;
 
 --
 -- Name: plugin_settings_plugin_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2829,7 +2679,6 @@ CREATE SEQUENCE public.plugin_settings_plugin_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.plugin_settings_plugin_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: plugin_settings_plugin_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2849,7 +2698,6 @@ CREATE TABLE public.publication_categories (
 );
 
 
-ALTER TABLE public.publication_categories OWNER TO adrianasofi;
 
 --
 -- Name: publication_categories_publication_category_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2863,7 +2711,6 @@ CREATE SEQUENCE public.publication_categories_publication_category_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.publication_categories_publication_category_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: publication_categories_publication_category_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2885,7 +2732,6 @@ CREATE TABLE public.publication_galley_settings (
 );
 
 
-ALTER TABLE public.publication_galley_settings OWNER TO adrianasofi;
 
 --
 -- Name: publication_galley_settings_publication_galley_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2899,7 +2745,6 @@ CREATE SEQUENCE public.publication_galley_settings_publication_galley_setting_id
     CACHE 1;
 
 
-ALTER SEQUENCE public.publication_galley_settings_publication_galley_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: publication_galley_settings_publication_galley_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2926,7 +2771,6 @@ CREATE TABLE public.publication_galleys (
 );
 
 
-ALTER TABLE public.publication_galleys OWNER TO adrianasofi;
 
 --
 -- Name: publication_galleys_galley_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2940,7 +2784,6 @@ CREATE SEQUENCE public.publication_galleys_galley_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.publication_galleys_galley_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: publication_galleys_galley_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -2962,7 +2805,6 @@ CREATE TABLE public.publication_settings (
 );
 
 
-ALTER TABLE public.publication_settings OWNER TO adrianasofi;
 
 --
 -- Name: publication_settings_publication_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -2976,7 +2818,6 @@ CREATE SEQUENCE public.publication_settings_publication_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.publication_settings_publication_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: publication_settings_publication_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3006,7 +2847,6 @@ CREATE TABLE public.publications (
 );
 
 
-ALTER TABLE public.publications OWNER TO adrianasofi;
 
 --
 -- Name: publications_publication_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3020,7 +2860,6 @@ CREATE SEQUENCE public.publications_publication_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.publications_publication_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: publications_publication_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3045,7 +2884,6 @@ CREATE TABLE public.queries (
 );
 
 
-ALTER TABLE public.queries OWNER TO adrianasofi;
 
 --
 -- Name: queries_query_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3059,7 +2897,6 @@ CREATE SEQUENCE public.queries_query_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.queries_query_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: queries_query_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3079,7 +2916,6 @@ CREATE TABLE public.query_participants (
 );
 
 
-ALTER TABLE public.query_participants OWNER TO adrianasofi;
 
 --
 -- Name: query_participants_query_participant_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3093,7 +2929,6 @@ CREATE SEQUENCE public.query_participants_query_participant_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.query_participants_query_participant_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: query_participants_query_participant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3115,7 +2950,6 @@ CREATE TABLE public.queued_payments (
 );
 
 
-ALTER TABLE public.queued_payments OWNER TO adrianasofi;
 
 --
 -- Name: queued_payments_queued_payment_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3129,7 +2963,6 @@ CREATE SEQUENCE public.queued_payments_queued_payment_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.queued_payments_queued_payment_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: queued_payments_queued_payment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3151,7 +2984,6 @@ CREATE TABLE public.review_assignment_settings (
 );
 
 
-ALTER TABLE public.review_assignment_settings OWNER TO adrianasofi;
 
 --
 -- Name: review_assignment_settings_review_assignment_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3165,7 +2997,6 @@ CREATE SEQUENCE public.review_assignment_settings_review_assignment_settings_id_
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_assignment_settings_review_assignment_settings_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_assignment_settings_review_assignment_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3211,7 +3042,6 @@ CREATE TABLE public.review_assignments (
 );
 
 
-ALTER TABLE public.review_assignments OWNER TO adrianasofi;
 
 --
 -- Name: review_assignments_review_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3225,7 +3055,6 @@ CREATE SEQUENCE public.review_assignments_review_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_assignments_review_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_assignments_review_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3245,7 +3074,6 @@ CREATE TABLE public.review_files (
 );
 
 
-ALTER TABLE public.review_files OWNER TO adrianasofi;
 
 --
 -- Name: review_files_review_file_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3259,7 +3087,6 @@ CREATE SEQUENCE public.review_files_review_file_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_files_review_file_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_files_review_file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3282,7 +3109,6 @@ CREATE TABLE public.review_form_element_settings (
 );
 
 
-ALTER TABLE public.review_form_element_settings OWNER TO adrianasofi;
 
 --
 -- Name: review_form_element_settings_review_form_element_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3296,7 +3122,6 @@ CREATE SEQUENCE public.review_form_element_settings_review_form_element_setting_
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_form_element_settings_review_form_element_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_form_element_settings_review_form_element_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3319,7 +3144,6 @@ CREATE TABLE public.review_form_elements (
 );
 
 
-ALTER TABLE public.review_form_elements OWNER TO adrianasofi;
 
 --
 -- Name: review_form_elements_review_form_element_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3333,7 +3157,6 @@ CREATE SEQUENCE public.review_form_elements_review_form_element_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_form_elements_review_form_element_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_form_elements_review_form_element_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3355,7 +3178,6 @@ CREATE TABLE public.review_form_responses (
 );
 
 
-ALTER TABLE public.review_form_responses OWNER TO adrianasofi;
 
 --
 -- Name: review_form_responses_review_form_response_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3369,7 +3191,6 @@ CREATE SEQUENCE public.review_form_responses_review_form_response_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_form_responses_review_form_response_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_form_responses_review_form_response_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3392,7 +3213,6 @@ CREATE TABLE public.review_form_settings (
 );
 
 
-ALTER TABLE public.review_form_settings OWNER TO adrianasofi;
 
 --
 -- Name: review_form_settings_review_form_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3406,7 +3226,6 @@ CREATE SEQUENCE public.review_form_settings_review_form_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_form_settings_review_form_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_form_settings_review_form_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3428,7 +3247,6 @@ CREATE TABLE public.review_forms (
 );
 
 
-ALTER TABLE public.review_forms OWNER TO adrianasofi;
 
 --
 -- Name: review_forms_review_form_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3442,7 +3260,6 @@ CREATE SEQUENCE public.review_forms_review_form_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_forms_review_form_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_forms_review_form_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3464,7 +3281,6 @@ CREATE TABLE public.review_round_files (
 );
 
 
-ALTER TABLE public.review_round_files OWNER TO adrianasofi;
 
 --
 -- Name: review_round_files_review_round_file_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3478,7 +3294,6 @@ CREATE SEQUENCE public.review_round_files_review_round_file_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_round_files_review_round_file_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_round_files_review_round_file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3501,7 +3316,6 @@ CREATE TABLE public.review_rounds (
 );
 
 
-ALTER TABLE public.review_rounds OWNER TO adrianasofi;
 
 --
 -- Name: review_rounds_review_round_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3515,7 +3329,6 @@ CREATE SEQUENCE public.review_rounds_review_round_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.review_rounds_review_round_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: review_rounds_review_round_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3536,7 +3349,6 @@ CREATE TABLE public.reviewer_suggestion_settings (
 );
 
 
-ALTER TABLE public.reviewer_suggestion_settings OWNER TO adrianasofi;
 
 --
 -- Name: reviewer_suggestions; Type: TABLE; Schema: public; Owner: adrianasofi
@@ -3556,7 +3368,6 @@ CREATE TABLE public.reviewer_suggestions (
 );
 
 
-ALTER TABLE public.reviewer_suggestions OWNER TO adrianasofi;
 
 --
 -- Name: reviewer_suggestions_reviewer_suggestion_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3570,7 +3381,6 @@ CREATE SEQUENCE public.reviewer_suggestions_reviewer_suggestion_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.reviewer_suggestions_reviewer_suggestion_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: reviewer_suggestions_reviewer_suggestion_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3592,7 +3402,6 @@ CREATE TABLE public.ror_settings (
 );
 
 
-ALTER TABLE public.ror_settings OWNER TO adrianasofi;
 
 --
 -- Name: ror_settings_ror_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3606,7 +3415,6 @@ CREATE SEQUENCE public.ror_settings_ror_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.ror_settings_ror_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: ror_settings_ror_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3628,7 +3436,6 @@ CREATE TABLE public.rors (
 );
 
 
-ALTER TABLE public.rors OWNER TO adrianasofi;
 
 --
 -- Name: rors_ror_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3642,7 +3449,6 @@ CREATE SEQUENCE public.rors_ror_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.rors_ror_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: rors_ror_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3661,7 +3467,6 @@ CREATE TABLE public.schema_migrations (
 );
 
 
-ALTER TABLE public.schema_migrations OWNER TO postgres;
 
 --
 -- Name: section_settings; Type: TABLE; Schema: public; Owner: adrianasofi
@@ -3676,7 +3481,6 @@ CREATE TABLE public.section_settings (
 );
 
 
-ALTER TABLE public.section_settings OWNER TO adrianasofi;
 
 --
 -- Name: section_settings_section_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3690,7 +3494,6 @@ CREATE SEQUENCE public.section_settings_section_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.section_settings_section_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: section_settings_section_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3719,7 +3522,6 @@ CREATE TABLE public.sections (
 );
 
 
-ALTER TABLE public.sections OWNER TO adrianasofi;
 
 --
 -- Name: sections_section_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3733,7 +3535,6 @@ CREATE SEQUENCE public.sections_section_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.sections_section_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: sections_section_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3756,7 +3557,6 @@ CREATE TABLE public.sessions (
 );
 
 
-ALTER TABLE public.sessions OWNER TO adrianasofi;
 
 --
 -- Name: site; Type: TABLE; Schema: public; Owner: adrianasofi
@@ -3773,7 +3573,6 @@ CREATE TABLE public.site (
 );
 
 
-ALTER TABLE public.site OWNER TO adrianasofi;
 
 --
 -- Name: site_settings; Type: TABLE; Schema: public; Owner: adrianasofi
@@ -3787,7 +3586,6 @@ CREATE TABLE public.site_settings (
 );
 
 
-ALTER TABLE public.site_settings OWNER TO adrianasofi;
 
 --
 -- Name: site_settings_site_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3801,7 +3599,6 @@ CREATE SEQUENCE public.site_settings_site_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.site_settings_site_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: site_settings_site_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3822,7 +3619,6 @@ CREATE SEQUENCE public.site_site_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.site_site_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: site_site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3846,7 +3642,6 @@ CREATE TABLE public.stage_assignments (
 );
 
 
-ALTER TABLE public.stage_assignments OWNER TO adrianasofi;
 
 --
 -- Name: stage_assignments_stage_assignment_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3860,7 +3655,6 @@ CREATE SEQUENCE public.stage_assignments_stage_assignment_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.stage_assignments_stage_assignment_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: stage_assignments_stage_assignment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3883,7 +3677,6 @@ CREATE TABLE public.static_page_settings (
 );
 
 
-ALTER TABLE public.static_page_settings OWNER TO adrianasofi;
 
 --
 -- Name: static_page_settings_static_page_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3897,7 +3690,6 @@ CREATE SEQUENCE public.static_page_settings_static_page_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.static_page_settings_static_page_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: static_page_settings_static_page_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3917,7 +3709,6 @@ CREATE TABLE public.static_pages (
 );
 
 
-ALTER TABLE public.static_pages OWNER TO adrianasofi;
 
 --
 -- Name: static_pages_static_page_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3931,7 +3722,6 @@ CREATE SEQUENCE public.static_pages_static_page_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.static_pages_static_page_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: static_pages_static_page_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3954,7 +3744,6 @@ CREATE TABLE public.subeditor_submission_group (
 );
 
 
-ALTER TABLE public.subeditor_submission_group OWNER TO adrianasofi;
 
 --
 -- Name: subeditor_submission_group_subeditor_submission_group_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -3968,7 +3757,6 @@ CREATE SEQUENCE public.subeditor_submission_group_subeditor_submission_group_id_
     CACHE 1;
 
 
-ALTER SEQUENCE public.subeditor_submission_group_subeditor_submission_group_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: subeditor_submission_group_subeditor_submission_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -3996,7 +3784,6 @@ CREATE TABLE public.submission_comments (
 );
 
 
-ALTER TABLE public.submission_comments OWNER TO adrianasofi;
 
 --
 -- Name: submission_comments_comment_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4010,7 +3797,6 @@ CREATE SEQUENCE public.submission_comments_comment_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.submission_comments_comment_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: submission_comments_comment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4030,7 +3816,6 @@ CREATE TABLE public.submission_file_revisions (
 );
 
 
-ALTER TABLE public.submission_file_revisions OWNER TO adrianasofi;
 
 --
 -- Name: submission_file_revisions_revision_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4044,7 +3829,6 @@ CREATE SEQUENCE public.submission_file_revisions_revision_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.submission_file_revisions_revision_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: submission_file_revisions_revision_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4066,7 +3850,6 @@ CREATE TABLE public.submission_file_settings (
 );
 
 
-ALTER TABLE public.submission_file_settings OWNER TO adrianasofi;
 
 --
 -- Name: submission_file_settings_submission_file_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4080,7 +3863,6 @@ CREATE SEQUENCE public.submission_file_settings_submission_file_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.submission_file_settings_submission_file_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: submission_file_settings_submission_file_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4111,7 +3893,6 @@ CREATE TABLE public.submission_files (
 );
 
 
-ALTER TABLE public.submission_files OWNER TO adrianasofi;
 
 --
 -- Name: submission_files_submission_file_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4125,7 +3906,6 @@ CREATE SEQUENCE public.submission_files_submission_file_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.submission_files_submission_file_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: submission_files_submission_file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4144,7 +3924,6 @@ CREATE TABLE public.submission_search_keyword_list (
 );
 
 
-ALTER TABLE public.submission_search_keyword_list OWNER TO adrianasofi;
 
 --
 -- Name: submission_search_keyword_list_keyword_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4158,7 +3937,6 @@ CREATE SEQUENCE public.submission_search_keyword_list_keyword_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.submission_search_keyword_list_keyword_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: submission_search_keyword_list_keyword_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4179,7 +3957,6 @@ CREATE TABLE public.submission_search_object_keywords (
 );
 
 
-ALTER TABLE public.submission_search_object_keywords OWNER TO adrianasofi;
 
 --
 -- Name: submission_search_object_keyw_submission_search_object_keyw_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4193,7 +3970,6 @@ CREATE SEQUENCE public.submission_search_object_keyw_submission_search_object_ke
     CACHE 1;
 
 
-ALTER SEQUENCE public.submission_search_object_keyw_submission_search_object_keyw_seq OWNER TO adrianasofi;
 
 --
 -- Name: submission_search_object_keyw_submission_search_object_keyw_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4214,7 +3990,6 @@ CREATE TABLE public.submission_search_objects (
 );
 
 
-ALTER TABLE public.submission_search_objects OWNER TO adrianasofi;
 
 --
 -- Name: submission_search_objects_object_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4228,7 +4003,6 @@ CREATE SEQUENCE public.submission_search_objects_object_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.submission_search_objects_object_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: submission_search_objects_object_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4250,7 +4024,6 @@ CREATE TABLE public.submission_settings (
 );
 
 
-ALTER TABLE public.submission_settings OWNER TO adrianasofi;
 
 --
 -- Name: submission_settings_submission_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4264,7 +4037,6 @@ CREATE SEQUENCE public.submission_settings_submission_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.submission_settings_submission_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: submission_settings_submission_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4292,7 +4064,6 @@ CREATE TABLE public.submissions (
 );
 
 
-ALTER TABLE public.submissions OWNER TO adrianasofi;
 
 --
 -- Name: submissions_submission_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4306,7 +4077,6 @@ CREATE SEQUENCE public.submissions_submission_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.submissions_submission_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: submissions_submission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4329,7 +4099,6 @@ CREATE TABLE public.subscription_type_settings (
 );
 
 
-ALTER TABLE public.subscription_type_settings OWNER TO adrianasofi;
 
 --
 -- Name: subscription_type_settings_subscription_type_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4343,7 +4112,6 @@ CREATE SEQUENCE public.subscription_type_settings_subscription_type_setting_id_s
     CACHE 1;
 
 
-ALTER SEQUENCE public.subscription_type_settings_subscription_type_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: subscription_type_settings_subscription_type_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4370,7 +4138,6 @@ CREATE TABLE public.subscription_types (
 );
 
 
-ALTER TABLE public.subscription_types OWNER TO adrianasofi;
 
 --
 -- Name: subscription_types_type_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4384,7 +4151,6 @@ CREATE SEQUENCE public.subscription_types_type_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.subscription_types_type_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: subscription_types_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4411,7 +4177,6 @@ CREATE TABLE public.subscriptions (
 );
 
 
-ALTER TABLE public.subscriptions OWNER TO adrianasofi;
 
 --
 -- Name: subscriptions_subscription_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4425,7 +4190,6 @@ CREATE SEQUENCE public.subscriptions_subscription_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.subscriptions_subscription_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: subscriptions_subscription_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4449,7 +4213,6 @@ CREATE TABLE public.temporary_files (
 );
 
 
-ALTER TABLE public.temporary_files OWNER TO adrianasofi;
 
 --
 -- Name: temporary_files_file_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4463,7 +4226,6 @@ CREATE SEQUENCE public.temporary_files_file_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.temporary_files_file_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: temporary_files_file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4484,7 +4246,6 @@ CREATE TABLE public.usage_stats_institution_temporary_records (
 );
 
 
-ALTER TABLE public.usage_stats_institution_temporary_records OWNER TO adrianasofi;
 
 --
 -- Name: usage_stats_institution_tempo_usage_stats_temp_institution__seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4498,7 +4259,6 @@ CREATE SEQUENCE public.usage_stats_institution_tempo_usage_stats_temp_institutio
     CACHE 1;
 
 
-ALTER SEQUENCE public.usage_stats_institution_tempo_usage_stats_temp_institution__seq OWNER TO adrianasofi;
 
 --
 -- Name: usage_stats_institution_tempo_usage_stats_temp_institution__seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4533,7 +4293,6 @@ CREATE TABLE public.usage_stats_total_temporary_records (
 );
 
 
-ALTER TABLE public.usage_stats_total_temporary_records OWNER TO adrianasofi;
 
 --
 -- Name: usage_stats_total_temporary_recor_usage_stats_temp_total_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4547,7 +4306,6 @@ CREATE SEQUENCE public.usage_stats_total_temporary_recor_usage_stats_temp_total_
     CACHE 1;
 
 
-ALTER SEQUENCE public.usage_stats_total_temporary_recor_usage_stats_temp_total_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: usage_stats_total_temporary_recor_usage_stats_temp_total_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4579,7 +4337,6 @@ CREATE TABLE public.usage_stats_unique_item_investigations_temporary_records (
 );
 
 
-ALTER TABLE public.usage_stats_unique_item_investigations_temporary_records OWNER TO adrianasofi;
 
 --
 -- Name: usage_stats_unique_item_inves_usage_stats_temp_unique_item__seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4593,7 +4350,6 @@ CREATE SEQUENCE public.usage_stats_unique_item_inves_usage_stats_temp_unique_ite
     CACHE 1;
 
 
-ALTER SEQUENCE public.usage_stats_unique_item_inves_usage_stats_temp_unique_item__seq OWNER TO adrianasofi;
 
 --
 -- Name: usage_stats_unique_item_inves_usage_stats_temp_unique_item__seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4625,7 +4381,6 @@ CREATE TABLE public.usage_stats_unique_item_requests_temporary_records (
 );
 
 
-ALTER TABLE public.usage_stats_unique_item_requests_temporary_records OWNER TO adrianasofi;
 
 --
 -- Name: usage_stats_unique_item_requests_t_usage_stats_temp_item_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4639,7 +4394,6 @@ CREATE SEQUENCE public.usage_stats_unique_item_requests_t_usage_stats_temp_item_
     CACHE 1;
 
 
-ALTER SEQUENCE public.usage_stats_unique_item_requests_t_usage_stats_temp_item_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: usage_stats_unique_item_requests_t_usage_stats_temp_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4661,7 +4415,6 @@ CREATE TABLE public.user_group_settings (
 );
 
 
-ALTER TABLE public.user_group_settings OWNER TO adrianasofi;
 
 --
 -- Name: user_group_settings_user_group_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4675,7 +4428,6 @@ CREATE SEQUENCE public.user_group_settings_user_group_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.user_group_settings_user_group_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: user_group_settings_user_group_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4696,7 +4448,6 @@ CREATE TABLE public.user_group_stage (
 );
 
 
-ALTER TABLE public.user_group_stage OWNER TO adrianasofi;
 
 --
 -- Name: user_group_stage_user_group_stage_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4710,7 +4461,6 @@ CREATE SEQUENCE public.user_group_stage_user_group_stage_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.user_group_stage_user_group_stage_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: user_group_stage_user_group_stage_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4736,7 +4486,6 @@ CREATE TABLE public.user_groups (
 );
 
 
-ALTER TABLE public.user_groups OWNER TO adrianasofi;
 
 --
 -- Name: user_groups_user_group_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4750,7 +4499,6 @@ CREATE SEQUENCE public.user_groups_user_group_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.user_groups_user_group_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: user_groups_user_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4770,7 +4518,6 @@ CREATE TABLE public.user_interests (
 );
 
 
-ALTER TABLE public.user_interests OWNER TO adrianasofi;
 
 --
 -- Name: user_interests_user_interest_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4784,7 +4531,6 @@ CREATE SEQUENCE public.user_interests_user_interest_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.user_interests_user_interest_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: user_interests_user_interest_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4806,7 +4552,6 @@ CREATE TABLE public.user_settings (
 );
 
 
-ALTER TABLE public.user_settings OWNER TO adrianasofi;
 
 --
 -- Name: user_settings_user_setting_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4820,7 +4565,6 @@ CREATE SEQUENCE public.user_settings_user_setting_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.user_settings_user_setting_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: user_settings_user_setting_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4843,7 +4587,6 @@ CREATE TABLE public.user_user_groups (
 );
 
 
-ALTER TABLE public.user_user_groups OWNER TO adrianasofi;
 
 --
 -- Name: user_user_groups_user_user_group_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4857,7 +4600,6 @@ CREATE SEQUENCE public.user_user_groups_user_user_group_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.user_user_groups_user_user_group_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: user_user_groups_user_user_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4896,7 +4638,6 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO adrianasofi;
 
 --
 -- Name: users_tokens; Type: TABLE; Schema: public; Owner: postgres
@@ -4913,7 +4654,6 @@ CREATE TABLE public.users_tokens (
 );
 
 
-ALTER TABLE public.users_tokens OWNER TO postgres;
 
 --
 -- Name: users_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -4927,7 +4667,6 @@ CREATE SEQUENCE public.users_tokens_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.users_tokens_id_seq OWNER TO postgres;
 
 --
 -- Name: users_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
@@ -4948,7 +4687,6 @@ CREATE SEQUENCE public.users_user_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.users_user_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
@@ -4977,7 +4715,6 @@ CREATE TABLE public.versions (
 );
 
 
-ALTER TABLE public.versions OWNER TO adrianasofi;
 
 --
 -- Name: versions_version_id_seq; Type: SEQUENCE; Schema: public; Owner: adrianasofi
@@ -4991,7 +4728,6 @@ CREATE SEQUENCE public.versions_version_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.versions_version_id_seq OWNER TO adrianasofi;
 
 --
 -- Name: versions_version_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adrianasofi
