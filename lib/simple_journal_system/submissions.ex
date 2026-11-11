@@ -1,6 +1,6 @@
 defmodule SimpleJournalSystem.Submissions do
   @moduledoc """
-  The Submissions context.
+  Konteks naskah (submission) sesuai OJS 3.5.
   """
 
   import Ecto.Query, warn: false
@@ -9,63 +9,32 @@ defmodule SimpleJournalSystem.Submissions do
   alias SimpleJournalSystem.Submissions.Submission
 
   @doc """
-  Returns the list of submissions.
-
-  ## Examples
-
-      iex> list_submissions()
-      [%Submission{}, ...]
-
+  Daftar naskah milik satu jurnal (`context_id`), yang terbaru lebih dulu.
   """
-  def list_submissions do
-    Repo.all(Submission)
+  def list_submissions_for_context(context_id) do
+    Submission
+    |> where([s], s.context_id == ^context_id)
+    |> order_by([s], desc: s.submission_id)
+    |> Repo.all()
   end
 
   @doc """
-  Gets a single submission.
-
-  Raises `Ecto.NoResultsError` if the Submission does not exist.
-
-  ## Examples
-
-      iex> get_submission!(123)
-      %Submission{}
-
-      iex> get_submission!(456)
-      ** (Ecto.NoResultsError)
-
+  Mengambil satu naskah. Error `Ecto.NoResultsError` kalau tidak ada.
   """
-  def get_submission!(id), do: Repo.get!(Submission, id)
+  def get_submission!(submission_id), do: Repo.get!(Submission, submission_id)
 
   @doc """
-  Creates a submission.
-
-  ## Examples
-
-      iex> create_submission(%{field: value})
-      {:ok, %Submission{}}
-
-      iex> create_submission(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
+  Membuat naskah baru (awal wizard author): stage 1, status queued,
+  `submission_progress` "start".
   """
   def create_submission(attrs) do
     %Submission{}
-    |> Submission.changeset(attrs)
+    |> Submission.create_changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a submission.
-
-  ## Examples
-
-      iex> update_submission(submission, %{field: new_value})
-      {:ok, %Submission{}}
-
-      iex> update_submission(submission, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
+  Mengubah naskah.
   """
   def update_submission(%Submission{} = submission, attrs) do
     submission
@@ -74,29 +43,17 @@ defmodule SimpleJournalSystem.Submissions do
   end
 
   @doc """
-  Deletes a submission.
-
-  ## Examples
-
-      iex> delete_submission(submission)
-      {:ok, %Submission{}}
-
-      iex> delete_submission(submission)
-      {:error, %Ecto.Changeset{}}
-
+  Author mengirim naskah (menekan Submit): `date_submitted` terisi dan
+  `submission_progress` kosong.
   """
-  def delete_submission(%Submission{} = submission) do
-    Repo.delete(submission)
+  def submit_submission(%Submission{} = submission) do
+    submission
+    |> Submission.submit_changeset()
+    |> Repo.update()
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking submission changes.
-
-  ## Examples
-
-      iex> change_submission(submission)
-      %Ecto.Changeset{data: %Submission{}}
-
+  Changeset untuk form.
   """
   def change_submission(%Submission{} = submission, attrs \\ %{}) do
     Submission.changeset(submission, attrs)

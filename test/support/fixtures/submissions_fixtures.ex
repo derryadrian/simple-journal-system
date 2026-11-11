@@ -1,21 +1,15 @@
 defmodule SimpleJournalSystem.SubmissionsFixtures do
   @moduledoc """
-  This module defines test helpers for creating
-  entities via the `SimpleJournalSystem.Submissions` context.
+  Fungsi bantu untuk membuat naskah di test.
   """
 
   @doc """
-  Generate a submission.
+  Membuat naskah baru. Bawaannya untuk journal 1 (stage 1, status queued).
   """
   def submission_fixture(attrs \\ %{}) do
     {:ok, submission} =
       attrs
-      |> Enum.into(%{
-        abstract: "some abstract",
-        journal_id: 42,
-        status: 42,
-        title: "some title"
-      })
+      |> Enum.into(%{context_id: 1, locale: "en"})
       |> SimpleJournalSystem.Submissions.create_submission()
 
     submission
