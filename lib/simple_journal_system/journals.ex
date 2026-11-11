@@ -72,11 +72,11 @@ defmodule SimpleJournalSystem.Journals do
   def list_user_journals(user_id) do
     Repo.all(
       from j in Journal,
-      join: ug in assoc(j, :user_groups),
-      join: uug in assoc(ug, :user_user_groups),
-      where: uug.user_id == ^user_id,
-      group_by: j.journal_id,
-      select: j
+        join: ug in assoc(j, :user_groups),
+        join: uug in assoc(ug, :user_user_groups),
+        where: uug.user_id == ^user_id,
+        group_by: j.journal_id,
+        select: j
     )
   end
 
@@ -86,12 +86,13 @@ defmodule SimpleJournalSystem.Journals do
   """
   def switch_journal(user_id, journal_id) do
     # Verify user has role in this journal
-    has_access = Repo.exists?(
-      from j in Journal,
-      join: ug in assoc(j, :user_groups),
-      join: uug in assoc(ug, :user_user_groups),
-      where: j.journal_id == ^journal_id and uug.user_id == ^user_id
-    )
+    has_access =
+      Repo.exists?(
+        from j in Journal,
+          join: ug in assoc(j, :user_groups),
+          join: uug in assoc(ug, :user_user_groups),
+          where: j.journal_id == ^journal_id and uug.user_id == ^user_id
+      )
 
     if has_access do
       journal = get_journal!(journal_id)
@@ -107,10 +108,10 @@ defmodule SimpleJournalSystem.Journals do
   def get_user_default_journal(user_id) do
     Repo.one(
       from j in Journal,
-      join: ug in assoc(j, :user_groups),
-      join: uug in assoc(ug, :user_user_groups),
-      where: uug.user_id == ^user_id and ug.is_default == 1,
-      order_by: j.seq
+        join: ug in assoc(j, :user_groups),
+        join: uug in assoc(ug, :user_user_groups),
+        where: uug.user_id == ^user_id and ug.is_default == 1,
+        order_by: j.seq
     )
   end
 end

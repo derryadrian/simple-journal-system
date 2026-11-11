@@ -14,7 +14,6 @@ defmodule SimpleJournalSystem.Accounts do
   alias SimpleJournalSystem.Journals.Journal
   alias SimpleJournalSystem.Accounts.UserSetting
   alias SimpleJournalSystem.Audit
-  alias SimpleJournalSystem.Audit.RoleChangeLog
 
   ## Database getters
 
@@ -24,15 +23,18 @@ defmodule SimpleJournalSystem.Accounts do
   end
 
   defp get_user_by_email_or_username(login) do
-    query = from u in User,
-            where: u.email == ^login or u.username == ^login,
-            limit: 1
+    query =
+      from u in User,
+        where: u.email == ^login or u.username == ^login,
+        limit: 1
+
     Repo.one(query)
   end
 
   # Fungsi login utama – mendukung Bcrypt DAN legacy SHA1 (OJS)
   def get_user_by_email_and_password(email, password) do
     user = get_user_by_email_or_username(email)
+
     if user && verify_password(password, user.hashed_password) do
       maybe_upgrade_hash(user, password)
       user
@@ -41,34 +43,35 @@ defmodule SimpleJournalSystem.Accounts do
     end
   end
 
-  @doc """
-  Verifies password against hash. Supports:
-  - Bcrypt (current)
-  - OJS SHA1 legacy: sha1$salt$hash or plain SHA1
-  """
+  # Verifies password against hash. Supports:
+  # - Bcrypt (current)
+  # - OJS SHA1 legacy: sha1$salt$hash or plain SHA1
   defp verify_password(password, hashed) do
     cond do
       is_nil(hashed) or hashed == "" ->
         false
-      String.starts_with?(hashed, "$2b$") or String.starts_with?(hashed, "$2a$") or String.starts_with?(hashed, "$2y$") ->
+
+      String.starts_with?(hashed, "$2b$") or String.starts_with?(hashed, "$2a$") or
+          String.starts_with?(hashed, "$2y$") ->
         Bcrypt.verify_pass(password, hashed)
+
       String.contains?(hashed, "$") ->
         verify_sha1_legacy(password, hashed)
+
       true ->
         # Plain SHA1 (40 hex chars)
         :crypto.hash(:sha, password) |> Base.encode16(case: :lower) == hashed
     end
   end
 
-  @doc """
-  Verifies OJS legacy SHA1 format: algorithm$salt$hash
-  Common formats:
-  - sha1$salt$hash
-  - sha256$salt$hash
-  - md5$salt$hash
-  """
+  # Verifies OJS legacy SHA1 format: algorithm$salt$hash
+  # Common formats:
+  # - sha1$salt$hash
+  # - sha256$salt$hash
+  # - md5$salt$hash
   defp verify_sha1_legacy(password, hashed) do
     parts = String.split(hashed, "$", parts: 3)
+
     case parts do
       [algo, salt, hash] ->
         computed =
@@ -78,18 +81,20 @@ defmodule SimpleJournalSystem.Accounts do
             "md5" -> :crypto.hash(:md5, salt <> password)
             _ -> :crypto.hash(:sha, salt <> password)
           end
+
         Base.encode16(computed, case: :lower) == hash
+
       _ ->
         false
     end
   end
 
-  @doc """
-  Upgrades legacy hash to Bcrypt on successful login.
-  """
+  # Upgrades legacy hash to Bcrypt on successful login.
   defp maybe_upgrade_hash(user, password) do
     hashed = user.hashed_password
-    if hashed && !String.starts_with?(hashed, "$2b$") and !String.starts_with?(hashed, "$2a$") and !String.starts_with?(hashed, "$2y$") do
+
+    if hashed && !String.starts_with?(hashed, "$2b$") and !String.starts_with?(hashed, "$2a$") and
+         !String.starts_with?(hashed, "$2y$") do
       new_hash = Bcrypt.hash_pwd_salt(password)
       user |> Ecto.Changeset.change(hashed_password: new_hash) |> Repo.update()
       :ok
@@ -114,20 +119,10 @@ defmodule SimpleJournalSystem.Accounts do
     end
   end
 
-  def get_user_by_session_token(user_id)
-      when is_integer(user_id) do
-
-    User
-    |> Repo.get(user_id)
-    |> Repo.preload(user_user_groups: :user_group)
-  end
-
   def list_user_groups_for_user(user) do
     UserUserGroup
     |> where(user_id: ^user.user_id)
-    |> join(:inner, [uug], ug in UserGroup,
-      on: uug.user_group_id == ug.user_group_id
-    )
+    |> join(:inner, [uug], ug in UserGroup, on: uug.user_group_id == ug.user_group_id)
     |> select([_uug, ug], ug)
     |> Repo.all()
   end
@@ -155,18 +150,7 @@ defmodule SimpleJournalSystem.Accounts do
     User.registration_changeset(user, attrs)
   end
 
-  ## Email and password updates (tetap ada)
-  def change_user_email(user, attrs) do
-    User.email_changeset(user, attrs)
-  end
-
-  def apply_user_email(user, password, attrs) do
-    user
-    |> User.email_changeset(attrs)
-    |> User.validate_current_password(password)
-    |> Repo.update()
-  end
-
+  ## Password updates
   def change_user_password(user, attrs, opts) do
     User.password_changeset(user, attrs, opts)
   end
@@ -176,64 +160,6 @@ defmodule SimpleJournalSystem.Accounts do
     |> User.password_changeset(attrs)
     |> User.validate_current_password(password)
     |> Repo.update()
-  end
-
-  ## Confirmation (jika dipakai)
-  def deliver_user_confirmation_instructions(%User{} = user) do
-    {encoded_token, user_token} = UserToken.build_email_token(user, "confirm")
-    Repo.insert!(user_token)
-    SimpleJournalSystem.Emails.deliver_confirmation_instructions(user, encoded_token)
-  end
-
-  def confirm_user(token) do
-    with {:ok, query} <- UserToken.verify_email_token_query(token, "confirm"),
-         %User{} = user <- Repo.one(query),
-         {:ok, %{}} <- User.confirm_changeset(user) |> Repo.update() do
-      {:ok, user}
-    else
-      _ -> :error
-    end
-  end
-
-  ## Reset password (jika dipakai)
-  def deliver_user_reset_password_instructions(%User{} = user) do
-    {encoded_token, user_token} = UserToken.build_email_token(user, "reset_password")
-    Repo.insert!(user_token)
-    SimpleJournalSystem.Emails.deliver_reset_password_instructions(user, encoded_token)
-  end
-
-  def reset_user_password(token, attrs) do
-    with {:ok, query} <- UserToken.verify_email_token_query(token, "reset_password"),
-         %User{} = user <- Repo.one(query),
-         {:ok, %{}} <- User.password_changeset(user, attrs) |> Repo.update() do
-      {:ok, user}
-    else
-      _ -> :error
-    end
-  end
-
-  ## Update email dengan konfirmasi
-  def deliver_user_update_email_instructions(%User{} = user, email) do
-    {encoded_token, user_token} = UserToken.build_email_token(user, "change:#{email}")
-    Repo.insert!(user_token)
-    SimpleJournalSystem.Emails.deliver_update_email_instructions(user, email, encoded_token)
-  end
-
-  def update_user_email(token, password) do
-    with {:ok, query} <- UserToken.verify_email_token_query(token, "change"),
-         %User{} = user <- Repo.one(query),
-         {:ok, %{}} <- User.email_changeset(user, %{email: token_context(token)}) |> User.validate_current_password(password) |> Repo.update() do
-      {:ok, user}
-    else
-      _ -> :error
-    end
-  end
-
-  defp token_context(token) do
-    # helper untuk ekstrak email dari token_context (format "change:email@domain.com")
-    token
-    |> String.split(":", parts: 2)
-    |> List.last()
   end
 
   ## User Group CRUD (D)
@@ -272,7 +198,13 @@ defmodule SimpleJournalSystem.Accounts do
   Deletes a user group. Prevents deletion if users are assigned.
   """
   def delete_user_group(%UserGroup{} = group) do
-    count = Repo.one(from uug in UserUserGroup, where: uug.user_group_id == ^group.user_group_id, select: count(uug.user_group_id))
+    count =
+      Repo.one(
+        from uug in UserUserGroup,
+          where: uug.user_group_id == ^group.user_group_id,
+          select: count(uug.user_group_id)
+      )
+
     if count > 0 do
       {:error, :has_assigned_users}
     else
@@ -285,8 +217,11 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def set_default_group(journal_id, user_group_id) do
     Repo.transaction(fn ->
-      from(g in UserGroup, where: g.context_id == ^journal_id) |> Repo.update_all(set: [is_default: 0])
-      from(g in UserGroup, where: g.user_group_id == ^user_group_id) |> Repo.update_all(set: [is_default: 1])
+      from(g in UserGroup, where: g.context_id == ^journal_id)
+      |> Repo.update_all(set: [is_default: 0])
+
+      from(g in UserGroup, where: g.user_group_id == ^user_group_id)
+      |> Repo.update_all(set: [is_default: 1])
     end)
   end
 
@@ -296,8 +231,10 @@ defmodule SimpleJournalSystem.Accounts do
   Gets localized settings for a user group.
   """
   def get_user_group_settings(user_group_id, locale \\ "en") do
-    Repo.all(from ugs in UserGroupSetting,
-      where: ugs.user_group_id == ^user_group_id and ugs.locale == ^locale)
+    Repo.all(
+      from ugs in UserGroupSetting,
+        where: ugs.user_group_id == ^user_group_id and ugs.locale == ^locale
+    )
   end
 
   @doc """
@@ -305,12 +242,23 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def put_user_group_setting(user_group_id, setting_name, setting_value, locale \\ "en") do
     Repo.transaction(fn ->
-      existing = Repo.one(from ugs in UserGroupSetting,
-        where: ugs.user_group_id == ^user_group_id and ugs.setting_name == ^setting_name and ugs.locale == ^locale)
+      existing =
+        Repo.one(
+          from ugs in UserGroupSetting,
+            where:
+              ugs.user_group_id == ^user_group_id and ugs.setting_name == ^setting_name and
+                ugs.locale == ^locale
+        )
+
       if existing do
         existing |> Ecto.Changeset.change(setting_value: setting_value) |> Repo.update()
       else
-        Repo.insert(%UserGroupSetting{user_group_id: user_group_id, setting_name: setting_name, setting_value: setting_value, locale: locale})
+        Repo.insert(%UserGroupSetting{
+          user_group_id: user_group_id,
+          setting_name: setting_name,
+          setting_value: setting_value,
+          locale: locale
+        })
       end
     end)
   end
@@ -322,13 +270,22 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def set_stages(user_group_id, journal_id, stage_ids) do
     Repo.transaction(fn ->
-      Repo.delete_all(from ugs in UserGroupStage, where: ugs.user_group_id == ^user_group_id and ugs.context_id == ^journal_id)
+      Repo.delete_all(
+        from ugs in UserGroupStage,
+          where: ugs.user_group_id == ^user_group_id and ugs.context_id == ^journal_id
+      )
+
       Enum.each(stage_ids, fn stage_id ->
         if Stages.valid?(stage_id) do
-          Repo.insert!(%UserGroupStage{user_group_id: user_group_id, context_id: journal_id, stage_id: stage_id})
+          Repo.insert!(%UserGroupStage{
+            user_group_id: user_group_id,
+            context_id: journal_id,
+            stage_id: stage_id
+          })
         end
       end)
     end)
+
     {:ok, :stages_updated}
   end
 
@@ -336,18 +293,22 @@ defmodule SimpleJournalSystem.Accounts do
   Gets stages assigned to a user group.
   """
   def stages_for_group(user_group_id) do
-    Repo.all(from ugs in UserGroupStage,
-      where: ugs.user_group_id == ^user_group_id,
-      select: ugs.stage_id)
+    Repo.all(
+      from ugs in UserGroupStage,
+        where: ugs.user_group_id == ^user_group_id,
+        select: ugs.stage_id
+    )
   end
 
   @doc """
   Gets stages assigned to a user group for a specific journal.
   """
   def stages_for_group_in_journal(user_group_id, journal_id) do
-    Repo.all(from ugs in UserGroupStage,
-      where: ugs.user_group_id == ^user_group_id and ugs.context_id == ^journal_id,
-      select: ugs.stage_id)
+    Repo.all(
+      from ugs in UserGroupStage,
+        where: ugs.user_group_id == ^user_group_id and ugs.context_id == ^journal_id,
+        select: ugs.stage_id
+    )
   end
 
   ## User Settings EAV (C)
@@ -356,9 +317,11 @@ defmodule SimpleJournalSystem.Accounts do
   Gets a user setting value.
   """
   def get_setting(user, key, locale \\ "en") do
-    Repo.one(from us in UserSetting,
-      where: us.user_id == ^user.user_id and us.setting_name == ^key and us.locale == ^locale,
-      select: us.setting_value)
+    Repo.one(
+      from us in UserSetting,
+        where: us.user_id == ^user.user_id and us.setting_name == ^key and us.locale == ^locale,
+        select: us.setting_value
+    )
   end
 
   @doc """
@@ -373,12 +336,22 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def put_setting(user, key, value, locale \\ "en") do
     Repo.transaction(fn ->
-      existing = Repo.one(from us in UserSetting,
-        where: us.user_id == ^user.user_id and us.setting_name == ^key and us.locale == ^locale)
+      existing =
+        Repo.one(
+          from us in UserSetting,
+            where:
+              us.user_id == ^user.user_id and us.setting_name == ^key and us.locale == ^locale
+        )
+
       if existing do
         existing |> Ecto.Changeset.change(setting_value: value) |> Repo.update()
       else
-        Repo.insert(%UserSetting{user_id: user.user_id, setting_name: key, setting_value: value, locale: locale})
+        Repo.insert(%UserSetting{
+          user_id: user.user_id,
+          setting_name: key,
+          setting_value: value,
+          locale: locale
+        })
       end
     end)
   end
@@ -387,9 +360,11 @@ defmodule SimpleJournalSystem.Accounts do
   Gets all settings for a user as a map.
   """
   def get_all_settings(user, locale \\ "en") do
-    Repo.all(from us in UserSetting,
-      where: us.user_id == ^user.user_id and us.locale == ^locale,
-      select: {us.setting_name, us.setting_value})
+    Repo.all(
+      from us in UserSetting,
+        where: us.user_id == ^user.user_id and us.locale == ^locale,
+        select: {us.setting_name, us.setting_value}
+    )
     |> Enum.into(%{})
   end
 
@@ -398,6 +373,7 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def get_profile(user, locale \\ "en") do
     settings = get_all_settings(user, locale)
+
     %{
       given_name: settings["givenName"] || settings["firstName"],
       family_name: settings["familyName"] || settings["lastName"],
@@ -419,7 +395,15 @@ defmodule SimpleJournalSystem.Accounts do
   Updates user profile from attrs (uses put_setting for EAV fields).
   """
   def update_profile(user, attrs) do
-    eav_fields = ["givenName", "familyName", "affiliation", "orcid", "country", "biography", "locale"]
+    eav_fields = [
+      "givenName",
+      "familyName",
+      "affiliation",
+      "orcid",
+      "country",
+      "biography",
+      "locale"
+    ]
 
     Repo.transaction(fn ->
       Enum.each(eav_fields, fn field ->
@@ -429,7 +413,16 @@ defmodule SimpleJournalSystem.Accounts do
       end)
 
       # Update direct fields on users table
-      direct_fields = Map.take(attrs, ["email", "username", "url", "phone", "mailing_address", "billing_address"])
+      direct_fields =
+        Map.take(attrs, [
+          "email",
+          "username",
+          "url",
+          "phone",
+          "mailing_address",
+          "billing_address"
+        ])
+
       if direct_fields != %{} do
         user
         |> User.changeset(direct_fields)
@@ -470,9 +463,12 @@ defmodule SimpleJournalSystem.Accounts do
       group = Repo.get!(UserGroup, user_group_id)
 
       # Check if already enrolled
-      existing = Repo.one(from uug in UserUserGroup,
-        where: uug.user_id == ^user_id and uug.user_group_id == ^user_group_id)
-      
+      existing =
+        Repo.one(
+          from uug in UserUserGroup,
+            where: uug.user_id == ^user_id and uug.user_group_id == ^user_group_id
+        )
+
       if existing do
         {:error, :already_enrolled}
       else
@@ -481,6 +477,7 @@ defmodule SimpleJournalSystem.Accounts do
           user_group_id: user_group_id,
           date_start: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
+
         # Audit log
         Audit.log_enroll(user_id, changed_by_id, user_group_id, group.context_id)
         {:ok, :enrolled}
@@ -501,8 +498,13 @@ defmodule SimpleJournalSystem.Accounts do
   defp do_unenroll_user(user_id, user_group_id, changed_by_id) do
     Repo.transaction(fn ->
       group = Repo.get!(UserGroup, user_group_id)
-      deleted = Repo.delete_all(from uug in UserUserGroup,
-        where: uug.user_id == ^user_id and uug.user_group_id == ^user_group_id)
+
+      deleted =
+        Repo.delete_all(
+          from uug in UserUserGroup,
+            where: uug.user_id == ^user_id and uug.user_group_id == ^user_group_id
+        )
+
       if deleted > 0 do
         # Audit log
         Audit.log_unenroll(user_id, changed_by_id, user_group_id, group.context_id)
@@ -520,20 +522,20 @@ defmodule SimpleJournalSystem.Accounts do
   def list_user_roles(user_id) do
     Repo.all(
       from uug in UserUserGroup,
-      join: ug in UserGroup,
-      on: uug.user_group_id == ug.user_group_id,
-      join: j in Journal,
-      on: ug.context_id == j.journal_id,
-      where: uug.user_id == ^user_id,
-      select: %{
-        journal_id: j.journal_id,
-        journal_path: j.path,
-        role_id: ug.role_id,
-        group_id: ug.user_group_id,
-        is_default: ug.is_default == 1,
-        date_start: uug.date_start,
-        date_end: uug.date_end
-      }
+        join: ug in UserGroup,
+        on: uug.user_group_id == ug.user_group_id,
+        join: j in Journal,
+        on: ug.context_id == j.journal_id,
+        where: uug.user_id == ^user_id,
+        select: %{
+          journal_id: j.journal_id,
+          journal_path: j.path,
+          role_id: ug.role_id,
+          group_id: ug.user_group_id,
+          is_default: ug.is_default == 1,
+          date_start: uug.date_start,
+          date_end: uug.date_end
+        }
     )
     |> Enum.map(fn r ->
       Map.put(r, :role_name, Roles.name(r.role_id))
@@ -546,16 +548,16 @@ defmodule SimpleJournalSystem.Accounts do
   def list_user_roles_in_journal(user_id, journal_id) do
     Repo.all(
       from uug in UserUserGroup,
-      join: ug in UserGroup,
-      on: uug.user_group_id == ug.user_group_id,
-      where: uug.user_id == ^user_id and ug.context_id == ^journal_id,
-      select: %{
-        role_id: ug.role_id,
-        group_id: ug.user_group_id,
-        is_default: ug.is_default == 1,
-        date_start: uug.date_start,
-        date_end: uug.date_end
-      }
+        join: ug in UserGroup,
+        on: uug.user_group_id == ug.user_group_id,
+        where: uug.user_id == ^user_id and ug.context_id == ^journal_id,
+        select: %{
+          role_id: ug.role_id,
+          group_id: ug.user_group_id,
+          is_default: ug.is_default == 1,
+          date_start: uug.date_start,
+          date_end: uug.date_end
+        }
     )
     |> Enum.map(fn r ->
       Map.put(r, :role_name, Roles.name(r.role_id))
@@ -568,13 +570,16 @@ defmodule SimpleJournalSystem.Accounts do
   def bulk_enroll(user_ids, user_group_id, changed_by_id) do
     Repo.transaction(fn ->
       _group = Repo.get!(UserGroup, user_group_id)
-      results = Enum.map(user_ids, fn user_id ->
-        case enroll_user(user_id, user_group_id, changed_by_id) do
-          {:ok, _} -> {:ok, user_id}
-          {:error, :already_enrolled} -> {:skipped, user_id}
-          error -> error
-        end
-      end)
+
+      results =
+        Enum.map(user_ids, fn user_id ->
+          case enroll_user(user_id, user_group_id, changed_by_id) do
+            {:ok, _} -> {:ok, user_id}
+            {:error, :already_enrolled} -> {:skipped, user_id}
+            error -> error
+          end
+        end)
+
       results
     end)
   end
@@ -585,47 +590,53 @@ defmodule SimpleJournalSystem.Accounts do
   Lists all users with search and filter.
   """
   def list_users(filters \\ %{}) do
-    query = User
-    |> where([u], not is_nil(u.user_id))
-    |> order_by([u], desc: u.date_registered)
+    query =
+      User
+      |> where([u], not is_nil(u.user_id))
+      |> order_by([u], desc: u.date_registered)
 
-    query = if filters[:search] do
-      search = "%#{filters[:search]}%"
-      from u in query,
-        where: ilike(u.email, ^search) or ilike(u.username, ^search)
-    else
-      query
-    end
+    query =
+      if filters[:search] do
+        search = "%#{filters[:search]}%"
 
-    query = if filters[:role_id] do
-      from u in query,
-        join: uug in assoc(u, :user_user_groups),
-        join: ug in assoc(uug, :user_group),
-        where: ug.role_id == ^filters[:role_id]
-    else
-      query
-    end
+        from u in query,
+          where: ilike(u.email, ^search) or ilike(u.username, ^search)
+      else
+        query
+      end
 
-    query = if filters[:journal_id] do
-      from u in query,
-        join: uug in assoc(u, :user_user_groups),
-        join: ug in assoc(uug, :user_group),
-        where: ug.context_id == ^filters[:journal_id]
-    else
-      query
-    end
+    query =
+      if filters[:role_id] do
+        from u in query,
+          join: uug in assoc(u, :user_user_groups),
+          join: ug in assoc(uug, :user_group),
+          where: ug.role_id == ^filters[:role_id]
+      else
+        query
+      end
 
-    query = if filters[:disabled] != nil do
-      from u in query, where: u.disabled == ^filters[:disabled]
-    else
-      query
-    end
+    query =
+      if filters[:journal_id] do
+        from u in query,
+          join: uug in assoc(u, :user_user_groups),
+          join: ug in assoc(uug, :user_group),
+          where: ug.context_id == ^filters[:journal_id]
+      else
+        query
+      end
+
+    query =
+      if filters[:disabled] != nil do
+        from u in query, where: u.disabled == ^filters[:disabled]
+      else
+        query
+      end
 
     page = filters[:page] || 1
     per_page = filters[:per_page] || 25
 
     {results, total} = Repo.paginate(query, page: page, page_size: per_page)
-    
+
     %{
       users: results,
       total: total,
@@ -642,6 +653,7 @@ defmodule SimpleJournalSystem.Accounts do
     user = Repo.get!(User, user_id)
     roles = list_user_roles(user_id)
     journals = Journals.list_user_journals(user_id)
+
     %{
       user: user,
       roles: roles,
@@ -656,9 +668,10 @@ defmodule SimpleJournalSystem.Accounts do
     Repo.transaction(fn ->
       current_roles = list_user_roles(user_id)
       current_group_ids = Enum.map(current_roles, & &1.group_id)
-      
+
       # Roles to add
       to_add = role_changes[:add] || []
+
       Enum.each(to_add, fn group_id ->
         unless group_id in current_group_ids do
           enroll_user(user_id, group_id, changed_by_id)
@@ -667,6 +680,7 @@ defmodule SimpleJournalSystem.Accounts do
 
       # Roles to remove
       to_remove = role_changes[:remove] || []
+
       Enum.each(to_remove, fn group_id ->
         if group_id in current_group_ids do
           unenroll_user(user_id, group_id, changed_by_id)
@@ -682,7 +696,11 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def approve_user(user_id, changed_by_id) do
     Repo.transaction(fn ->
-      user = Repo.get!(User, user_id) |> Ecto.Changeset.change(disabled: 0, disabled_reason: nil) |> Repo.update!()
+      user =
+        Repo.get!(User, user_id)
+        |> Ecto.Changeset.change(disabled: 0, disabled_reason: nil)
+        |> Repo.update!()
+
       Audit.log_approve(user_id, changed_by_id)
       user
     end)
@@ -693,7 +711,11 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def reject_user(user_id, reason, changed_by_id) do
     Repo.transaction(fn ->
-      user = Repo.get!(User, user_id) |> Ecto.Changeset.change(disabled: 1, disabled_reason: reason) |> Repo.update!()
+      user =
+        Repo.get!(User, user_id)
+        |> Ecto.Changeset.change(disabled: 1, disabled_reason: reason)
+        |> Repo.update!()
+
       Audit.log_reject(user_id, changed_by_id, reason)
       user
     end)
@@ -704,29 +726,39 @@ defmodule SimpleJournalSystem.Accounts do
   """
   def export_users_csv(filters \\ %{}) do
     %{users: results} = list_users(Map.merge(Map.new(filters), %{page: 1, per_page: 10000}))
-    
-    headers = ["User ID", "Username", "Email", "Disabled", "Disabled Reason", "Date Registered", "Roles", "Journals"]
-    
-    rows = Enum.map(results, fn user ->
-      roles = list_user_roles(user.user_id)
-      journals = Journals.list_user_journals(user.user_id)
-      role_str = Enum.map_join(roles, ", ", fn r -> "#{r.role_name} (#{r.journal_path})" end)
-      journal_str = Enum.map_join(journals, ", ", fn j -> j.path end)
-      
-      disabled_str = if user.disabled == 1, do: "Yes", else: "No"
-      
-      [
-        user.user_id,
-        user.username,
-        user.email,
-        disabled_str,
-        user.disabled_reason || "",
-        user.date_registered,
-        role_str,
-        journal_str
-      ]
-    end)
-    
+
+    headers = [
+      "User ID",
+      "Username",
+      "Email",
+      "Disabled",
+      "Disabled Reason",
+      "Date Registered",
+      "Roles",
+      "Journals"
+    ]
+
+    rows =
+      Enum.map(results, fn user ->
+        roles = list_user_roles(user.user_id)
+        journals = Journals.list_user_journals(user.user_id)
+        role_str = Enum.map_join(roles, ", ", fn r -> "#{r.role_name} (#{r.journal_path})" end)
+        journal_str = Enum.map_join(journals, ", ", fn j -> j.path end)
+
+        disabled_str = if user.disabled == 1, do: "Yes", else: "No"
+
+        [
+          user.user_id,
+          user.username,
+          user.email,
+          disabled_str,
+          user.disabled_reason || "",
+          user.date_registered,
+          role_str,
+          journal_str
+        ]
+      end)
+
     [headers | rows]
     |> Enum.map(&Enum.join(&1, ","))
     |> Enum.join("\n")

@@ -15,29 +15,34 @@ defmodule SimpleJournalSystem.AuthorizationTest do
   describe "get_roles/1" do
     setup do
       journal = Repo.get!(Journal, 1)
-      {:ok, author_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.author(),
-        is_default: 1
-      })
-      
-      {:ok, editor_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.editor(),
-        is_default: 0
-      })
-      
-      {:ok, reviewer_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.reviewer(),
-        is_default: 0
-      })
-      
+
+      {:ok, author_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.author(),
+          is_default: 1
+        })
+
+      {:ok, editor_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.editor(),
+          is_default: 0
+        })
+
+      {:ok, reviewer_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.reviewer(),
+          is_default: 0
+        })
+
       user = user_fixture()
       Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
       Accounts.enroll_user(user.user_id, editor_group.user_group_id, user.user_id)
-      
+
       user = Repo.get!(User, user.user_id) |> Repo.preload(user_user_groups: :user_group)
+
       %{
         user: user,
         author_group: author_group,
@@ -69,16 +74,18 @@ defmodule SimpleJournalSystem.AuthorizationTest do
   describe "has_role?/2" do
     setup do
       journal = Repo.get!(Journal, 1)
-      {:ok, author_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.author(),
-        is_default: 1
-      })
-      
+
+      {:ok, author_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.author(),
+          is_default: 1
+        })
+
       user = user_fixture()
       Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
       user = Repo.get!(User, user.user_id) |> Repo.preload(user_user_groups: :user_group)
-      
+
       %{
         user: user,
         author_group: author_group
@@ -104,22 +111,25 @@ defmodule SimpleJournalSystem.AuthorizationTest do
   describe "has_any_role?/2" do
     setup do
       journal = Repo.get!(Journal, 1)
-      {:ok, author_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.author(),
-        is_default: 1
-      })
-      
-      {:ok, editor_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.editor(),
-        is_default: 0
-      })
-      
+
+      {:ok, author_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.author(),
+          is_default: 1
+        })
+
+      {:ok, editor_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.editor(),
+          is_default: 0
+        })
+
       user = user_fixture()
       Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
       user = Repo.get!(User, user.user_id) |> Repo.preload(user_user_groups: :user_group)
-      
+
       %{
         user: user,
         author_group: author_group,
@@ -142,23 +152,26 @@ defmodule SimpleJournalSystem.AuthorizationTest do
   describe "has_all_roles?/2" do
     setup do
       journal = Repo.get!(Journal, 1)
-      {:ok, author_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.author(),
-        is_default: 1
-      })
-      
-      {:ok, editor_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.editor(),
-        is_default: 0
-      })
-      
+
+      {:ok, author_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.author(),
+          is_default: 1
+        })
+
+      {:ok, editor_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.editor(),
+          is_default: 0
+        })
+
       user = user_fixture()
       Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
       Accounts.enroll_user(user.user_id, editor_group.user_group_id, user.user_id)
       user = Repo.get!(User, user.user_id) |> Repo.preload(user_user_groups: :user_group)
-      
+
       %{
         user: user,
         author_group: author_group,
@@ -180,23 +193,26 @@ defmodule SimpleJournalSystem.AuthorizationTest do
   describe "helper functions" do
     setup do
       journal = Repo.get!(Journal, 1)
-      {:ok, author_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.author(),
-        is_default: 1
-      })
-      
-      {:ok, editor_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.editor(),
-        is_default: 0
-      })
-      
+
+      {:ok, author_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.author(),
+          is_default: 1
+        })
+
+      {:ok, editor_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.editor(),
+          is_default: 0
+        })
+
       user = user_fixture()
       Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
       Accounts.enroll_user(user.user_id, editor_group.user_group_id, user.user_id)
       user = Repo.get!(User, user.user_id) |> Repo.preload(user_user_groups: :user_group)
-      
+
       %{
         user: user,
         author_group: author_group,
@@ -239,24 +255,26 @@ defmodule SimpleJournalSystem.AuthorizationTest do
     setup do
       journal1 = Repo.get!(Journal, 1)
       journal2 = Repo.get!(Journal, 2)
-      
-      {:ok, author_group} = Accounts.create_user_group(%{
-        context_id: journal1.journal_id,
-        role_id: Roles.author(),
-        is_default: 1
-      })
-      
-      {:ok, editor_group} = Accounts.create_user_group(%{
-        context_id: journal2.journal_id,
-        role_id: Roles.editor(),
-        is_default: 0
-      })
-      
+
+      {:ok, author_group} =
+        Accounts.create_user_group(%{
+          context_id: journal1.journal_id,
+          role_id: Roles.author(),
+          is_default: 1
+        })
+
+      {:ok, editor_group} =
+        Accounts.create_user_group(%{
+          context_id: journal2.journal_id,
+          role_id: Roles.editor(),
+          is_default: 0
+        })
+
       user = user_fixture()
       Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
       Accounts.enroll_user(user.user_id, editor_group.user_group_id, user.user_id)
       user = Repo.get!(User, user.user_id) |> Repo.preload(user_user_groups: :user_group)
-      
+
       %{
         user: user,
         journal1: journal1,
@@ -265,10 +283,14 @@ defmodule SimpleJournalSystem.AuthorizationTest do
     end
 
     @tag :multi_journal
-    test "user has different roles in different journals", %{user: user, journal1: j1, journal2: j2} do
+    test "user has different roles in different journals", %{
+      user: user,
+      journal1: j1,
+      journal2: j2
+    } do
       roles_j1 = Accounts.list_user_roles_in_journal(user.user_id, j1.journal_id)
       roles_j2 = Accounts.list_user_roles_in_journal(user.user_id, j2.journal_id)
-      
+
       assert Enum.any?(roles_j1, &(&1.role_id == Roles.author()))
       assert Enum.any?(roles_j2, &(&1.role_id == Roles.editor()))
     end

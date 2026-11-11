@@ -16,23 +16,27 @@ defmodule SimpleJournalSystem.Accounts.UserGroup do
     field :masthead, :integer, default: 0
 
     has_many :user_user_groups,
-      SimpleJournalSystem.Accounts.UserUserGroup,
-      foreign_key: :user_group_id,
-      references: :user_group_id
+             SimpleJournalSystem.Accounts.UserUserGroup,
+             foreign_key: :user_group_id,
+             references: :user_group_id
 
     has_many :user_group_settings,
-      SimpleJournalSystem.Accounts.UserGroupSetting,
-      foreign_key: :user_group_id,
-      references: :user_group_id
-
+             SimpleJournalSystem.Accounts.UserGroupSetting,
+             foreign_key: :user_group_id,
+             references: :user_group_id
   end
 
   def changeset(group, attrs) do
     group
     |> cast(attrs, [
-      :context_id, :role_id, :is_default, :show_title,
-      :permit_self_registration, :permit_metadata_edit,
-      :permit_settings, :masthead
+      :context_id,
+      :role_id,
+      :is_default,
+      :show_title,
+      :permit_self_registration,
+      :permit_metadata_edit,
+      :permit_settings,
+      :masthead
     ])
     |> validate_required([:role_id])
     |> unique_constraint([:context_id, :role_id], name: :user_groups_context_id_role_id_key)

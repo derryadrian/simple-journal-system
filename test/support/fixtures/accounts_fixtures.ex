@@ -12,7 +12,6 @@ defmodule SimpleJournalSystem.AccountsFixtures do
   import Ecto.Query
   alias SimpleJournalSystem.Accounts
   alias SimpleJournalSystem.Accounts.Scope
-  alias SimpleJournalSystem.Accounts.User
   alias SimpleJournalSystem.Accounts.Roles
   alias SimpleJournalSystem.Journals.Journal
   alias SimpleJournalSystem.Repo

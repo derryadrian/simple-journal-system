@@ -13,7 +13,6 @@ defmodule SimpleJournalSystem.Accounts.UserSetting do
     belongs_to :user, SimpleJournalSystem.Accounts.User,
       foreign_key: :user_id,
       references: :user_id
-
   end
 
   def changeset(setting, attrs) do

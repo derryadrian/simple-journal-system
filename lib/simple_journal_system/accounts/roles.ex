@@ -18,8 +18,8 @@ defmodule SimpleJournalSystem.Accounts.Roles do
   @reviewer 4096
   @assistant 4097
   @author 65536
-  @reader 1048576
-  @subscription_manager 2097152
+  @reader 1_048_576
+  @subscription_manager 2_097_152
 
   @all [
     @site_admin,

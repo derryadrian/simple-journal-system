@@ -10,7 +10,8 @@ defmodule SimpleJournalSystem.Application do
     children = [
       SimpleJournalSystemWeb.Telemetry,
       SimpleJournalSystem.Repo,
-      {DNSCluster, query: Application.get_env(:simple_journal_system, :dns_cluster_query) || :ignore},
+      {DNSCluster,
+       query: Application.get_env(:simple_journal_system, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: SimpleJournalSystem.PubSub},
       {SimpleJournalSystemWeb.RateLimit, clean_period: :timer.minutes(10)},
       # Start a worker by calling: SimpleJournalSystem.Worker.start_link(arg)

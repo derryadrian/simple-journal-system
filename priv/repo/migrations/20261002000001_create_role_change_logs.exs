@@ -4,8 +4,12 @@ defmodule SimpleJournalSystem.Repo.Migrations.CreateRoleChangeLogs do
   def change do
     create table(:role_change_logs) do
       add :user_id, references(:users, column: :user_id, type: :bigint, on_delete: :nilify_all)
-      add :changed_by_id, references(:users, column: :user_id, type: :bigint, on_delete: :nilify_all)
-      add :action, :string, null: false  # "enroll", "unenroll", "role_change", "approve", "reject"
+
+      add :changed_by_id,
+          references(:users, column: :user_id, type: :bigint, on_delete: :nilify_all)
+
+      # "enroll", "unenroll", "role_change", "approve", "reject"
+      add :action, :string, null: false
       add :old_role_id, :integer
       add :new_role_id, :integer
       add :user_group_id, :integer

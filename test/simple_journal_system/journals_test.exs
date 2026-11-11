@@ -50,13 +50,14 @@ defmodule SimpleJournalSystem.JournalsTest do
 
     @tag :crud
     test "create_journal creates new journal" do
-      {:ok, journal} = Journals.create_journal(%{
-        path: "testjournal#{System.unique_integer()}",
-        seq: 10.0,
-        primary_locale: "en",
-        enabled: 1
-      })
-      
+      {:ok, journal} =
+        Journals.create_journal(%{
+          path: "testjournal#{System.unique_integer()}",
+          seq: 10.0,
+          primary_locale: "en",
+          enabled: 1
+        })
+
       assert journal.path != nil
       assert journal.enabled == 1
     end
@@ -65,19 +66,20 @@ defmodule SimpleJournalSystem.JournalsTest do
     test "update_journal updates journal" do
       journal = Repo.get!(Journal, 1)
       {:ok, updated} = Journals.update_journal(journal, %{enabled: 0})
-      
+
       assert updated.enabled == 0
     end
 
     @tag :crud
     test "delete_journal deletes journal" do
-      {:ok, journal} = Journals.create_journal(%{
-        path: "delete#{System.unique_integer()}",
-        seq: 1.0,
-        primary_locale: "en",
-        enabled: 1
-      })
-      
+      {:ok, journal} =
+        Journals.create_journal(%{
+          path: "delete#{System.unique_integer()}",
+          seq: 1.0,
+          primary_locale: "en",
+          enabled: 1
+        })
+
       {:ok, _} = Journals.delete_journal(journal)
       refute Repo.get(Journal, journal.journal_id)
     end
@@ -86,20 +88,25 @@ defmodule SimpleJournalSystem.JournalsTest do
   describe "User-Journal relationships" do
     setup do
       journal = Repo.get!(Journal, 1)
-      {:ok, author_group} = Accounts.create_user_group(%{
-        context_id: journal.journal_id,
-        role_id: Roles.author(),
-        is_default: 1
-      })
-      
+
+      {:ok, author_group} =
+        Accounts.create_user_group(%{
+          context_id: journal.journal_id,
+          role_id: Roles.author(),
+          is_default: 1
+        })
+
       user = user_fixture()
       Accounts.enroll_user(user.user_id, author_group.user_group_id, user.user_id)
-      
+
       {:ok, user: user, journal: journal, author_group: author_group}
     end
 
     @tag :user_journals
-    test "list_user_journals returns journals where user has role", %{user: user, journal: journal} do
+    test "list_user_journals returns journals where user has role", %{
+      user: user,
+      journal: journal
+    } do
       journals = Journals.list_user_journals(user.user_id)
       assert Enum.any?(journals, &(&1.journal_id == journal.journal_id))
     end
@@ -117,7 +124,10 @@ defmodule SimpleJournalSystem.JournalsTest do
     end
 
     @tag :user_journals
-    test "get_user_default_journal returns journal with default role", %{user: user, journal: journal} do
+    test "get_user_default_journal returns journal with default role", %{
+      user: user,
+      journal: journal
+    } do
       default = Journals.get_user_default_journal(user.user_id)
       assert default.journal_id == journal.journal_id
     end

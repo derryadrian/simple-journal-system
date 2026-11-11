@@ -68,8 +68,6 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   def fetch_current_scope_for_user(conn, _opts) do
     with {token, conn} <- ensure_user_token(conn),
          {user, token_inserted_at} <- Accounts.get_user_by_session_token(token) do
-
-
       conn
       |> assign(:current_scope, Scope.for_user(user))
       |> maybe_reissue_user_session_token(user, token_inserted_at)
@@ -246,7 +244,6 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   def require_role(conn, role_id) do
     case conn.assigns[:current_scope] do
       %{user: user} when not is_nil(user) ->
-
         if Authorization.has_role?(user, role_id) do
           conn
         else
@@ -263,25 +260,27 @@ defmodule SimpleJournalSystemWeb.UserAuth do
     end
   end
 
-# --- HELPER PLUGS OJS (DELEGATED TO REQUIRE_ROLE/2) ---
+  # --- HELPER PLUGS OJS (DELEGATED TO REQUIRE_ROLE/2) ---
 
   alias SimpleJournalSystem.Accounts.Roles
 
   def require_manager(conn, _opts),
-  do: require_role(conn, Roles.manager())
+    do: require_role(conn, Roles.manager())
 
-def require_admin(conn, _opts),
-  do: require_role(conn, Roles.site_admin())
+  def require_admin(conn, _opts),
+    do: require_role(conn, Roles.site_admin())
 
-def require_journal_manager(conn, _opts),
-  do: require_role(conn, Roles.journal_manager())
+  def require_journal_manager(conn, _opts),
+    do: require_role(conn, Roles.journal_manager())
 
-def require_author(conn, _opts),
-  do: require_role(conn, Roles.author())
+  def require_author(conn, _opts),
+    do: require_role(conn, Roles.author())
 
-def require_editor(conn, _opts), do: require_role(conn, Roles.editor())
-def require_reviewer(conn, _opts), do: require_role(conn, Roles.reviewer())
-def require_assistant(conn, _opts), do: require_role(conn, Roles.assistant())
-def require_reader(conn, _opts), do: require_role(conn, Roles.reader())
-def require_subscription_manager(conn, _opts), do: require_role(conn, Roles.subscription_manager())
+  def require_editor(conn, _opts), do: require_role(conn, Roles.editor())
+  def require_reviewer(conn, _opts), do: require_role(conn, Roles.reviewer())
+  def require_assistant(conn, _opts), do: require_role(conn, Roles.assistant())
+  def require_reader(conn, _opts), do: require_role(conn, Roles.reader())
+
+  def require_subscription_manager(conn, _opts),
+    do: require_role(conn, Roles.subscription_manager())
 end

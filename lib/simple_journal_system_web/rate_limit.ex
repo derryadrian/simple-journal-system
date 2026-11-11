@@ -40,8 +40,12 @@ defmodule SimpleJournalSystemWeb.RateLimit do
 
   defp get_client_ip(conn) do
     case conn.req_headers do
-      [{"x-forwarded-for", ip} | _] -> ip
-      [{"x-real-ip", ip} | _] -> ip
+      [{"x-forwarded-for", ip} | _] ->
+        ip
+
+      [{"x-real-ip", ip} | _] ->
+        ip
+
       _ ->
         case conn.remote_ip do
           {_, _, _, _} = ip_tuple ->

@@ -2,7 +2,9 @@ defmodule SimpleJournalSystemWeb.ErrorJSONTest do
   use SimpleJournalSystemWeb.ConnCase, async: true
 
   test "renders 404" do
-    assert SimpleJournalSystemWeb.ErrorJSON.render("404.json", %{}) == %{errors: %{detail: "Not Found"}}
+    assert SimpleJournalSystemWeb.ErrorJSON.render("404.json", %{}) == %{
+             errors: %{detail: "Not Found"}
+           }
   end
 
   test "renders 500" do

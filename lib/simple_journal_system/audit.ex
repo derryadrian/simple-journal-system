@@ -50,7 +50,14 @@ defmodule SimpleJournalSystem.Audit do
   @doc """
   Logs role change (user moved from one role to another).
   """
-  def log_role_change_action(user_id, changed_by_id, old_group_id, new_group_id, context_id, conn \\ nil) do
+  def log_role_change_action(
+        user_id,
+        changed_by_id,
+        old_group_id,
+        new_group_id,
+        context_id,
+        conn \\ nil
+      ) do
     log_role_change(%{
       user_id: user_id,
       changed_by_id: changed_by_id,
@@ -93,9 +100,9 @@ defmodule SimpleJournalSystem.Audit do
   def get_user_logs(user_id, limit \\ 50) do
     Repo.all(
       from log in RoleChangeLog,
-      where: log.user_id == ^user_id,
-      order_by: [desc: log.inserted_at],
-      limit: ^limit
+        where: log.user_id == ^user_id,
+        order_by: [desc: log.inserted_at],
+        limit: ^limit
     )
   end
 
@@ -105,9 +112,9 @@ defmodule SimpleJournalSystem.Audit do
   def get_admin_logs(changed_by_id, limit \\ 50) do
     Repo.all(
       from log in RoleChangeLog,
-      where: log.changed_by_id == ^changed_by_id,
-      order_by: [desc: log.inserted_at],
-      limit: ^limit
+        where: log.changed_by_id == ^changed_by_id,
+        order_by: [desc: log.inserted_at],
+        limit: ^limit
     )
   end
 
@@ -117,9 +124,9 @@ defmodule SimpleJournalSystem.Audit do
   def get_context_logs(context_id, limit \\ 50) do
     Repo.all(
       from log in RoleChangeLog,
-      where: log.context_id == ^context_id,
-      order_by: [desc: log.inserted_at],
-      limit: ^limit
+        where: log.context_id == ^context_id,
+        order_by: [desc: log.inserted_at],
+        limit: ^limit
     )
   end
 
@@ -139,8 +146,12 @@ defmodule SimpleJournalSystem.Audit do
 
   defp get_client_ip(conn) do
     case conn.req_headers do
-      [{"x-forwarded-for", ip} | _] -> ip
-      [{"x-real-ip", ip} | _] -> ip
+      [{"x-forwarded-for", ip} | _] ->
+        ip
+
+      [{"x-real-ip", ip} | _] ->
+        ip
+
       _ ->
         case conn.remote_ip do
           {_, _, _, _} = ip_tuple -> ip_tuple |> Tuple.to_list() |> Enum.join(".")

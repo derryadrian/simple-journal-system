@@ -11,21 +11,22 @@ defmodule SimpleJournalSystem.Accounts.UserUserGroup do
     field :masthead, :integer
 
     belongs_to :user,
-      SimpleJournalSystem.Accounts.User,
-      foreign_key: :user_id,
-      references: :user_id
+               SimpleJournalSystem.Accounts.User,
+               foreign_key: :user_id,
+               references: :user_id
 
     belongs_to :user_group,
-      SimpleJournalSystem.Accounts.UserGroup,
-      foreign_key: :user_group_id,
-      references: :user_group_id
-
+               SimpleJournalSystem.Accounts.UserGroup,
+               foreign_key: :user_group_id,
+               references: :user_group_id
   end
 
   def changeset(uug, attrs) do
     uug
     |> cast(attrs, [:user_id, :user_group_id, :date_start, :date_end, :masthead])
     |> validate_required([:user_id, :user_group_id])
-    |> unique_constraint([:user_id, :user_group_id], name: :user_user_groups_user_id_user_group_id_key)
+    |> unique_constraint([:user_id, :user_group_id],
+      name: :user_user_groups_user_id_user_group_id_key
+    )
   end
 end

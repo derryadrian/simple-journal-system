@@ -56,7 +56,9 @@ defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
 
       assert conn.halted
       assert redirected_to(conn) == ~p"/"
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) == "You are not authorized to access this page."
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "You are not authorized to access this page."
     end
 
     test "require_author menolak user tanpa role apa pun", %{conn: conn} do

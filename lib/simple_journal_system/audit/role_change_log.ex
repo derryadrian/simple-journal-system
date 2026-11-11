@@ -29,8 +29,16 @@ defmodule SimpleJournalSystem.Audit.RoleChangeLog do
   def changeset(log, attrs) do
     log
     |> cast(attrs, [
-      :user_id, :changed_by_id, :action, :old_role_id, :new_role_id,
-      :user_group_id, :context_id, :metadata, :ip_address, :user_agent
+      :user_id,
+      :changed_by_id,
+      :action,
+      :old_role_id,
+      :new_role_id,
+      :user_group_id,
+      :context_id,
+      :metadata,
+      :ip_address,
+      :user_agent
     ])
     |> validate_required([:user_id, :changed_by_id, :action])
   end

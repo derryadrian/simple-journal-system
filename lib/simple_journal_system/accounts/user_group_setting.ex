@@ -13,13 +13,14 @@ defmodule SimpleJournalSystem.Accounts.UserGroupSetting do
     belongs_to :user_group, SimpleJournalSystem.Accounts.UserGroup,
       foreign_key: :user_group_id,
       references: :user_group_id
-
   end
 
   def changeset(setting, attrs) do
     setting
     |> cast(attrs, [:user_group_id, :locale, :setting_name, :setting_value])
     |> validate_required([:user_group_id, :setting_name])
-    |> unique_constraint(:user_group_id, name: :user_group_settings_user_group_id_locale_setting_name_key)
+    |> unique_constraint(:user_group_id,
+      name: :user_group_settings_user_group_id_locale_setting_name_key
+    )
   end
 end
