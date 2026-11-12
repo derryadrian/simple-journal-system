@@ -18,14 +18,16 @@
             <li class="py-4 flex items-center justify-between">
               <div class="flex items-center space-x-4">
                 <div class="flex-1">
-                  <h3 class="text-lg font-medium text-gray-900"><%= journal.path %></h3>
-                  <p class="text-sm text-gray-500">ID: <%= journal.journal_id %> • Locale: <%= journal.primary_locale %></p>
+                  <h3 class="text-lg font-medium text-gray-900">{journal.path}</h3>
+                  <p class="text-sm text-gray-500">
+                    ID: {journal.journal_id} • Locale: {journal.primary_locale}
+                  </p>
                 </div>
                 <%= if @current_journal && @current_journal.journal_id == journal.journal_id do %>
                   <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Current</span>
-                <% else do %>
-                  <.link 
-                    href={~p"/journal/switch/#{journal.journal_id}"} 
+                <% else %>
+                  <.link
+                    href={~p"/journal/switch/#{journal.journal_id}"}
                     class="px-4 py-2 bg-[#1b629b] hover:bg-[#155282] text-white text-sm font-medium rounded border border-gray-400 shadow-sm transition-colors"
                     method="get"
                   >

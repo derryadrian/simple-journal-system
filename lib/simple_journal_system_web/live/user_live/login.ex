@@ -17,7 +17,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
           </nav>
           <!-- Title & Subtitle -->
           <h1 class="text-3xl font-bold text-gray-900 mb-4">Login</h1>
-          
+
           <p class="text-sm text-gray-700 mb-6">
             Required fields are marked with an asterisk: <span class="text-red-600 font-bold">*</span>
           </p>
@@ -37,7 +37,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
               <label for="user_email" class="block text-sm font-medium text-gray-800 mb-1">
                 Username or Email <span class="text-red-600">*</span>
               </label>
-              
+
               <.input
                 field={f[:email]}
                 type="email"
@@ -51,7 +51,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
               <label for="user_password" class="block text-sm font-medium text-gray-800 mb-1">
                 Password <span class="text-red-600">*</span>
               </label>
-              
+
               <.input
                 field={f[:password]}
                 type="password"
@@ -76,7 +76,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Login do
               <.link href={~p"/users/register"} class="text-sm text-[#1b629b] hover:underline">
                 Register
               </.link>
-              
+
               <button
                 type="submit"
                 class="px-5 py-1.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] text-gray-900 font-semibold text-sm rounded border border-gray-400 shadow-sm transition-colors"

@@ -13,13 +13,13 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
           <span class="text-5xl font-serif font-bold leading-none">
             OJS
           </span>
-          
+
           <div class="border-t border-white/80 pt-0.5 text-[10px] uppercase tracking-widest leading-none">
             OPEN JOURNAL SYSTEMS
           </div>
         </a>
       </div>
-      
+
       <nav class="flex items-center gap-6 text-sm font-medium">
         <!-- Journal Switcher (CSS-only dropdown with click-away hook) -->
         <%= if @user_journals && length(@user_journals) > 0 do %>
@@ -43,11 +43,11 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
                   d="M3 7h18M3 12h18M3 17h18"
                 />
               </svg>
-              
+
               <span class="font-medium">
                 {(@current_journal && @current_journal.path) || "Select Journal"}
               </span>
-              
+
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
@@ -84,13 +84,13 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
             </div>
           </div>
         <% end %>
-        
+
         <%= if @current_scope do %>
           <span class="text-xs opacity-80">{@current_scope.user.email}</span>
           <a href="/users/settings" class="hover:underline">
             Settings
           </a>
-          
+
           <a
             href="/users/log-out"
             data-method="delete"
@@ -102,7 +102,7 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
           <a href="/users/register" class="hover:underline">
             Register
           </a>
-          
+
           <a href="/users/log-in" class="hover:underline">
             Login
           </a>
@@ -118,9 +118,9 @@ defmodule SimpleJournalSystemWeb.OjsComponents do
       <div class="max-w-6xl mx-auto flex justify-end">
         <div class="text-right text-gray-800">
           <p class="text-xl font-serif italic">Platform &</p>
-          
+
           <p class="text-xl font-serif italic">workflow by</p>
-          
+
           <p class="text-2xl font-serif font-bold">OJS / PKP</p>
         </div>
       </div>

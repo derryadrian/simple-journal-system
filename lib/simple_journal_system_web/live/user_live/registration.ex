@@ -31,7 +31,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Registration do
           </nav>
           <!-- Title & Subtitle -->
           <h1 class="text-3xl font-bold text-gray-900 mb-2">Register</h1>
-          
+
           <p class="text-sm text-gray-700 mb-6">
             Required fields are marked with an asterisk: <span class="text-red-600 font-bold">*</span>
           </p>
@@ -54,7 +54,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Registration do
                 <label class="block text-sm font-medium text-gray-800 mb-1">
                   Username <span class="text-red-600">*</span>
                 </label>
-                
+
                 <.input
                   field={f[:username]}
                   type="text"
@@ -67,7 +67,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Registration do
                 <label class="block text-sm font-medium text-gray-800 mb-1">
                   Email <span class="text-red-600">*</span>
                 </label>
-                
+
                 <.input
                   field={f[:email]}
                   type="email"
@@ -80,7 +80,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Registration do
                 <label class="block text-sm font-medium text-gray-800 mb-1">
                   Password <span class="text-red-600">*</span>
                 </label>
-                
+
                 <.input
                   field={f[:password]}
                   type="password"
@@ -93,7 +93,7 @@ defmodule SimpleJournalSystemWeb.UserLive.Registration do
                 <label class="block text-sm font-medium text-gray-800 mb-1">
                   Repeat Password <span class="text-red-600">*</span>
                 </label>
-                
+
                 <.input
                   field={f[:password_confirmation]}
                   type="password"
