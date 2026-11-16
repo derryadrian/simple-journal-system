@@ -29,6 +29,31 @@ defmodule SimpleJournalSystem.Authorization do
   end
 
   @doc """
+  Mengecek role user berdasarkan jurnal aktif.
+  Site Admin dengan context_id nil memiliki akses global.
+  """
+  def has_role_in_journal?(nil, _role_id, _journal_id), do: false
+
+  def has_role_in_journal?(user, role_id, journal_id) do
+    user.user_user_groups
+    |> Enum.any?(fn membership ->
+      group = membership.user_group
+
+      global_admin? =
+        role_id == Roles.site_admin() and
+          group.role_id == Roles.site_admin() and
+          is_nil(group.context_id)
+
+      journal_role? =
+        not is_nil(journal_id) and
+          group.role_id == role_id and
+          group.context_id == journal_id
+
+      global_admin? or journal_role?
+    end)
+  end
+
+  @doc """
   Mengecek apakah user memiliki minimal satu role
   dari daftar role yang diizinkan.
   """

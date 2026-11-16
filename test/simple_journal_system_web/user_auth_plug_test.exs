@@ -16,6 +16,7 @@ defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
         conn
         |> init_test_session(%{})
         |> Phoenix.Controller.fetch_flash([])
+        |> Plug.Conn.assign(:current_journal, %{journal_id: 1})
 
       %{conn: conn}
     end
@@ -42,6 +43,27 @@ defmodule SimpleJournalSystemWeb.UserAuthPlugTest do
       user = enrolled_user(Roles.site_admin(), nil)
       conn = conn |> with_scope(user) |> UserAuth.require_admin([])
       refute conn.halted
+    end
+
+    test "Site Admin tidak otomatis memiliki role author", %{conn: conn} do
+      user = enrolled_user(Roles.site_admin(), nil)
+      conn = conn |> with_scope(user) |> UserAuth.require_author([])
+
+      assert conn.halted
+    end
+
+    test "Site Admin tidak otomatis memiliki role manager", %{conn: conn} do
+      user = enrolled_user(Roles.site_admin(), nil)
+      conn = conn |> with_scope(user) |> UserAuth.require_manager([])
+
+      assert conn.halted
+    end
+
+    test "role manager dari jurnal lain tidak bisa mengakses jurnal aktif", %{conn: conn} do
+      user = enrolled_user(Roles.manager(), 2)
+      conn = conn |> with_scope(user) |> UserAuth.require_manager([])
+
+      assert conn.halted
     end
 
     test "require_reviewer meloloskan user dengan role reviewer", %{conn: conn} do

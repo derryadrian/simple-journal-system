@@ -244,7 +244,17 @@ defmodule SimpleJournalSystemWeb.UserAuth do
   def require_role(conn, role_id) do
     case conn.assigns[:current_scope] do
       %{user: user} when not is_nil(user) ->
-        if Authorization.has_role?(user, role_id) do
+        journal_id =
+          case conn.assigns[:current_journal] do
+            %{journal_id: id} -> id
+            _ -> nil
+          end
+
+        if Authorization.has_role_in_journal?(
+             user,
+             role_id,
+             journal_id
+           ) do
           conn
         else
           conn
