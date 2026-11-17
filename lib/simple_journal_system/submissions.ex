@@ -33,6 +33,83 @@ defmodule SimpleJournalSystem.Submissions do
   """
   def get_submission!(submission_id), do: Repo.get!(Submission, submission_id)
 
+
+  @doc """
+  Membuat metadata file dan menghubungkannya dengan submission.
+  Kedua proses dilakukan dalam satu transaksi database.
+
+  `file_attrs` berisi path dan mimetype.
+  `submission_file_attrs` berisi informasi file submission,
+  termasuk file_stage dan genre_id.
+  """
+  def create_submission_file(%Submission{} = submission, file_attrs, submission_file_attrs) do
+    Repo.transaction(fn ->
+      case Repo.insert(
+             SimpleJournalSystem.Submissions.File.changeset(
+               %SimpleJournalSystem.Submissions.File{},
+               file_attrs
+             )
+           ) do
+        {:ok, file} ->
+          attrs =
+            submission_file_attrs
+            |> Map.new(fn {key, value} -> {to_string(key), value} end)
+            |> Map.drop([
+              "submission_id",
+              "file_id",
+              "created_at",
+              "updated_at"
+            ])
+            |> Map.merge(%{
+              "submission_id" => submission.submission_id,
+              "file_id" => file.file_id,
+              "created_at" => now(),
+              "updated_at" => now()
+            })
+
+          case Repo.insert(
+                 SimpleJournalSystem.Submissions.SubmissionFile.changeset(
+                   %SimpleJournalSystem.Submissions.SubmissionFile{},
+                   attrs
+                 )
+               ) do
+            {:ok, submission_file} ->
+              %{file: file, submission_file: submission_file}
+
+            {:error, changeset} ->
+              Repo.rollback(changeset)
+          end
+
+        {:error, changeset} ->
+          Repo.rollback(changeset)
+      end
+    end)
+  end
+
+  @doc """
+  Mengambil daftar file milik sebuah submission beserta metadata file fisiknya.
+  """
+  def list_submission_files(submission_id) do
+    from(sf in SimpleJournalSystem.Submissions.SubmissionFile,
+      join: f in SimpleJournalSystem.Submissions.File,
+      on: f.file_id == sf.file_id,
+      where: sf.submission_id == ^submission_id,
+      order_by: [asc: sf.submission_file_id],
+      select: %{submission_file: sf, file: f}
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  Mengambil satu data submission file berdasarkan ID.
+  """
+  def get_submission_file!(submission_file_id) do
+    Repo.get!(
+      SimpleJournalSystem.Submissions.SubmissionFile,
+      submission_file_id
+    )
+  end
+
   @doc """
   Membuat naskah baru (awal wizard author): stage 1, status queued,
   `submission_progress` "start".

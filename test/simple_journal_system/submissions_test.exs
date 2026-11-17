@@ -4,7 +4,9 @@ defmodule SimpleJournalSystem.SubmissionsTest do
   import SimpleJournalSystem.SubmissionsFixtures
 
   alias SimpleJournalSystem.Ojs.SubmissionStatus
+  alias SimpleJournalSystem.Repo
   alias SimpleJournalSystem.Submissions
+  alias SimpleJournalSystem.Submissions.File
   alias SimpleJournalSystem.Submissions.Submission
 
   describe "create_submission/1" do
@@ -69,6 +71,75 @@ defmodule SimpleJournalSystem.SubmissionsTest do
       reloaded = Submissions.get_submission!(submission.submission_id)
       assert reloaded.submission_progress == ""
       assert reloaded.date_submitted
+    end
+  end
+  describe "submission files" do
+    test "membuat metadata file dan menghubungkannya dengan submission" do
+      submission = submission_fixture()
+
+      assert {:ok, %{file: file, submission_file: submission_file}} =
+               Submissions.create_submission_file(
+                 submission,
+                 %{path: "test/document.pdf", mimetype: "application/pdf"},
+                 %{file_stage: 1}
+               )
+
+      assert file.path == "test/document.pdf"
+      assert file.mimetype == "application/pdf"
+      assert submission_file.submission_id == submission.submission_id
+      assert submission_file.file_id == file.file_id
+      assert submission_file.file_stage == 1
+      assert submission_file.created_at
+      assert submission_file.updated_at
+    end
+
+    test "mengambil daftar file milik submission" do
+      submission = submission_fixture()
+
+      assert {:ok, %{submission_file: created}} =
+               Submissions.create_submission_file(
+                 submission,
+                 %{path: "test/document.pdf", mimetype: "application/pdf"},
+                 %{file_stage: 1}
+               )
+
+      files = Submissions.list_submission_files(submission.submission_id)
+
+      assert length(files) == 1
+      assert hd(files).submission_file.submission_file_id ==
+               created.submission_file_id
+      assert hd(files).file.path == "test/document.pdf"
+    end
+
+    test "mengambil submission file berdasarkan ID" do
+      submission = submission_fixture()
+
+      assert {:ok, %{submission_file: created}} =
+               Submissions.create_submission_file(
+                 submission,
+                 %{path: "test/document.pdf", mimetype: "application/pdf"},
+                 %{file_stage: 1}
+               )
+
+      result = Submissions.get_submission_file!(created.submission_file_id)
+
+      assert result.submission_file_id == created.submission_file_id
+    end
+
+    test "membatalkan penyimpanan metadata jika submission file gagal dibuat" do
+      submission = submission_fixture()
+      files_before = Repo.aggregate(File, :count, :file_id)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Submissions.create_submission_file(
+                 submission,
+                 %{path: "test/document.pdf", mimetype: "application/pdf"},
+                 %{}
+               )
+
+      files_after = Repo.aggregate(File, :count, :file_id)
+
+      assert files_after == files_before
     end
   end
 end
