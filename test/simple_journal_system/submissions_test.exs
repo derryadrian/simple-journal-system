@@ -2,12 +2,18 @@ defmodule SimpleJournalSystem.SubmissionsTest do
   use SimpleJournalSystem.DataCase, async: true
 
   import SimpleJournalSystem.SubmissionsFixtures
+  import Ecto.Query
+  import SimpleJournalSystem.AccountsFixtures, only: [author_fixture: 1, user_fixture: 0]
 
   alias SimpleJournalSystem.Ojs.SubmissionStatus
   alias SimpleJournalSystem.Repo
   alias SimpleJournalSystem.Submissions
   alias SimpleJournalSystem.Submissions.File
   alias SimpleJournalSystem.Submissions.Submission
+  alias SimpleJournalSystem.Accounts.Roles
+  alias SimpleJournalSystem.Accounts.UserGroup
+  alias SimpleJournalSystem.Accounts.UserUserGroup
+  alias SimpleJournalSystem.Submissions.StageAssignment
 
   describe "create_submission/1" do
     test "naskah baru mulai di stage 1, status queued, progress start" do
@@ -73,6 +79,7 @@ defmodule SimpleJournalSystem.SubmissionsTest do
       assert reloaded.date_submitted
     end
   end
+
   describe "submission files" do
     test "membuat metadata file dan menghubungkannya dengan submission" do
       submission = submission_fixture()
@@ -106,8 +113,10 @@ defmodule SimpleJournalSystem.SubmissionsTest do
       files = Submissions.list_submission_files(submission.submission_id)
 
       assert length(files) == 1
+
       assert hd(files).submission_file.submission_file_id ==
                created.submission_file_id
+
       assert hd(files).file.path == "test/document.pdf"
     end
 
@@ -140,6 +149,47 @@ defmodule SimpleJournalSystem.SubmissionsTest do
       files_after = Repo.aggregate(File, :count, :file_id)
 
       assert files_after == files_before
+    end
+  end
+
+  describe "author_owns_submission?/2" do
+    test "mengembalikan true untuk Author yang ditugaskan" do
+      user = author_fixture(1)
+      submission = submission_fixture()
+
+      group =
+        Repo.one!(
+          from ug in UserGroup,
+            join: uug in UserUserGroup,
+            on: uug.user_group_id == ug.user_group_id,
+            where:
+              uug.user_id == ^user.user_id and
+                ug.context_id == 1 and
+                ug.role_id == ^Roles.author(),
+            select: ug
+        )
+
+      Repo.insert!(%StageAssignment{
+        submission_id: submission.submission_id,
+        user_id: user.user_id,
+        user_group_id: group.user_group_id,
+        date_assigned: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      })
+
+      assert Submissions.author_owns_submission?(
+               submission.submission_id,
+               user.user_id
+             )
+    end
+
+    test "mengembalikan false untuk user yang tidak ditugaskan" do
+      submission = submission_fixture()
+      user = user_fixture()
+
+      refute Submissions.author_owns_submission?(
+               submission.submission_id,
+               user.user_id
+             )
     end
   end
 end

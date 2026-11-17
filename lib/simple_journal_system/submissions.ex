@@ -33,6 +33,25 @@ defmodule SimpleJournalSystem.Submissions do
   """
   def get_submission!(submission_id), do: Repo.get!(Submission, submission_id)
 
+  @doc """
+  Memastikan user merupakan Author yang ditugaskan pada submission.
+  """
+  def author_owns_submission?(submission_id, user_id) do
+    author_role = Roles.author()
+
+    Repo.exists?(
+      from sa in StageAssignment,
+        join: s in Submission,
+        on: s.submission_id == sa.submission_id,
+        join: ug in UserGroup,
+        on: ug.user_group_id == sa.user_group_id,
+        where:
+          sa.submission_id == ^submission_id and
+            sa.user_id == ^user_id and
+            ug.role_id == ^author_role and
+            ug.context_id == s.context_id
+    )
+  end
 
   @doc """
   Membuat metadata file dan menghubungkannya dengan submission.
