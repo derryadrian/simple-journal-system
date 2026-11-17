@@ -120,6 +120,9 @@ defmodule SimpleJournalSystem.AccountsTest do
       assert user.email == attrs[:email]
       assert String.starts_with?(user.hashed_password, "$2b$")
       assert user.disabled == 0
+      assert is_integer(user.user_id)
+      assert user.user_id > 0
+      assert user.locales == "[]"
     end
 
     test "rejects duplicate username" do

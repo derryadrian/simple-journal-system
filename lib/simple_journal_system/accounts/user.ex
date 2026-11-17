@@ -9,6 +9,7 @@ defmodule SimpleJournalSystem.Accounts.User do
     field :username, :string
     field :hashed_password, :string, source: :password
     field :email, :string
+    field :locales, :string, default: "[]"
 
     has_many :user_user_groups,
              SimpleJournalSystem.Accounts.UserUserGroup,
@@ -19,7 +20,6 @@ defmodule SimpleJournalSystem.Accounts.User do
     field :mailing_address, :string
     field :billing_address, :string
     field :country, :string
-    field :locales, :string
     field :gossip, :string
     field :date_last_email, :naive_datetime
     field :date_registered, :naive_datetime
@@ -80,7 +80,7 @@ defmodule SimpleJournalSystem.Accounts.User do
     user
     |> cast(attrs, [:username, :email, :password, :password_confirmation])
     |> validate_required([:username, :email, :password])
-    |> validate_length(:username, min: 3, max: 100)
+    |> validate_length(:username, min: 3, max: 32)
     |> validate_format(:email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
       message: "format email tidak valid"
     )
@@ -89,7 +89,6 @@ defmodule SimpleJournalSystem.Accounts.User do
     |> unique_constraint(:username, name: :users_username)
     |> unique_constraint(:email, name: :users_email)
     |> put_password_hash()
-    |> put_user_id()
     |> put_default_values()
   end
 
@@ -101,16 +100,6 @@ defmodule SimpleJournalSystem.Accounts.User do
 
   defp put_password_hash(changeset), do: changeset
 
-  defp put_user_id(changeset) do
-    case changeset.valid? do
-      true ->
-        max_id = SimpleJournalSystem.Repo.aggregate(__MODULE__, :max, :user_id) || 0
-        change(changeset, user_id: max_id + 1)
-
-      false ->
-        changeset
-    end
-  end
 
   defp put_default_values(changeset) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
