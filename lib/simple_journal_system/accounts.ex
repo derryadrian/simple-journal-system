@@ -51,8 +51,11 @@ defmodule SimpleJournalSystem.Accounts do
       is_nil(hashed) or hashed == "" ->
         false
 
-      String.starts_with?(hashed, "$2b$") or String.starts_with?(hashed, "$2a$") or
-          String.starts_with?(hashed, "$2y$") ->
+      String.starts_with?(hashed, "$2y$") ->
+        normalized_hash = String.replace_prefix(hashed, "$2y$", "$2b$")
+        Bcrypt.verify_pass(password, normalized_hash)
+
+      String.starts_with?(hashed, "$2b$") or String.starts_with?(hashed, "$2a$") ->
         Bcrypt.verify_pass(password, hashed)
 
       String.contains?(hashed, "$") ->
