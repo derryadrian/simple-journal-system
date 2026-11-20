@@ -7,8 +7,10 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
   import Ecto.Query, warn: false
 
   alias SimpleJournalSystem.Journals
+  alias SimpleJournalSystem.Ojs.FileStage
   alias SimpleJournalSystem.Repo
   alias SimpleJournalSystem.Submissions
+  alias SimpleJournalSystem.Submissions.FileStorage
   alias SimpleJournalSystem.Submissions.Section
 
   @impl true
@@ -28,7 +30,13 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
      |> assign(:selected_locale, selected_locale)
      |> assign(:sections, sections)
      |> assign(:locales, locales)
-     |> assign(:started_submission, nil)}
+     |> assign(:started_submission, nil)
+     |> allow_upload(:manuscript,
+       accept: ~w(.pdf),
+       max_entries: 1,
+       max_file_size: 10_000_000,
+       progress: &handle_upload_progress/3
+     )}
   end
 
   @impl true
@@ -133,6 +141,64 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
     {:noreply, assign(socket, :started_submission, nil)}
   end
 
+  def handle_event("validate_upload", _params, socket) do
+    {:noreply, socket}
+  end
+
+  defp handle_upload_progress(:manuscript, entry, socket) do
+    IO.inspect(
+      %{
+        filename: entry.client_name,
+        progress: entry.progress,
+        done?: entry.done?
+      },
+      label: "MANUSCRIPT UPLOAD PROGRESS"
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_event("save_upload", _params, socket) do
+    submission = socket.assigns.started_submission
+    user = socket.assigns.current_scope.user
+
+    cond do
+      is_nil(submission) ->
+        {:noreply, put_flash(socket, :error, "Submission tidak ditemukan.")}
+
+      not Submissions.author_owns_submission?(
+        submission.submission_id,
+        user.user_id
+      ) ->
+        {:noreply, put_flash(socket, :error, "Kamu tidak memiliki akses ke submission ini.")}
+
+      socket.assigns.uploads.manuscript.entries == [] ->
+        {:noreply, put_flash(socket, :error, "Pilih file PDF terlebih dahulu.")}
+
+      true ->
+        results =
+          consume_uploaded_entries(socket, :manuscript, fn %{path: temp_path}, _entry ->
+            {:ok, save_manuscript(temp_path, submission, user)}
+          end)
+
+        case results do
+          [{:ok, _result}] ->
+            socket =
+              socket
+              |> put_flash(:info, "Manuskrip berhasil diunggah.")
+              |> assign(:started_submission, nil)
+
+            {:noreply, socket}
+
+          [{:error, reason}] ->
+            {:noreply, put_flash(socket, :error, "Gagal menyimpan manuskrip: #{inspect(reason)}")}
+
+          _ ->
+            {:noreply, put_flash(socket, :error, "Upload manuskrip gagal.")}
+        end
+    end
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -160,6 +226,39 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
                 <p class="mt-2 text-sm text-base-content/70">
                   You can continue with the next wizard step once the submission details page is available.
                 </p>
+                <form
+                  id="manuscript-upload-form"
+                  phx-change="validate_upload"
+                  phx-submit="save_upload"
+                  class="mt-6 space-y-4"
+                >
+                  <div class="space-y-2">
+                    <label class="label font-medium" for={@uploads.manuscript.ref}>
+                      Upload Manuscript (PDF)
+                    </label>
+
+                    <.live_file_input
+                      upload={@uploads.manuscript}
+                      class="file-input file-input-bordered w-full"
+                    />
+
+                    <p class="text-xs text-base-content/60">
+                      PDF only. Maximum file size: 10 MB.
+                    </p>
+
+                    <%= for entry <- @uploads.manuscript.entries do %>
+                      <p class="text-sm">{entry.client_name}</p>
+                    <% end %>
+
+                    <%= for error <- upload_errors(@uploads.manuscript) do %>
+                      <p class="text-sm text-error">{error}</p>
+                    <% end %>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">
+                    Upload PDF
+                  </button>
+                </form>
                 <button
                   type="button"
                   phx-click="new_submission"
@@ -338,4 +437,36 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
   defp locale_label("id"), do: "Bahasa Indonesia (id)"
   defp locale_label("en"), do: "English (en)"
   defp locale_label(locale), do: locale
+
+  defp save_manuscript(temp_path, submission, user) do
+    case Submissions.get_submission_genre(submission.context_id) do
+      nil ->
+        {:error, :submission_genre_not_found}
+
+      genre ->
+        with {:ok, relative_path} <-
+               FileStorage.store(temp_path, submission.submission_id) do
+          case Submissions.create_author_submission_file(
+                 user,
+                 submission.submission_id,
+                 %{
+                   path: relative_path,
+                   mimetype: "application/pdf"
+                 },
+                 %{
+                   file_stage: FileStage.submission(),
+                   genre_id: genre.genre_id,
+                   uploader_user_id: user.user_id
+                 }
+               ) do
+            {:ok, _result} = result ->
+              result
+
+            {:error, reason} ->
+              FileStorage.delete(relative_path)
+              {:error, reason}
+          end
+        end
+    end
+  end
 end

@@ -34,6 +34,18 @@ defmodule SimpleJournalSystem.Submissions do
   def get_submission!(submission_id), do: Repo.get!(Submission, submission_id)
 
   @doc """
+  Mengambil genre utama submission yang aktif untuk suatu jurnal.
+  """
+  def get_submission_genre(context_id) do
+    Repo.get_by(
+      SimpleJournalSystem.Submissions.Genre,
+      context_id: context_id,
+      entry_key: "SUBMISSION",
+      enabled: 1
+    )
+  end
+
+  @doc """
   Memastikan user merupakan Author yang ditugaskan pada submission.
   """
   def author_owns_submission?(submission_id, user_id) do
@@ -51,6 +63,28 @@ defmodule SimpleJournalSystem.Submissions do
             ug.role_id == ^author_role and
             ug.context_id == s.context_id
     )
+  end
+
+  @doc """
+  Membuat file submission setelah memastikan user adalah Author pemiliknya.
+  """
+  def create_author_submission_file(
+        %User{user_id: user_id},
+        submission_id,
+        file_attrs,
+        submission_file_attrs
+      ) do
+    case Repo.get(Submission, submission_id) do
+      nil ->
+        {:error, :submission_not_found}
+
+      submission ->
+        if author_owns_submission?(submission_id, user_id) do
+          create_submission_file(submission, file_attrs, submission_file_attrs)
+        else
+          {:error, :not_authorized}
+        end
+    end
   end
 
   @doc """

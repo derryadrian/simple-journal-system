@@ -192,4 +192,66 @@ defmodule SimpleJournalSystem.SubmissionsTest do
              )
     end
   end
+
+  describe "create_author_submission_file/4" do
+    test "Author yang ditugaskan boleh membuat file submission" do
+      user = author_fixture(1)
+      submission = submission_fixture()
+
+      group =
+        Repo.one!(
+          from ug in UserGroup,
+            join: uug in UserUserGroup,
+            on: uug.user_group_id == ug.user_group_id,
+            where:
+              uug.user_id == ^user.user_id and
+                ug.context_id == 1 and
+                ug.role_id == ^Roles.author(),
+            select: ug
+        )
+
+      Repo.insert!(%StageAssignment{
+        submission_id: submission.submission_id,
+        user_id: user.user_id,
+        user_group_id: group.user_group_id,
+        date_assigned: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      })
+
+      assert {:ok, %{file: file, submission_file: submission_file}} =
+               Submissions.create_author_submission_file(
+                 user,
+                 submission.submission_id,
+                 %{path: "test/author.pdf", mimetype: "application/pdf"},
+                 %{file_stage: 1}
+               )
+
+      assert file.path == "test/author.pdf"
+      assert submission_file.submission_id == submission.submission_id
+    end
+
+    test "user yang bukan Author pemilik ditolak" do
+      user = user_fixture()
+      submission = submission_fixture()
+
+      assert {:error, :not_authorized} =
+               Submissions.create_author_submission_file(
+                 user,
+                 submission.submission_id,
+                 %{path: "test/unauthorized.pdf", mimetype: "application/pdf"},
+                 %{file_stage: 1}
+               )
+    end
+
+    test "submission yang tidak ditemukan ditolak" do
+      user = user_fixture()
+
+      assert {:error, :submission_not_found} =
+               Submissions.create_author_submission_file(
+                 user,
+                 -1,
+                 %{path: "test/missing.pdf", mimetype: "application/pdf"},
+                 %{file_stage: 1}
+               )
+    end
+  end
 end

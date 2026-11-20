@@ -23,6 +23,10 @@ end
 config :simple_journal_system, SimpleJournalSystemWeb.Endpoint,
   http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 
+config :simple_journal_system,
+       :upload_dir,
+       Path.expand(System.get_env("UPLOAD_DIR") || "../uploads", __DIR__)
+
 if config_env() == :dev do
   # Reload browser tabs when matching files change.
   config :simple_journal_system, SimpleJournalSystemWeb.Endpoint,
