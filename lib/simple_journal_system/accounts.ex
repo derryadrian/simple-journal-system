@@ -31,11 +31,11 @@ defmodule SimpleJournalSystem.Accounts do
     Repo.one(query)
   end
 
-  # Fungsi login utama – mendukung Bcrypt DAN legacy SHA1 (OJS)
+  # Fungsi login utama – hanya mengizinkan user aktif
   def get_user_by_email_and_password(email, password) do
     user = get_user_by_email_or_username(email)
 
-    if user && verify_password(password, user.hashed_password) do
+    if user && user.disabled == 0 && verify_password(password, user.hashed_password) do
       maybe_upgrade_hash(user, password)
       user
     else
@@ -111,13 +111,13 @@ defmodule SimpleJournalSystem.Accounts do
     {:ok, query} = UserToken.verify_session_token_query(token)
 
     case Repo.one(query) do
-      {user, inserted_at} ->
+      {user, inserted_at} when user.disabled == 0 ->
         {
           Repo.preload(user, user_user_groups: :user_group),
           inserted_at
         }
 
-      nil ->
+      _ ->
         nil
     end
   end

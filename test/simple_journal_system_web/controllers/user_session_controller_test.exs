@@ -2,7 +2,6 @@ defmodule SimpleJournalSystemWeb.UserSessionControllerTest do
   use SimpleJournalSystemWeb.ConnCase, async: true
 
   import SimpleJournalSystem.AccountsFixtures
-  alias SimpleJournalSystem.Accounts
 
   setup do
     %{unconfirmed_user: unconfirmed_user_fixture(), user: user_fixture()}
@@ -72,6 +71,26 @@ defmodule SimpleJournalSystemWeb.UserSessionControllerTest do
     end
   end
 
+  test "rejects login for disabled user", %{conn: conn, user: user} do
+    user = set_password(user)
+
+    user
+    |> Ecto.Changeset.change(disabled: 1)
+    |> SimpleJournalSystem.Repo.update!()
+
+    conn =
+      post(conn, ~p"/users/log-in", %{
+        "user" => %{
+          "email" => user.email,
+          "password" => valid_user_password()
+        }
+      })
+
+    refute get_session(conn, :user_token)
+    assert redirected_to(conn) == ~p"/users/log-in"
+    assert Phoenix.Flash.get(conn.assigns.flash, :error) == "Invalid email or password"
+  end
+
   describe "POST /users/log-in - magic link" do
     @describetag :skip
     test "logs the user in", %{conn: conn, user: user} do
@@ -107,7 +126,10 @@ defmodule SimpleJournalSystemWeb.UserSessionControllerTest do
       assert redirected_to(conn) == ~p"/"
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "User confirmed successfully."
 
-      assert Accounts.get_user!(user.id).confirmed_at
+      assert SimpleJournalSystem.Repo.get!(
+               SimpleJournalSystem.Accounts.User,
+               user.id
+             ).confirmed_at
 
       # Now do a logged in request and assert on the menu
       conn = get(conn, ~p"/")

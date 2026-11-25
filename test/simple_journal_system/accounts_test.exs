@@ -39,6 +39,27 @@ defmodule SimpleJournalSystem.AccountsTest do
     end
   end
 
+  describe "get_user_by_session_token/1" do
+    test "returns user for active session", %{user: user} do
+      token = Accounts.generate_user_session_token(user)
+
+      assert {authenticated_user, _inserted_at} =
+               Accounts.get_user_by_session_token(token)
+
+      assert authenticated_user.user_id == user.user_id
+    end
+
+    test "returns nil for disabled user session", %{user: user} do
+      token = Accounts.generate_user_session_token(user)
+
+      user
+      |> Ecto.Changeset.change(disabled: 1)
+      |> Repo.update!()
+
+      assert Accounts.get_user_by_session_token(token) == nil
+    end
+  end
+
   describe "SHA1 legacy password fallback" do
     @tag :auth
     test "logs in user with SHA1 legacy password", %{user: user} do

@@ -67,7 +67,7 @@ defmodule SimpleJournalSystemWeb.Router do
     pipe_through [:browser, :admin]
 
     live_session :admin_users,
-      on_mount: [{SimpleJournalSystemWeb.UserAuth, :require_authenticated}] do
+      on_mount: [{SimpleJournalSystemWeb.UserAuth, :require_admin}] do
       live "/users", AdminLive.UsersLive, :index
     end
 

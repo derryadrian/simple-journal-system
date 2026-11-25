@@ -186,6 +186,39 @@ defmodule SimpleJournalSystemWeb.UserAuth do
     end
   end
 
+  def on_mount(:require_admin, _params, session, socket) do
+    socket = mount_current_scope(socket, session)
+
+    case socket.assigns.current_scope do
+      %{user: user} when not is_nil(user) ->
+        if SimpleJournalSystem.Authorization.has_role_in_journal?(
+             user,
+             SimpleJournalSystem.Accounts.Roles.site_admin(),
+             nil
+           ) do
+          {:cont, socket}
+        else
+          socket =
+            socket
+            |> Phoenix.LiveView.put_flash(
+              :error,
+              "You are not authorized to access this page."
+            )
+            |> Phoenix.LiveView.redirect(to: ~p"/")
+
+          {:halt, socket}
+        end
+
+      _ ->
+        socket =
+          socket
+          |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+          |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
+
+        {:halt, socket}
+    end
+  end
+
   def on_mount(:require_sudo_mode, _params, session, socket) do
     socket = mount_current_scope(socket, session)
 
