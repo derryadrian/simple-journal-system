@@ -4,6 +4,21 @@ defmodule SimpleJournalSystemWeb.UserSessionController do
   alias SimpleJournalSystem.Accounts
   alias SimpleJournalSystemWeb.UserAuth
 
+  # Login via magic link token (confirm + login)
+  def create(conn, %{"user" => %{"token" => token}} = params) do
+    case Accounts.login_user_by_magic_link(token) do
+      {:ok, {user, _expired_tokens}} ->
+        conn
+        |> put_flash(:info, "User confirmed successfully.")
+        |> UserAuth.log_in_user(user, params["user"])
+
+      :error ->
+        conn
+        |> put_flash(:error, "Magic link is invalid or it has expired.")
+        |> redirect(to: ~p"/users/log-in")
+    end
+  end
+
   # Login menggunakan email/username + password (flow OJS)
   def create(conn, %{"user" => user_params}) do
     %{

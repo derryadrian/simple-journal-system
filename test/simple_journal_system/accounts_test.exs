@@ -459,8 +459,17 @@ defmodule SimpleJournalSystem.AccountsTest do
   end
 
   describe "login_user_by_magic_link/1" do
-    test "confirms user and expires tokens" do
-      user = unconfirmed_user_fixture()
+        test "confirms user and expires tokens" do
+      # Bikin user langsung lewat Repo (tanpa password), biar lolos dari guard
+            user =
+        %User{
+          user_id: 1000,
+          username: "magic_link_user",
+          email: "magic_link@example.com",
+          date_registered: NaiveDateTime.utc_now(:second),
+          disabled: 0 # <--- TAMBAHIN INI
+        }
+        |> Repo.insert!()
 
       refute user.confirmed_at
 
@@ -471,6 +480,18 @@ defmodule SimpleJournalSystem.AccountsTest do
                Accounts.login_user_by_magic_link(encoded_token)
 
       assert user.confirmed_at
+    end
+
+    test "raises when trying to login via magic link if user has password" do
+      # Bikin user yang punya password, tapi belum dikonfirmasi
+      user = unconfirmed_user_fixture()
+
+      {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
+
+      # Pastiin dia error (guard-nya bekerja)
+      assert_raise RuntimeError, ~r/magic link log in is not allowed/, fn ->
+        Accounts.login_user_by_magic_link(encoded_token)
+      end
     end
 
     test "returns user and (deleted) token for confirmed user" do

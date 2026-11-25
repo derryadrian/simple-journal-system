@@ -36,9 +36,17 @@ defmodule SimpleJournalSystem.SubmissionsTest do
 
     test "update_submission/2 with valid data updates the submission" do
       submission = submission_fixture()
-      update_attrs = %{status: 43, title: "some updated title", abstract: "some updated abstract", journal_id: 43}
 
-      assert {:ok, %Submission{} = submission} = Submissions.update_submission(submission, update_attrs)
+      update_attrs = %{
+        status: 43,
+        title: "some updated title",
+        abstract: "some updated abstract",
+        journal_id: 43
+      }
+
+      assert {:ok, %Submission{} = submission} =
+               Submissions.update_submission(submission, update_attrs)
+
       assert submission.status == 43
       assert submission.title == "some updated title"
       assert submission.abstract == "some updated abstract"
@@ -47,7 +55,10 @@ defmodule SimpleJournalSystem.SubmissionsTest do
 
     test "update_submission/2 with invalid data returns error changeset" do
       submission = submission_fixture()
-      assert {:error, %Ecto.Changeset{}} = Submissions.update_submission(submission, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Submissions.update_submission(submission, @invalid_attrs)
+
       assert submission == Submissions.get_submission!(submission.id)
     end
 

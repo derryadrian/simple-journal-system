@@ -75,10 +75,10 @@ defmodule SimpleJournalSystemWeb.Router do
     end
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", SimpleJournalSystemWeb do
-  #   pipe_through :api
-  # end
+    scope "/api", SimpleJournalSystemWeb.Api, as: :api do
+    pipe_through :api
+    post "/register", RegisterController, :create
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:simple_journal_system, :dev_routes) do

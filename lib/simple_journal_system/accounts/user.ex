@@ -88,7 +88,9 @@ defmodule SimpleJournalSystem.Accounts.User do
     |> validate_confirmation(:password, message: "does not match password")
     |> validate_length(:password, min: 6)
     |> unsafe_validate_unique(:email, SimpleJournalSystem.Repo)
+    |> unique_constraint(:email, name: :users_lower_email_index)
     |> unsafe_validate_unique(:username, SimpleJournalSystem.Repo)
+    |> unique_constraint(:username)
     |> put_password_hash()
     |> put_user_id()
     |> put_default_values()
@@ -117,7 +119,7 @@ defmodule SimpleJournalSystem.Accounts.User do
     if Keyword.get(opts, :validate_unique, true) do
       changeset
       |> unsafe_validate_unique(:email, SimpleJournalSystem.Repo)
-      |> unique_constraint(:email)
+      |> unique_constraint(:email, name: :users_lower_email_index)
     else
       changeset
     end
