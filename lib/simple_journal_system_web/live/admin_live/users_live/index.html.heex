@@ -1,9 +1,4 @@
-<Layouts.app
-  flash={@flash}
-  current_scope={@current_scope}
-  current_journal={@current_journal}
-  user_journals={@user_journals}
->
+<Layouts.app flash={@flash} current_scope={@current_scope}>
   <div class="max-w-full mx-auto px-6 py-8">
     <div class="bg-white border-x border-gray-200 p-8">
       <div class="flex justify-between items-center mb-6">
@@ -203,47 +198,94 @@
 
       <!-- Roles Modal -->
       <%= if @show_roles_modal do %>
-        <div
-          class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          phx-click="close_modal"
-        >
-          <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4" phx-click-away="close_modal">
-            <h2 class="text-xl font-bold mb-4">Edit Roles for {@modal_user.username}</h2>
+        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div
+            class="bg-white rounded-lg p-6 w-full max-w-md mx-4"
+            phx-click-away="close_modal"
+          >
+            <div id="roles-modal-content">
+              <h2 class="text-xl font-bold mb-4">
+                Edit Roles for {@modal_user.username}
+              </h2>
 
-            <.form
-              for={@roles_form}
-              phx-submit="save_roles"
-              phx-change="save_roles"
-              class="space-y-4"
-            >
-              <input type="hidden" name="user_id" value={@modal_user.user_id} />
+              <form phx-change="change_role_journal" class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Journal
+                </label>
+                <select
+                  name="journal_id"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md"
+                >
+                  <option value="">Select Journal</option>
+                  <%= for journal <- @journals do %>
+                    <option
+                      value={journal.journal_id}
+                      selected={journal.journal_id == @modal_journal_id}
+                    >
+                      {journal.path}
+                    </option>
+                  <% end %>
+                </select>
+              </form>
 
-              <div class="max-h-64 overflow-y-auto space-y-2">
-                <%= for {role_name, role_id} <- @all_roles do %>
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <.input
-                      name="role_ids[]"
-                      type="checkbox"
-                      value={role_id}
-                      class="h-4 w-4 rounded border-gray-300 text-[#1b629b] focus:ring-0"
-                    />
-                    <span class="text-sm text-gray-700">{role_name} ({role_id})</span>
-                  </label>
-                <% end %>
-              </div>
+              <.form
+                for={@roles_form}
+                phx-submit="save_roles"
+                id="roles-form"
+                class="space-y-4"
+              >
+                <input
+                  type="hidden"
+                  name="user_id"
+                  value={@modal_user.user_id}
+                />
 
-              <div class="flex justify-end gap-3 mt-4">
-                <button
-                  type="button"
-                  phx-click="close_modal"
-                  class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded"
-                >Cancel</button>
-                <button
-                  type="submit"
-                  class="px-4 py-2 bg-[#1b629b] hover:bg-[#155282] text-white rounded"
-                >Save Roles</button>
-              </div>
-            </.form>
+                <div class="max-h-64 overflow-y-auto space-y-2">
+                  <%= for group <- @modal_groups do %>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="group_ids[]"
+                        value={group.user_group_id}
+                        checked={group.user_group_id in @selected_group_ids}
+                        class="h-4 w-4 rounded border-gray-300 text-[#1b629b]"
+                      />
+                      <span class="text-sm text-gray-700">
+                        {group.user_group_settings
+                        |> Enum.find(&(&1.setting_name == "name" and &1.locale == "id"))
+                        |> case do
+                          nil -> Roles.name(group.role_id)
+                          setting -> setting.setting_value
+                        end} — Group #{group.user_group_id}
+                      </span>
+                    </label>
+                  <% end %>
+
+                  <%= if @modal_groups == [] do %>
+                    <p class="text-sm text-gray-500">
+                      No user groups available for this journal.
+                    </p>
+                  <% end %>
+                </div>
+
+                <div class="flex justify-end gap-3 mt-4">
+                  <button
+                    type="button"
+                    phx-click="close_modal"
+                    class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    class="px-4 py-2 bg-[#1b629b] hover:bg-[#155282] text-white rounded"
+                    disabled={@modal_journal_id == nil}
+                  >
+                    Save Roles
+                  </button>
+                </div>
+              </.form>
+            </div>
           </div>
         </div>
       <% end %>

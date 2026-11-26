@@ -171,7 +171,12 @@ defmodule SimpleJournalSystem.Accounts do
   Lists all user groups for a journal.
   """
   def list_user_groups(journal_id) do
-    Repo.all(from ug in UserGroup, where: ug.context_id == ^journal_id, order_by: ug.role_id)
+    Repo.all(
+      from ug in UserGroup,
+        where: ug.context_id == ^journal_id,
+        order_by: ug.role_id
+    )
+    |> Repo.preload(:user_group_settings)
   end
 
   @doc """
@@ -609,21 +614,14 @@ defmodule SimpleJournalSystem.Accounts do
       end
 
     query =
-      if filters[:role_id] do
+      if filters[:role_id] || filters[:journal_id] do
         from u in query,
           join: uug in assoc(u, :user_user_groups),
           join: ug in assoc(uug, :user_group),
-          where: ug.role_id == ^filters[:role_id]
-      else
-        query
-      end
-
-    query =
-      if filters[:journal_id] do
-        from u in query,
-          join: uug in assoc(u, :user_user_groups),
-          join: ug in assoc(uug, :user_group),
-          where: ug.context_id == ^filters[:journal_id]
+          where:
+            (is_nil(^filters[:role_id]) or ug.role_id == ^filters[:role_id]) and
+              (is_nil(^filters[:journal_id]) or
+                 ug.context_id == ^filters[:journal_id])
       else
         query
       end
