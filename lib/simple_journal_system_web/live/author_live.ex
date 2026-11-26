@@ -145,17 +145,24 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
     {:noreply, socket}
   end
 
-  defp handle_upload_progress(:manuscript, entry, socket) do
-    IO.inspect(
-      %{
-        filename: entry.client_name,
-        progress: entry.progress,
-        done?: entry.done?
-      },
-      label: "MANUSCRIPT UPLOAD PROGRESS"
-    )
+  def handle_event("save_metadata", %{"title" => title, "abstract" => abstract}, socket) do
+    submission = socket.assigns.started_submission
+    user = socket.assigns.current_scope.user
 
-    {:noreply, socket}
+    case Submissions.update_author_metadata(
+           submission.submission_id,
+           user.user_id,
+           %{"title" => title, "abstract" => abstract}
+         ) do
+      {:ok, _publication} ->
+        {:noreply, put_flash(socket, :info, "Judul dan abstrak berhasil disimpan.")}
+
+      {:error, :title_required} ->
+        {:noreply, put_flash(socket, :error, "Judul wajib diisi.")}
+
+      {:error, _reason} ->
+        {:noreply, put_flash(socket, :error, "Gagal menyimpan metadata submission.")}
+    end
   end
 
   def handle_event("save_upload", _params, socket) do
@@ -183,12 +190,7 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
 
         case results do
           [{:ok, _result}] ->
-            socket =
-              socket
-              |> put_flash(:info, "Manuskrip berhasil diunggah.")
-              |> assign(:started_submission, nil)
-
-            {:noreply, socket}
+            {:noreply, put_flash(socket, :info, "Manuskrip berhasil diunggah.")}
 
           [{:error, reason}] ->
             {:noreply, put_flash(socket, :error, "Gagal menyimpan manuskrip: #{inspect(reason)}")}
@@ -197,6 +199,19 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
             {:noreply, put_flash(socket, :error, "Upload manuskrip gagal.")}
         end
     end
+  end
+
+  defp handle_upload_progress(:manuscript, entry, socket) do
+    IO.inspect(
+      %{
+        filename: entry.client_name,
+        progress: entry.progress,
+        done?: entry.done?
+      },
+      label: "MANUSCRIPT UPLOAD PROGRESS"
+    )
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -223,9 +238,34 @@ defmodule SimpleJournalSystemWeb.AuthorLive do
                 <p class="mt-1 text-sm text-base-content/75">
                   Your draft has been saved. Submission ID: <strong class="font-mono">{@started_submission.submission_id}</strong>.
                 </p>
-                <p class="mt-2 text-sm text-base-content/70">
-                  You can continue with the next wizard step once the submission details page is available.
-                </p>
+                <form phx-submit="save_metadata" class="mt-5 space-y-4">
+                  <div class="space-y-2">
+                    <label for="title" class="label font-medium">Submission Title *</label>
+                    <input
+                      id="title"
+                      name="title"
+                      type="text"
+                      class="input input-bordered w-full"
+                      placeholder="Enter manuscript title"
+                      required
+                    />
+                  </div>
+
+                  <div class="space-y-2">
+                    <label for="abstract" class="label font-medium">Abstract</label>
+                    <textarea
+                      id="abstract"
+                      name="abstract"
+                      class="textarea textarea-bordered w-full"
+                      rows="5"
+                      placeholder="Enter manuscript abstract"
+                    ></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">
+                    Save Details
+                  </button>
+                </form>
                 <form
                   id="manuscript-upload-form"
                   phx-change="validate_upload"

@@ -7,6 +7,7 @@ defmodule SimpleJournalSystemWeb.AuthorLiveTest do
   alias SimpleJournalSystem.Journals
   alias SimpleJournalSystem.Repo
   alias SimpleJournalSystem.Submissions.Submission
+  alias SimpleJournalSystem.Submissions.PublicationSetting
 
   setup %{conn: conn} do
     {:ok, journal} =
@@ -50,5 +51,40 @@ defmodule SimpleJournalSystemWeb.AuthorLiveTest do
     assert submission.stage_id == 1
     assert submission.status == 1
     assert submission.submission_progress == "start"
+  end
+
+  test "author can save submission metadata through the form", %{
+    conn: conn,
+    journal: journal
+  } do
+    {:ok, view, _html} = live(conn, "/author")
+
+    view
+    |> form("#submission-start-form", %{
+      "journal_id" => to_string(journal.journal_id),
+      "locale" => "id"
+    })
+    |> render_submit()
+
+    metadata_form =
+      form(view, "form[phx-submit='save_metadata']", %{
+        "title" => "Judul Tes LiveView",
+        "abstract" => "Abstrak Tes LiveView"
+      })
+
+    html = render_submit(metadata_form)
+
+    assert html =~ "Judul dan abstrak berhasil disimpan."
+
+    submission = Repo.get_by!(Submission, context_id: journal.journal_id)
+
+    title =
+      Repo.get_by!(PublicationSetting,
+        publication_id: submission.current_publication_id,
+        locale: "id",
+        setting_name: "title"
+      )
+
+    assert title.setting_value == "Judul Tes LiveView"
   end
 end

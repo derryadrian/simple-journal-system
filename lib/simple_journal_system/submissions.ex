@@ -14,6 +14,7 @@ defmodule SimpleJournalSystem.Submissions do
   alias SimpleJournalSystem.Journals.Journal
   alias SimpleJournalSystem.Submissions.Author
   alias SimpleJournalSystem.Submissions.Publication
+  alias SimpleJournalSystem.Submissions.PublicationSetting
   alias SimpleJournalSystem.Submissions.Section
   alias SimpleJournalSystem.Submissions.StageAssignment
   alias SimpleJournalSystem.Submissions.Submission
@@ -200,6 +201,75 @@ defmodule SimpleJournalSystem.Submissions do
   """
   def change_submission(%Submission{} = submission, attrs \\ %{}) do
     Submission.changeset(submission, attrs)
+  end
+
+  @doc """
+  Menyimpan judul dan abstrak publikasi milik author.
+  Hanya dapat dilakukan selama submission masih draft.
+  """
+  def update_author_metadata(submission_id, user_id, attrs) do
+    submission = Repo.get(Submission, submission_id)
+
+    cond do
+      is_nil(submission) ->
+        {:error, :submission_not_found}
+
+      not author_owns_submission?(submission_id, user_id) ->
+        {:error, :not_authorized}
+
+      submission.submission_progress in [nil, ""] ->
+        {:error, :already_submitted}
+
+      true ->
+        publication = Repo.get(Publication, submission.current_publication_id)
+
+        if is_nil(publication) do
+          {:error, :publication_not_found}
+        else
+          title = String.trim(Map.get(attrs, "title", ""))
+          abstract = String.trim(Map.get(attrs, "abstract", ""))
+
+          if title == "" do
+            {:error, :title_required}
+          else
+            now = now()
+
+            Repo.transaction(fn ->
+              Enum.each(
+                [{"title", title}, {"abstract", abstract}],
+                fn {name, value} ->
+                  setting =
+                    Repo.get_by(PublicationSetting,
+                      publication_id: publication.publication_id,
+                      locale: submission.locale || "",
+                      setting_name: name
+                    )
+
+                  changeset =
+                    PublicationSetting.changeset(
+                      setting || %PublicationSetting{},
+                      %{
+                        publication_id: publication.publication_id,
+                        locale: submission.locale || "",
+                        setting_name: name,
+                        setting_value: value
+                      }
+                    )
+
+                  case Repo.insert_or_update(changeset) do
+                    {:ok, _setting} -> :ok
+                    {:error, changeset} -> Repo.rollback(changeset)
+                  end
+                end
+              )
+
+              publication
+              |> Ecto.Changeset.change(last_modified: now)
+              |> Repo.update!()
+            end)
+          end
+        end
+    end
   end
 
   ## Begin Submission (langkah pertama wizard author)

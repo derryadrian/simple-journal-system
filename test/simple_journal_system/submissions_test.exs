@@ -14,6 +14,7 @@ defmodule SimpleJournalSystem.SubmissionsTest do
   alias SimpleJournalSystem.Accounts.UserGroup
   alias SimpleJournalSystem.Accounts.UserUserGroup
   alias SimpleJournalSystem.Submissions.StageAssignment
+  alias SimpleJournalSystem.Submissions.PublicationSetting
 
   describe "create_submission/1" do
     test "naskah baru mulai di stage 1, status queued, progress start" do
@@ -77,6 +78,80 @@ defmodule SimpleJournalSystem.SubmissionsTest do
       reloaded = Submissions.get_submission!(submission.submission_id)
       assert reloaded.submission_progress == ""
       assert reloaded.date_submitted
+    end
+  end
+
+  describe "update_author_metadata/3" do
+    test "author berhasil menyimpan judul dan abstrak" do
+      user = author_fixture(1)
+      assert {:ok, result} = Submissions.start_submission(user, 1)
+
+      submission = result.submission
+      publication = result.publication
+
+      result =
+        Submissions.update_author_metadata(
+          submission.submission_id,
+          user.user_id,
+          %{"title" => "Judul Tes", "abstract" => "Abstrak Tes"}
+        )
+
+      assert {:ok, _} = result
+
+      title =
+        Repo.get_by!(PublicationSetting,
+          publication_id: publication.publication_id,
+          locale: "id",
+          setting_name: "title"
+        )
+
+      abstract =
+        Repo.get_by!(PublicationSetting,
+          publication_id: publication.publication_id,
+          locale: "id",
+          setting_name: "abstract"
+        )
+
+      assert title.setting_value == "Judul Tes"
+      assert abstract.setting_value == "Abstrak Tes"
+    end
+
+    test "user lain tidak boleh mengubah metadata" do
+      author = author_fixture(1)
+      other_user = author_fixture(1)
+      assert {:ok, result} = Submissions.start_submission(author, 1)
+
+      assert {:error, :not_authorized} =
+               Submissions.update_author_metadata(
+                 result.submission.submission_id,
+                 other_user.user_id,
+                 %{"title" => "Judul Ilegal", "abstract" => ""}
+               )
+    end
+
+    test "metadata tidak bisa diubah setelah submission dikirim" do
+      user = author_fixture(1)
+      assert {:ok, result} = Submissions.start_submission(user, 1)
+      assert {:ok, submitted} = Submissions.submit_submission(result.submission)
+
+      assert {:error, :already_submitted} =
+               Submissions.update_author_metadata(
+                 submitted.submission_id,
+                 user.user_id,
+                 %{"title" => "Judul Baru", "abstract" => ""}
+               )
+    end
+
+    test "judul wajib diisi" do
+      user = author_fixture(1)
+      assert {:ok, result} = Submissions.start_submission(user, 1)
+
+      assert {:error, :title_required} =
+               Submissions.update_author_metadata(
+                 result.submission.submission_id,
+                 user.user_id,
+                 %{"title" => "  ", "abstract" => "Abstrak"}
+               )
     end
   end
 
