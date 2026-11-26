@@ -12,8 +12,8 @@ defmodule SimpleJournalSystem.AccountsTest do
     end
 
     test "returns the user if the email exists" do
-      %{id: id} = user = user_fixture()
-      assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
+      %{user_id: user_id} = user = user_fixture()
+      assert %User{user_id: ^user_id} = Accounts.get_user_by_email(user.email)
     end
   end
 
@@ -28,9 +28,9 @@ defmodule SimpleJournalSystem.AccountsTest do
     end
 
     test "returns the user if the email and password are valid" do
-      %{id: id} = user = user_fixture() |> set_password()
+      %{user_id: user_id} = user = user_fixture() |> set_password()
 
-      assert %User{id: ^id} =
+      assert %User{user_id: ^user_id} =
                Accounts.get_user_by_email_and_password(user.email, valid_user_password())
     end
   end
@@ -43,45 +43,51 @@ defmodule SimpleJournalSystem.AccountsTest do
     end
 
     test "returns the user with the given id" do
-      %{id: id} = user = user_fixture()
-      assert %User{id: ^id} = Accounts.get_user!(user.id)
+      %{user_id: user_id} = user = user_fixture()
+      assert %User{user_id: ^user_id} = Accounts.get_user!(user.user_id)
     end
   end
 
   describe "register_user/1" do
-    test "requires email to be set" do
+    test "requires username, email, and password to be set" do
       {:error, changeset} = Accounts.register_user(%{})
 
-      assert %{email: ["can't be blank"]} = errors_on(changeset)
+      assert %{
+               username: ["can't be blank"],
+               email: ["can't be blank"],
+               password: ["can't be blank"]
+             } = errors_on(changeset)
     end
 
     test "validates email when given" do
       {:error, changeset} = Accounts.register_user(%{email: "not valid"})
 
-      assert %{email: ["must have the @ sign and no spaces"]} = errors_on(changeset)
+      assert %{email: ["format email tidak valid"]} = errors_on(changeset)
     end
 
     test "validates maximum values for email for security" do
-      too_long = String.duplicate("db", 100)
-      {:error, changeset} = Accounts.register_user(%{email: too_long})
-      assert "should be at most 160 character(s)" in errors_on(changeset).email
+      too_long = String.duplicate("db", 130) <> "@example.com"
+      {:error, changeset} = Accounts.register_user(valid_user_attributes(email: too_long))
+      assert "should be at most 255 character(s)" in errors_on(changeset).email
     end
 
     test "validates email uniqueness" do
       %{email: email} = user_fixture()
-      {:error, changeset} = Accounts.register_user(%{email: email})
+      {:error, changeset} = Accounts.register_user(valid_user_attributes(email: email))
       assert "has already been taken" in errors_on(changeset).email
 
       # Now try with the uppercased email too, to check that email case is ignored.
-      {:error, changeset} = Accounts.register_user(%{email: String.upcase(email)})
+      {:error, changeset} =
+        Accounts.register_user(valid_user_attributes(email: String.upcase(email)))
+
       assert "has already been taken" in errors_on(changeset).email
     end
 
-    test "registers users without password" do
+    test "registers users with valid attributes" do
       email = unique_user_email()
       {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
       assert user.email == email
-      assert is_nil(user.hashed_password)
+      refute is_nil(user.hashed_password)
       assert is_nil(user.confirmed_at)
       assert is_nil(user.password)
     end
@@ -126,7 +132,7 @@ defmodule SimpleJournalSystem.AccountsTest do
 
       {:ok, token} = Base.url_decode64(token, padding: false)
       assert user_token = Repo.get_by(UserToken, token: :crypto.hash(:sha256, token))
-      assert user_token.user_id == user.id
+      assert user_token.user_id == user.user_id
       assert user_token.sent_to == user.email
       assert user_token.context == "change:current@example.com"
     end
@@ -147,26 +153,26 @@ defmodule SimpleJournalSystem.AccountsTest do
 
     test "updates the email with a valid token", %{user: user, token: token, email: email} do
       assert {:ok, %{email: ^email}} = Accounts.update_user_email(user, token)
-      changed_user = Repo.get!(User, user.id)
+      changed_user = Repo.get!(User, user.user_id)
       assert changed_user.email != user.email
       assert changed_user.email == email
-      refute Repo.get_by(UserToken, user_id: user.id)
+      assert !Repo.get_by(UserToken, user_id: user.user_id)
     end
 
     test "does not update email with invalid token", %{user: user} do
       assert Accounts.update_user_email(user, "oops") ==
                {:error, :transaction_aborted}
 
-      assert Repo.get!(User, user.id).email == user.email
-      assert Repo.get_by(UserToken, user_id: user.id)
+      assert Repo.get!(User, user.user_id).email == user.email
+      assert Repo.get_by(UserToken, user_id: user.user_id)
     end
 
     test "does not update email if user email changed", %{user: user, token: token} do
       assert Accounts.update_user_email(%{user | email: "current@example.com"}, token) ==
                {:error, :transaction_aborted}
 
-      assert Repo.get!(User, user.id).email == user.email
-      assert Repo.get_by(UserToken, user_id: user.id)
+      assert Repo.get!(User, user.user_id).email == user.email
+      assert Repo.get_by(UserToken, user_id: user.user_id)
     end
 
     test "does not update email if token expired", %{user: user, token: token} do
@@ -175,8 +181,8 @@ defmodule SimpleJournalSystem.AccountsTest do
       assert Accounts.update_user_email(user, token) ==
                {:error, :transaction_aborted}
 
-      assert Repo.get!(User, user.id).email == user.email
-      assert Repo.get_by(UserToken, user_id: user.id)
+      assert Repo.get!(User, user.user_id).email == user.email
+      assert Repo.get_by(UserToken, user_id: user.user_id)
     end
   end
 
@@ -248,7 +254,7 @@ defmodule SimpleJournalSystem.AccountsTest do
           password: "new valid password"
         })
 
-      refute Repo.get_by(UserToken, user_id: user.id)
+      refute Repo.get_by(UserToken, user_id: user.user_id)
     end
   end
 
@@ -267,7 +273,7 @@ defmodule SimpleJournalSystem.AccountsTest do
       assert_raise Ecto.ConstraintError, fn ->
         Repo.insert!(%UserToken{
           token: user_token.token,
-          user_id: user_fixture().id,
+          user_id: user_fixture().user_id,
           context: "session"
         })
       end
@@ -291,7 +297,7 @@ defmodule SimpleJournalSystem.AccountsTest do
 
     test "returns user by token", %{user: user, token: token} do
       assert {session_user, token_inserted_at} = Accounts.get_user_by_session_token(token)
-      assert session_user.id == user.id
+      assert session_user.user_id == user.user_id
       assert session_user.authenticated_at != nil
       assert token_inserted_at != nil
     end
@@ -316,7 +322,7 @@ defmodule SimpleJournalSystem.AccountsTest do
 
     test "returns user by token", %{user: user, token: token} do
       assert session_user = Accounts.get_user_by_magic_link_token(token)
-      assert session_user.id == user.id
+      assert session_user.user_id == user.user_id
     end
 
     test "does not return user for invalid token" do
@@ -350,14 +356,12 @@ defmodule SimpleJournalSystem.AccountsTest do
       assert {:error, :not_found} = Accounts.login_user_by_magic_link(encoded_token)
     end
 
-    test "raises when unconfirmed user has password set" do
-      user = unconfirmed_user_fixture()
-      {1, nil} = Repo.update_all(User, set: [hashed_password: "hashed"])
+    test "does not login disabled user" do
+      user = user_fixture()
+      {1, nil} = Repo.update_all(User, set: [disabled: 1])
       {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
 
-      assert_raise RuntimeError, ~r/magic link log in is not allowed/, fn ->
-        Accounts.login_user_by_magic_link(encoded_token)
-      end
+      assert {:error, :not_found} = Accounts.login_user_by_magic_link(encoded_token)
     end
   end
 
@@ -383,9 +387,125 @@ defmodule SimpleJournalSystem.AccountsTest do
 
       {:ok, token} = Base.url_decode64(token, padding: false)
       assert user_token = Repo.get_by(UserToken, token: :crypto.hash(:sha256, token))
-      assert user_token.user_id == user.id
+      assert user_token.user_id == user.user_id
       assert user_token.sent_to == user.email
       assert user_token.context == "login"
+    end
+  end
+
+  describe "deliver_user_reset_password_instructions/1" do
+    setup do
+      %{user: user_fixture()}
+    end
+
+    test "sends reset password instructions with valid URL", %{user: user} do
+      url = extract_url(fn -> Accounts.deliver_user_reset_password_instructions(user) end)
+
+      assert String.starts_with?(url, "/users/reset_password/")
+
+      token = String.replace_prefix(url, "/users/reset_password/", "")
+      assert %User{user_id: user_id} = Accounts.get_user_by_reset_password_token(token)
+      assert user_id == user.user_id
+    end
+
+    defp extract_url(fun) do
+      {:ok, captured_email} = fun.()
+      [url] = Regex.run(~r{/users/reset_password/\S+}, captured_email.text_body)
+      url
+    end
+  end
+
+  describe "get_user_by_reset_password_token/1" do
+    setup do
+      user = user_fixture()
+      {encoded_token, _hashed_token} = generate_user_reset_password_token(user)
+      %{user: user, token: encoded_token}
+    end
+
+    test "returns user by token", %{user: user, token: token} do
+      assert %User{} = returned_user = Accounts.get_user_by_reset_password_token(token)
+      assert returned_user.user_id == user.user_id
+    end
+
+    test "does not return user for invalid token" do
+      refute Accounts.get_user_by_reset_password_token("oops")
+    end
+
+    test "does not return user for expired token", %{token: token} do
+      {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
+      refute Accounts.get_user_by_reset_password_token(token)
+    end
+  end
+
+  describe "reset_user_password/2" do
+    setup do
+      user = user_fixture()
+      {encoded_token, _hashed_token} = generate_user_reset_password_token(user)
+      %{user: user, token: encoded_token}
+    end
+
+    test "resets password with valid token", %{user: user, token: token} do
+      assert {:ok, updated_user} =
+               Accounts.reset_user_password(token, %{
+                 "password" => "new valid password",
+                 "password_confirmation" => "new valid password"
+               })
+
+      assert updated_user.user_id == user.user_id
+      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
+    end
+
+    test "does not reset password with invalid token", %{user: user} do
+      assert Accounts.reset_user_password("oops", %{
+               "password" => "new valid password",
+               "password_confirmation" => "new valid password"
+             }) == :error
+
+      refute Accounts.get_user_by_email_and_password(user.email, "new valid password")
+    end
+
+    test "does not reset password with expired token", %{user: user, token: token} do
+      {1, nil} = Repo.update_all(UserToken, set: [inserted_at: ~N[2020-01-01 00:00:00]])
+
+      assert Accounts.reset_user_password(token, %{
+               "password" => "new valid password",
+               "password_confirmation" => "new valid password"
+             }) == :error
+
+      refute Accounts.get_user_by_email_and_password(user.email, "new valid password")
+    end
+
+    test "does not allow reuse of token after successful reset", %{user: user, token: token} do
+      assert {:ok, _} =
+               Accounts.reset_user_password(token, %{
+                 "password" => "new valid password",
+                 "password_confirmation" => "new valid password"
+               })
+
+      assert Accounts.reset_user_password(token, %{
+               "password" => "another valid password",
+               "password_confirmation" => "another valid password"
+             }) == :error
+
+      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
+    end
+
+    test "does not reset with invalid password", %{user: user, token: token} do
+      assert Accounts.reset_user_password(token, %{
+               "password" => "short",
+               "password_confirmation" => "short"
+             }) == :error
+
+      refute Accounts.get_user_by_email_and_password(user.email, "short")
+    end
+
+    test "does not reset with password confirmation mismatch", %{user: user, token: token} do
+      assert Accounts.reset_user_password(token, %{
+               "password" => "new valid password",
+               "password_confirmation" => "different password"
+             }) == :error
+
+      refute Accounts.get_user_by_email_and_password(user.email, "new valid password")
     end
   end
 

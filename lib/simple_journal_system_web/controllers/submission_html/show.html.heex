@@ -1,6 +1,6 @@
 <Layouts.app flash={@flash}>
   <.header>
-    Submission {@submission.id}
+    Submission {@submission.submission_id}
     <:subtitle>This is a submission record from your database.</:subtitle>
     <:actions>
       <.button navigate={~p"/submissions"}>
@@ -12,10 +12,12 @@
     </:actions>
   </.header>
 
-  <.list>
-    <:item title="Title">{@submission.title}</:item>
-    <:item title="Abstract">{@submission.abstract}</:item>
+   <.list>
+    <:item title="Context ID">{@submission.context_id}</:item>
+    <:item title="Stage ID">{@submission.stage_id}</:item>
     <:item title="Status">{@submission.status}</:item>
-    <:item title="Journal">{@submission.journal_id}</:item>
+    <:item title="Locale">{@submission.locale}</:item>
+    <:item title="Submission Progress">{@submission.submission_progress}</:item>
+    <:item title="Work Type">{@submission.work_type}</:item>
   </.list>
 </Layouts.app>

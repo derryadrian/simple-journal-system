@@ -4,7 +4,12 @@ defmodule SimpleJournalSystemWeb.SubmissionControllerTest do
   import SimpleJournalSystem.SubmissionsFixtures
 
   @create_attrs %{status: 42, title: "some title", abstract: "some abstract", journal_id: 42}
-  @update_attrs %{status: 43, title: "some updated title", abstract: "some updated abstract", journal_id: 43}
+  @update_attrs %{
+    status: 43,
+    title: "some updated title",
+    abstract: "some updated abstract",
+    journal_id: 43
+  }
   @invalid_attrs %{status: nil, title: nil, abstract: nil, journal_id: nil}
 
   describe "index" do

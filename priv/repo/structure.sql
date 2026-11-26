@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict xVEE46UqMPwIIeUtDT4PeB8aAjn4nsfcA8t7AI0XhijauJghp2rSSPUVleZqkyg
+\restrict kLXb86w0Ime9fZJJCFMqwd5sdgUrOMGOv595IF7n175rj4A2bbJra7yh7MQZ72v
 
--- Dumped from database version 16.14 (Ubuntu 16.14-0ubuntu0.24.04.1)
--- Dumped by pg_dump version 16.14 (Ubuntu 16.14-0ubuntu0.24.04.1)
+-- Dumped from database version 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)
+-- Dumped by pg_dump version 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -3285,6 +3285,13 @@ ALTER TABLE ONLY public.users_tokens
 
 
 --
+-- Name: users_email_unique; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_email_unique ON public.users USING btree (lower((email)::text));
+
+
+--
 -- Name: users_tokens_context_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3306,6 +3313,13 @@ CREATE INDEX users_tokens_user_id_index ON public.users_tokens USING btree (user
 
 
 --
+-- Name: users_username_unique; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX users_username_unique ON public.users USING btree (lower((username)::text));
+
+
+--
 -- Name: users_tokens users_tokens_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3317,7 +3331,8 @@ ALTER TABLE ONLY public.users_tokens
 -- PostgreSQL database dump complete
 --
 
-\unrestrict xVEE46UqMPwIIeUtDT4PeB8aAjn4nsfcA8t7AI0XhijauJghp2rSSPUVleZqkyg
+\unrestrict kLXb86w0Ime9fZJJCFMqwd5sdgUrOMGOv595IF7n175rj4A2bbJra7yh7MQZ72v
 
 INSERT INTO public."schema_migrations" (version) VALUES (20260723043341);
 INSERT INTO public."schema_migrations" (version) VALUES (20260724044658);
+INSERT INTO public."schema_migrations" (version) VALUES (20260925024047);

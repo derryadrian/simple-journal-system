@@ -14,7 +14,9 @@ defmodule SimpleJournalSystem.AccountsFixtures do
 
   def valid_user_attributes(attrs \\ %{}) do
     Enum.into(attrs, %{
-      email: unique_user_email()
+      email: unique_user_email(),
+      username: "user#{System.unique_integer([:positive])}",
+      password: valid_user_password()
     })
   end
 
@@ -74,6 +76,12 @@ defmodule SimpleJournalSystem.AccountsFixtures do
 
   def generate_user_magic_link_token(user) do
     {encoded_token, user_token} = Accounts.UserToken.build_email_token(user, "login")
+    SimpleJournalSystem.Repo.insert!(user_token)
+    {encoded_token, user_token.token}
+  end
+
+  def generate_user_reset_password_token(user) do
+    {encoded_token, user_token} = Accounts.UserToken.build_email_token(user, "reset_password")
     SimpleJournalSystem.Repo.insert!(user_token)
     {encoded_token, user_token.token}
   end

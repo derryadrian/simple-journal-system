@@ -1,8 +1,10 @@
 <.form :let={f} for={@changeset} action={@action}>
-  <.input field={f[:title]} type="text" label="Title" />
-  <.input field={f[:abstract]} type="textarea" label="Abstract" />
+  <.input field={f[:context_id]} type="number" label="Context ID" />
+  <.input field={f[:stage_id]} type="number" label="Stage ID" />
   <.input field={f[:status]} type="number" label="Status" />
-  <.input field={f[:journal_id]} type="number" label="Journal" />
+  <.input field={f[:locale]} type="text" label="Locale" />
+  <.input field={f[:submission_progress]} type="text" label="Submission Progress" />
+  <.input field={f[:work_type]} type="number" label="Work Type" />
   <footer>
     <.button variant="primary">Save Submission</.button>
     <.button :if={@return_to} href={@return_to}>Cancel</.button>

@@ -25,11 +25,11 @@
         <tbody>
           <%= for issue <- @issues do %>
             <tr class="border-t border-gray-200 hover:bg-gray-50">
-              <td class="px-4 py-3"><%= issue.issue_id %></td>
-              <td class="px-4 py-3"><%= issue.volume %></td>
-              <td class="px-4 py-3"><%= issue.number %></td>
-              <td class="px-4 py-3"><%= issue.year %></td>
-              <td class="px-4 py-3"><%= issue.published %></td>
+              <td class="px-4 py-3">{issue.issue_id}</td>
+              <td class="px-4 py-3">{issue.volume}</td>
+              <td class="px-4 py-3">{issue.number}</td>
+              <td class="px-4 py-3">{issue.year}</td>
+              <td class="px-4 py-3">{issue.published}</td>
               <td class="px-4 py-3 flex space-x-3">
                 <.link href={~p"/issues/#{issue}"} class="text-[#1b629b] hover:underline">
                   Show

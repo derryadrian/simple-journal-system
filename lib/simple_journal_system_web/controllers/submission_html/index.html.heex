@@ -9,10 +9,11 @@
   </.header>
 
   <.table id="submissions" rows={@submissions} row_click={&JS.navigate(~p"/submissions/#{&1}")}>
-    <:col :let={submission} label="Title">{submission.title}</:col>
-    <:col :let={submission} label="Abstract">{submission.abstract}</:col>
+    <:col :let={submission} label="Submission ID">{submission.submission_id}</:col>
+    <:col :let={submission} label="Context ID">{submission.context_id}</:col>
+    <:col :let={submission} label="Stage ID">{submission.stage_id}</:col>
     <:col :let={submission} label="Status">{submission.status}</:col>
-    <:col :let={submission} label="Journal">{submission.journal_id}</:col>
+    <:col :let={submission} label="Locale">{submission.locale}</:col>
     <:action :let={submission}>
       <div class="sr-only">
         <.link navigate={~p"/submissions/#{submission}"}>Show</.link>
