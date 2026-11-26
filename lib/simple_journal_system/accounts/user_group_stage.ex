@@ -19,7 +19,7 @@ defmodule SimpleJournalSystem.Accounts.UserGroupStage do
     |> cast(attrs, [:context_id, :user_group_id, :stage_id])
     |> validate_required([:context_id, :user_group_id, :stage_id])
     |> unique_constraint([:context_id, :user_group_id, :stage_id],
-      name: :user_group_stage_context_id_user_group_id_stage_id_key
+      name: :user_group_stage_unique
     )
   end
 end
