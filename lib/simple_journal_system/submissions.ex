@@ -18,6 +18,8 @@ defmodule SimpleJournalSystem.Submissions do
   alias SimpleJournalSystem.Submissions.Section
   alias SimpleJournalSystem.Submissions.StageAssignment
   alias SimpleJournalSystem.Submissions.Submission
+  alias SimpleJournalSystem.Ojs.FileStage
+  alias SimpleJournalSystem.Submissions.SubmissionFile
 
   @doc """
   Daftar naskah milik satu jurnal (`context_id`), yang terbaru lebih dulu.
@@ -191,9 +193,37 @@ defmodule SimpleJournalSystem.Submissions do
   `submission_progress` kosong.
   """
   def submit_submission(%Submission{} = submission) do
-    submission
-    |> Submission.submit_changeset()
-    |> Repo.update()
+    title =
+      Repo.get_by(PublicationSetting,
+        publication_id: submission.current_publication_id,
+        locale: submission.locale || "",
+        setting_name: "title"
+      )
+
+    has_manuscript =
+      Repo.exists?(
+        from sf in SubmissionFile,
+          where:
+            sf.submission_id == ^submission.submission_id and
+              sf.file_stage == ^FileStage.submission()
+      )
+
+    cond do
+      is_nil(submission.date_submitted) == false ->
+        {:error, :already_submitted}
+
+      is_nil(title) or is_nil(title.setting_value) or
+          String.trim(title.setting_value) == "" ->
+        {:error, :title_required}
+
+      not has_manuscript ->
+        {:error, :manuscript_required}
+
+      true ->
+        submission
+        |> Submission.submit_changeset()
+        |> Repo.update()
+    end
   end
 
   @doc """

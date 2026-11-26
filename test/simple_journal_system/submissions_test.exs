@@ -69,7 +69,24 @@ defmodule SimpleJournalSystem.SubmissionsTest do
 
   describe "submit_submission/1" do
     test "mengisi date_submitted dan mengosongkan submission_progress" do
-      submission = submission_fixture()
+      user = author_fixture(1)
+      assert {:ok, result} = Submissions.start_submission(user, 1)
+
+      submission = result.submission
+
+      assert {:ok, _} =
+               Submissions.update_author_metadata(
+                 submission.submission_id,
+                 user.user_id,
+                 %{"title" => "Judul Tes", "abstract" => "Abstrak Tes"}
+               )
+
+      assert {:ok, _} =
+               Submissions.create_submission_file(
+                 submission,
+                 %{path: "test/manuscript.pdf", mimetype: "application/pdf"},
+                 %{file_stage: SimpleJournalSystem.Ojs.FileStage.submission()}
+               )
 
       assert {:ok, submitted} = Submissions.submit_submission(submission)
       assert submitted.date_submitted
@@ -78,6 +95,39 @@ defmodule SimpleJournalSystem.SubmissionsTest do
       reloaded = Submissions.get_submission!(submission.submission_id)
       assert reloaded.submission_progress == ""
       assert reloaded.date_submitted
+    end
+
+    test "menolak submission tanpa judul" do
+      user = author_fixture(1)
+      assert {:ok, result} = Submissions.start_submission(user, 1)
+
+      submission = result.submission
+
+      assert {:ok, _} =
+               Submissions.create_submission_file(
+                 submission,
+                 %{path: "test/manuscript.pdf", mimetype: "application/pdf"},
+                 %{file_stage: SimpleJournalSystem.Ojs.FileStage.submission()}
+               )
+
+      assert {:error, :title_required} = Submissions.submit_submission(submission)
+    end
+
+    test "menolak submission tanpa file naskah" do
+      user = author_fixture(1)
+      assert {:ok, result} = Submissions.start_submission(user, 1)
+
+      submission = result.submission
+
+      assert {:ok, _} =
+               Submissions.update_author_metadata(
+                 submission.submission_id,
+                 user.user_id,
+                 %{"title" => "Judul Tes", "abstract" => "Abstrak Tes"}
+               )
+
+      assert {:error, :manuscript_required} =
+               Submissions.submit_submission(submission)
     end
   end
 
@@ -132,6 +182,21 @@ defmodule SimpleJournalSystem.SubmissionsTest do
     test "metadata tidak bisa diubah setelah submission dikirim" do
       user = author_fixture(1)
       assert {:ok, result} = Submissions.start_submission(user, 1)
+
+      assert {:ok, _} =
+               Submissions.update_author_metadata(
+                 result.submission.submission_id,
+                 user.user_id,
+                 %{"title" => "Judul Tes", "abstract" => "Abstrak Tes"}
+               )
+
+      assert {:ok, _} =
+               Submissions.create_submission_file(
+                 result.submission,
+                 %{path: "test/manuscript.pdf", mimetype: "application/pdf"},
+                 %{file_stage: SimpleJournalSystem.Ojs.FileStage.submission()}
+               )
+
       assert {:ok, submitted} = Submissions.submit_submission(result.submission)
 
       assert {:error, :already_submitted} =
