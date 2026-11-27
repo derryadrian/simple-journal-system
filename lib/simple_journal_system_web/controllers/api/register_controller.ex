@@ -1,22 +1,41 @@
 defmodule SimpleJournalSystemWeb.Api.RegisterController do
   use SimpleJournalSystemWeb, :controller
 
-  def create(conn, params) do
-    email = params["email"]
-    device_id = params["device_id"]
+  alias SimpleJournalSystem.Accounts
 
-    if email && device_id do
-      conn
-      |> put_status(:ok)
-      |> json(%{
-        status: "success",
-        message: "Endpoint API SJS berhasil dihubungi!",
-        data: %{email: email, device_id: device_id}
-      })
-    else
-      conn
-      |> put_status(:bad_request)
-      |> json(%{error: "Data tidak lengkap"})
+  def create(conn, params) do
+    user_params = %{
+      "username" => params["username"],
+      "email" => params["email"],
+      "password" => params["password"],
+      "password_confirmation" => params["password"]
+    }
+
+    case Accounts.register_user(user_params) do
+      {:ok, user} ->
+        conn
+        |> put_status(:created)
+        |> json(%{
+          status: "success",
+          message: "User berhasil didaftarkan.",
+          data: %{
+            user_id: user.user_id,
+            username: user.username,
+            email: user.email
+          }
+        })
+
+      {:error, changeset} ->
+        # Ambil error langsung dari changeset.errors
+        # Formatnya: [email: {"has already been taken", []}, ...]
+        formatted_errors =
+          Enum.reduce(changeset.errors, %{}, fn {field, {msg, _opts}}, acc ->
+            Map.put(acc, field, msg)
+          end)
+
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{status: "error", errors: formatted_errors})
     end
   end
 end
