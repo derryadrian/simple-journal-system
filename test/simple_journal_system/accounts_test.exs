@@ -18,6 +18,13 @@ defmodule SimpleJournalSystem.AccountsTest do
     end
   end
 
+    test "returns the user if the email exists with different capitalization" do
+      %{user_id: user_id} = user = user_fixture()
+
+      assert %User{user_id: ^user_id} =
+               Accounts.get_user_by_email(String.upcase(user.email))
+    end
+
   describe "get_user_by_email_and_password/2" do
     test "does not return the user if the email does not exist" do
       refute Accounts.get_user_by_email_and_password(

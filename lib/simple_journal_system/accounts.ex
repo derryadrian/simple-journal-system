@@ -29,9 +29,9 @@ defmodule SimpleJournalSystem.Accounts do
     Repo.get!(User, user_id)
   end
 
-  defp get_user_by_email_or_username(login) do
+    defp get_user_by_email_or_username(login) do
     from(u in User,
-      where: u.email == ^login or u.username == ^login,
+      where: fragment("lower(?) = lower(?)", u.email, ^login) or u.username == ^login,
       limit: 1
     )
     |> Repo.one()
